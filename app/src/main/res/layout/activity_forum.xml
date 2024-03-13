@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".forum">
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="357dp"
+        android:layout_height="30dp"
+        android:text="@string/este_aplicativo_foi_criado_para_fins_estudantis"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.296"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.99"
+        tools:ignore="TextSizeCheck,VisualLintOverlap" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="170dp"
+        android:layout_height="30dp"
+        android:text="@string/goodlink"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.947"
+        tools:ignore="TextSizeCheck,VisualLintOverlap" />
+
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="507dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.66" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutInfo"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.146"
+        tools:ignore="TextSizeCheck">
+
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabPlaylists"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/playlists"
+            android:text="@string/playlists"
+            tools:ignore="SpeakableTextPresentCheck"
+            tools:layout_editor_absoluteX="7dp"
+            tools:layout_editor_absoluteY="254dp" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabForm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/formul_rio"
+            android:text="@string/formul_rio"
+            tools:ignore="SpeakableTextPresentCheck"
+            tools:layout_editor_absoluteX="140dp"
+            tools:layout_editor_absoluteY="335dp" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/usu_rio"
+            tools:ignore="SpeakableTextPresentCheck"
+            tools:layout_editor_absoluteX="272dp"
+            tools:layout_editor_absoluteY="100dp" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="262dp"
+        android:layout_height="44dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.081" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
