@@ -17,9 +17,9 @@
     <string name="li_e_aceito_os_termos_e_politica">Li e aceito os termos e politica</string>
     <string name="categoria">Categoria</string>
     <string name="descri_o">Descrição</string>
-    <string name="iframe_do_v_deo">IFrame do Vídeo</string>
+    <string name="linkdaplaylist">Link da playlist</string>
     <string name="nome_do_canal">Nome do Canal</string>
-    <string name="url_do_canal">URL do canal</string>
+    <string name="linkdocanal">Link do canal</string>
     <string name="textview">TextView</string>
     <string name="t_tulo">Título</string>
     <string name="goodlink">GoodLink</string>
@@ -31,11 +31,14 @@
     <string name="formul_rio">formulário</string>
     <string name="usu_rio">usuário</string>
     <string name="usu_rios">usuários</string>
-    <string name="confirmar">Confirmar</string>
+    <string name="enviar">Enviar</string>
     <string name="password_description">Senha do usuário\n</string>
-    <string name="password_hint">Senha do usuário\n</string>
-    <string name="email_hint">Email do usuário\n</string>
+    <string name="password_hint">Senha antiga\n</string>
+    <string name="email_hint">Email\n</string>
     <string name="salvar">Salvar</string>
-    <string name="nome_do_usu_rio">Nome do usuário</string>
+    <string name="nome_do_usu_rio">Nome</string>
+    <string name="manter_me_logado">Manter-me logado</string>
+    <string name="deslogar">Deslogar</string>
+    <string name="nova_senha">Nova senha</string>
 
 </resources>
