@@ -5,7 +5,7 @@ public class User {
     private String email;
 
     public User() {
-        // Construtor vazio necessário para o Firebase
+
     }
 
     public User(String nome, String email) {
@@ -13,7 +13,6 @@ public class User {
         this.email = email;
     }
 
-    // Métodos getters e setters
     public String getNome() {
         return nome;
     }

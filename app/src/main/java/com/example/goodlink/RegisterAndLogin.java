@@ -23,12 +23,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 
 public class RegisterAndLogin extends AppCompatActivity {
-
     private FireBaseAuthenticate mAuthenticator;
     private FireBaseDataBase mDatabase;
     private CheckBox checkBoxServices;
     private SessionManager sessionManager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +44,6 @@ public class RegisterAndLogin extends AppCompatActivity {
         sessionManager = new SessionManager(this);
 
         if (sessionManager.isLoggedIn()) {
-            // Se já estiver logado, redirecionar para a próxima tela (ex: MainActivity)
             goToActivity();
         }
 
@@ -86,16 +83,27 @@ public class RegisterAndLogin extends AppCompatActivity {
                 boolean aceitouTermos = checkBoxServices.isChecked();
 
                 if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
-                    // Se algum campo estiver vazio, exiba um Toast
                     Toast.makeText(RegisterAndLogin.this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show();
+                } else if (senha.length() < 8) {
+                    Toast.makeText(RegisterAndLogin.this, "A senha deve ter no mínimo " + 8 + " caracteres", Toast.LENGTH_SHORT).show();
                 } else if (!aceitouTermos) {
-                    // Se os termos não foram aceitos, exiba um Toast
                     Toast.makeText(RegisterAndLogin.this, "Por favor, aceite os termos e condições", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Se todos os campos estiverem preenchidos e os termos aceitos, proceda com o registro
                     mAuthenticator.registerUser(nome, email, senha, RegisterAndLogin.this);
-                    // Não há necessidade de manter o usuário logado após o registro
-                    // Pois ele será redirecionado para a tela de login
+
+                    FireBaseAuthenticate.RegistrationCallback registrationCallback = new FireBaseAuthenticate.RegistrationCallback() {
+                        @Override
+                        public void onRegistrationSuccess() {
+                            Intent intent = new Intent(RegisterAndLogin.this, LoginAndRegister.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onRegistrationFailure(String errorMessage) {
+                        }
+                    };
+
                 }
             }
         });

@@ -9,12 +9,10 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 public class FireStoreDataManager {
-    private FirebaseFirestore firestore;
-    private CollectionReference usersCollection;
+    private final FirebaseFirestore firestore;
+    private final CollectionReference usersCollection;
 
     public FireStoreDataManager() {
         firestore = FirebaseFirestore.getInstance();

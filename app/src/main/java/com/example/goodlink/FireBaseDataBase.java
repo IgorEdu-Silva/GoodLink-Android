@@ -1,18 +1,18 @@
 package com.example.goodlink;
 
+import android.annotation.SuppressLint;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FireBaseDataBase {
+    @SuppressLint("StaticFieldLeak")
     private static FirebaseFirestore mFirestore;
-
-    private DatabaseReference mDatabase;
-
+    private final DatabaseReference mDatabase;
     public FireBaseDataBase() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
-
     public DatabaseReference getDatabaseReference() {
         return mDatabase;
     }

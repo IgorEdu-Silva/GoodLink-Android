@@ -29,11 +29,9 @@ public class forum extends AppCompatActivity {
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         TabLayout tabLayout = findViewById(R.id.tabLayoutInfo);
 
-        // Set up ViewPager adapter
         PagerAdapterFragments pagerAdapter = new PagerAdapterFragments(this);
         viewPager.setAdapter(pagerAdapter);
 
-        // Connect TabLayout with ViewPager
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> {
                     switch (position) {

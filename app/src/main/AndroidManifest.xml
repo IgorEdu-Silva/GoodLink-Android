@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GoodLink"
         tools:targetApi="31">
-
+        <activity
+            android:name=".ResetPass"
+            android:exported="false" />
         <activity
             android:name=".Termos"
             android:exported="false" />

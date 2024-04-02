@@ -3,6 +3,7 @@ package com.example.goodlink;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -13,17 +14,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class TabUsersFragment extends Fragment {
-
     private FireBaseAuthenticate mAuthenticator;
     private SessionManager sessionManager;
     private TextView usernameTextView;
     private EditText emailEditText;
     private User loggedInUser;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,7 @@ public class TabUsersFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab_users, container, false);
 
-        mAuthenticator = new FireBaseAuthenticate(new FireBaseDataBase()); // Inicializa a autenticação Firebase
+        mAuthenticator = new FireBaseAuthenticate(new FireBaseDataBase());
 
         usernameTextView = view.findViewById(R.id.username_Users);
         emailEditText = view.findViewById(R.id.emailUser_Users);
@@ -44,12 +47,11 @@ public class TabUsersFragment extends Fragment {
 
         // Recupera os dados do usuário do Firestore
         FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser(); // Obtém o usuário atualmente autenticado diretamente do Firebase Authentication
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             fireStoreDataManager.getUser(currentUser.getUid(), new FireStoreDataManager.FireStoreDataListener<User>() {
                 @Override
                 public void onSuccess(User userData) {
-                    // Se os dados do usuário foram recuperados com sucesso, defina o nome de usuário e email nos componentes de interface do usuário
                     loggedInUser = userData;
                     String username = userData.getNome();
                     String email = userData.getEmail();
@@ -59,7 +61,6 @@ public class TabUsersFragment extends Fragment {
 
                 @Override
                 public void onFailure(String errorMessage) {
-                    // Se houver uma falha ao recuperar os dados do usuário, exiba uma mensagem de erro
                     Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
                 }
             });
@@ -73,6 +74,55 @@ public class TabUsersFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), LoginAndRegister.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+            }
+        });
+
+        Button btnSave = view.findViewById(R.id.btnSave_Users);
+        EditText etOldPassword = view.findViewById(R.id.password_Users);
+        EditText etNewPassword = view.findViewById(R.id.NewPassword_Users);
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String oldPassword = etOldPassword.getText().toString();
+                String newPassword = etNewPassword.getText().toString();
+
+                if (oldPassword.isEmpty() || newPassword.isEmpty()) {
+                    Toast.makeText(requireContext(), "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (currentUser != null) {
+                    AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), oldPassword);
+                    currentUser.reauthenticate(credential)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    currentUser.updatePassword(newPassword)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Toast.makeText(requireContext(), "Senha atualizada com sucesso.", Toast.LENGTH_SHORT).show();
+                                                    etOldPassword.setText("");
+                                                    etNewPassword.setText("");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(requireContext(), "Falha ao atualizar a senha: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(requireContext(), "Falha ao reautenticar o usuário: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
             }
         });
 

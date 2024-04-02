@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,11 +20,9 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginAndRegister extends AppCompatActivity {
-
     private FireBaseAuthenticate mAuthenticator;
     private FireBaseDataBase mDatabase;
     private CheckBox checkBoxServices;
-
     private SessionManager sessionManager;
 
     @Override
@@ -41,7 +41,6 @@ public class LoginAndRegister extends AppCompatActivity {
         sessionManager = new SessionManager(this);
 
         if (sessionManager.isLoggedIn()) {
-            // Se já estiver logado, redirecionar para a próxima tela (ex: MainActivity)
             goToActivity();
         }
 
@@ -69,7 +68,6 @@ public class LoginAndRegister extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Se todos os campos estiverem preenchidos, faça o login
                 EditText editTextEmail = findViewById(R.id.editTextEmail);
                 EditText editTextPassword = findViewById(R.id.editTextPassword);
 
@@ -81,7 +79,6 @@ public class LoginAndRegister extends AppCompatActivity {
                 mAuthenticator.loginUser(email, senha, new AuthenticationListener() {
                     @Override
                     public void onLoginSuccess(FirebaseUser user) {
-                        // Se o login for bem-sucedido, redirecione o usuário para a próxima tela
                         Intent intent = new Intent(LoginAndRegister.this, forum.class);
                         startActivity(intent);
                         finish();
@@ -89,17 +86,23 @@ public class LoginAndRegister extends AppCompatActivity {
 
                     @Override
                     public void onLoginFailure(String errorMessage) {
-                        // Se o login falhar, exiba um Toast informando o usuário
                         Toast.makeText(LoginAndRegister.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 });
                 if (manterLogado) {
-                    // Se o usuário deseja manter-se logado, salvar o estado de login
                     sessionManager.setLogin(true);
                 }
             }
         });
 
+        TextView textViewForgotPass = findViewById(R.id.forgotePass);
+        textViewForgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginAndRegister.this, ResetPass.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void goToActivity() {
