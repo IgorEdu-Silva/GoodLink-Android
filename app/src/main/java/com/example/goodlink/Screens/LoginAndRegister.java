@@ -1,12 +1,12 @@
-package com.example.goodlink;
+package com.example.goodlink.Screens;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +17,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.goodlink.FireBase.FireBaseAuthenticate;
+import com.example.goodlink.FireBase.FireBaseDataBase;
+import com.example.goodlink.FireBase.SessionManager;
+import com.example.goodlink.R;
 import com.google.firebase.auth.FirebaseUser;
+
 
 public class LoginAndRegister extends AppCompatActivity {
     private FireBaseAuthenticate mAuthenticator;
@@ -73,6 +78,11 @@ public class LoginAndRegister extends AppCompatActivity {
 
                 String email = editTextEmail.getText().toString();
                 String senha = editTextPassword.getText().toString();
+
+                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(senha)) {
+                    Toast.makeText(LoginAndRegister.this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 CheckBox checkBoxLog = findViewById(R.id.checkBoxLog);
                 boolean manterLogado = checkBoxLog.isChecked();

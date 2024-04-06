@@ -13,19 +13,19 @@
         android:theme="@style/Theme.GoodLink"
         tools:targetApi="31">
         <activity
-            android:name=".ResetPass"
+            android:name=".Screens.ResetPass"
             android:exported="false" />
         <activity
-            android:name=".Termos"
+            android:name=".Screens.Termos"
             android:exported="false" />
         <activity
-            android:name=".LoginAndRegister"
+            android:name=".Screens.LoginAndRegister"
             android:exported="false" />
         <activity
-            android:name=".forum"
+            android:name=".Screens.forum"
             android:exported="false" />
         <activity
-            android:name=".RegisterAndLogin"
+            android:name=".Screens.RegisterAndLogin"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

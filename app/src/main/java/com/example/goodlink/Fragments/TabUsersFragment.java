@@ -1,4 +1,4 @@
-package com.example.goodlink;
+package com.example.goodlink.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.goodlink.FireBase.FireBaseAuthenticate;
+import com.example.goodlink.FireBase.FireBaseDataBase;
+import com.example.goodlink.FireBase.FireStoreDataManager;
+import com.example.goodlink.Screens.LoginAndRegister;
+import com.example.goodlink.R;
+import com.example.goodlink.FireBase.SessionManager;
+import com.example.goodlink.FireBase.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
@@ -26,6 +33,8 @@ public class TabUsersFragment extends Fragment {
     private SessionManager sessionManager;
     private TextView usernameTextView;
     private EditText emailEditText;
+    private EditText etOldPassword;
+    private EditText etNewPassword;
     private User loggedInUser;
 
     @Override
@@ -45,7 +54,6 @@ public class TabUsersFragment extends Fragment {
         emailEditText = view.findViewById(R.id.emailUser_Users);
         Button buttonDeslogar = view.findViewById(R.id.button);
 
-        // Recupera os dados do usuário do Firestore
         FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
@@ -129,4 +137,29 @@ public class TabUsersFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        clearEditTexts();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        clearEditTexts();
+    }
+
+    private void clearEditTexts() {
+        if (etNewPassword != null) {
+            etNewPassword.setText("");
+        }
+        if (etOldPassword != null) {
+            etOldPassword.setText("");
+        }
+    }
 }

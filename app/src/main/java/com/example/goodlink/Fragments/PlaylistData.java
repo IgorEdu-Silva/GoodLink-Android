@@ -1,4 +1,4 @@
-package com.example.goodlink;
+package com.example.goodlink.Fragments;
 
 public class PlaylistData {
     private String titulo;

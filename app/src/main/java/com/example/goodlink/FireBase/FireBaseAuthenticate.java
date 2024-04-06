@@ -1,4 +1,4 @@
-package com.example.goodlink;
+package com.example.goodlink.FireBase;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,9 +7,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.goodlink.Screens.LoginAndRegister;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -101,20 +100,30 @@ public class FireBaseAuthenticate {
 
 
 
-    public void resetPassword(String email, ResetPass.ResetPasswordListener listener) {
-        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        listener.onResetSuccess();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        listener.onResetFailure(e.getMessage());
-                    }
-                });
+    public void resetPassword(String email, ResetPasswordListener context) {
+        mDatabase.checkIfEmailExists(email, new FireBaseDataBase.EmailCheckListener() {
+            @Override
+            public void onEmailExists(boolean exists) {
+                if (exists) {
+                    mAuth.sendPasswordResetEmail(email)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        context.onResetSuccess();
+                                    } else {
+
+                                        String errorMessage = task.getException().getMessage();
+                                        context.onResetFailure(errorMessage);
+                                    }
+                                }
+                            });
+                } else {
+                    String errorMessage = "O email não está cadastrado.";
+                    context.onResetFailure(errorMessage);
+                }
+            }
+        });
     }
 
     public void logoutUser() {

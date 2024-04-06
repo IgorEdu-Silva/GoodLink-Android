@@ -1,4 +1,4 @@
-package com.example.goodlink;
+package com.example.goodlink.Screens;
 
 import android.os.Bundle;
 
@@ -7,13 +7,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
-import android.os.Bundle;
+
+import com.example.goodlink.Fragments.PagerAdapterFragments;
+import com.example.goodlink.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class forum extends AppCompatActivity {
+    private boolean telaAtiva = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,5 +49,25 @@ public class forum extends AppCompatActivity {
                     }
                 }
         ).attach();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (telaAtiva) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        telaAtiva = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        telaAtiva = false;
     }
 }

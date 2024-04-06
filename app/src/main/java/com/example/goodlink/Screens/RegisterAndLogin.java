@@ -1,4 +1,4 @@
-package com.example.goodlink;
+package com.example.goodlink.Screens;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +20,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.goodlink.FireBase.FireBaseAuthenticate;
+import com.example.goodlink.FireBase.FireBaseDataBase;
+import com.example.goodlink.FireBase.SessionManager;
+import com.example.goodlink.R;
 
 
 public class RegisterAndLogin extends AppCompatActivity {

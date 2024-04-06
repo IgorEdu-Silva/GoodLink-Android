@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ResetPass">
+    tools:context=".Screens.ResetPass">
 
     <EditText
         android:id="@+id/EmailForReset"
@@ -19,7 +19,8 @@
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.408" />
+        app:layout_constraintVertical_bias="0.408"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/ConfirmReset"
@@ -32,18 +33,21 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.524" />
+        app:layout_constraintVertical_bias="0.524"
+        tools:ignore="TextContrastCheck,TextSizeCheck" />
 
-    <Button
+    <ImageButton
         android:id="@+id/BackToLogin"
         android:layout_width="130dp"
         android:layout_height="50dp"
-        android:text="@string/voltar"
-        android:textAlignment="center"
+        android:background="#00FFFFFF"
+        android:importantForAccessibility="no"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.69" />
+        app:layout_constraintVertical_bias="0.636"
+        app:srcCompat="?attr/homeAsUpIndicator"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

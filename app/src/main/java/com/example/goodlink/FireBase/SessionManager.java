@@ -1,4 +1,4 @@
-package com.example.goodlink;
+package com.example.goodlink.FireBase;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -1,4 +1,4 @@
-package com.example.goodlink;
+package com.example.goodlink.FireBase;
 
 public class User {
     private String nome;

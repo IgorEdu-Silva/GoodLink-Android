@@ -1,4 +1,4 @@
-package com.example.goodlink;
+package com.example.goodlink.Fragments;
 
 import android.os.Bundle;
 
@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.goodlink.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -70,5 +71,43 @@ public class TabFormFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        clearEditTexts();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        clearEditTexts();
+    }
+
+    private void clearEditTexts() {
+        if (tituloEditText != null) {
+            tituloEditText.setText("");
+        }
+        if (descricaoEditText != null) {
+            descricaoEditText.setText("");
+        }
+        if (nomeCanalEditText != null) {
+            nomeCanalEditText.setText("");
+        }
+        if (iframeEditText != null) {
+            iframeEditText.setText("");
+        }
+        if (urlCanalEditText != null) {
+            urlCanalEditText.setText("");
+        }
+        if (categoriaEditText != null) {
+            categoriaEditText.setText("");
+        }
     }
 }

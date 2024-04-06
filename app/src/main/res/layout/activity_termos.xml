@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Termos">
+    tools:context=".Screens.Termos">
 
     <TextView
         android:id="@+id/textViewTermosDeUso"
@@ -29,21 +29,20 @@
 
     <TextView
         android:id="@+id/textViewContainerTermos"
-        android:layout_width="394dp"
-        android:layout_height="694dp"
+        android:layout_width="391dp"
+        android:layout_height="668dp"
         android:layout_gravity="center"
         android:fontFamily="sans-serif"
         android:gravity="fill_horizontal"
-        android:lineSpacingExtra="18dp"
-        android:lineSpacingMultiplier="0.6"
+        android:lineSpacingExtra="16dp"
+        android:lineSpacingMultiplier="0.4"
         android:text="@string/Politica_de_privacidade_e_termos_de_uso_juntos"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.476"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.793"
         tools:ignore="RtlCompat" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
