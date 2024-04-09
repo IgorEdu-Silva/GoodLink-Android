@@ -65,6 +65,9 @@ public class FireBaseAuthenticate {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
+                                                FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+                                                fireStoreDataManager.addUser(user.getUid(), nome, email);
+
                                                 user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {

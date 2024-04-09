@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.goodlink.FireBase.FireStoreDataManager;
 import com.example.goodlink.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,20 +56,30 @@ public class TabFormFragment extends Fragment {
                 String categoria = categoriaEditText.getText().toString();
 
                 FirebaseUser currentUser = mAuth.getCurrentUser();
+                FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
 
                 if (currentUser != null) {
                     String userID = currentUser.getUid();
                     PlaylistData playlistData = new PlaylistData(titulo, descricao, nomeCanal, iframe, urlCanal, categoria, userID);
 
-                    db.collection("users").document(userID).collection("playlists")
-                            .add(playlistData)
-                            .addOnSuccessListener(documentReference -> Toast.makeText(getActivity(), "Dados enviados com sucesso!", Toast.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Toast.makeText(getActivity(), "Erro ao enviar os dados: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    fireStoreDataManager.createPlaylist(userID, playlistData, new FireStoreDataManager.OnPlaylistCreatedListener() {
+                        @Override
+                        public void onPlaylistCreated(String playlistId) {
+                            Toast.makeText(getActivity(), "Playlist criada com sucesso!", Toast.LENGTH_SHORT).show();
+                            clearEditTexts();
+                        }
+
+                        @Override
+                        public void onPlaylistCreationFailed(String errorMessage) {
+                            Toast.makeText(getActivity(), "Erro ao criar a playlist: " + errorMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
                     Toast.makeText(getActivity(), "Por favor, faça login para enviar os dados.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
 
         return view;
     }
@@ -82,6 +93,7 @@ public class TabFormFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+        clearEditTexts();
     }
 
     @Override

@@ -3,90 +3,122 @@ package com.example.goodlink.FireBase;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.example.goodlink.Fragments.PlaylistData;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FireStoreDataManager {
     private final FirebaseFirestore firestore;
     private final CollectionReference usersCollection;
+    private final CollectionReference playlistsCollection;
 
     public FireStoreDataManager() {
         firestore = FirebaseFirestore.getInstance();
         usersCollection = firestore.collection("users");
+        playlistsCollection = firestore.collection("playlists");
     }
 
     public void addUser(String userId, String name, String email) {
-        DocumentReference userRef = usersCollection.document(userId);
-        User userData = new User(name, email);
-        userRef.set(userData);
+        Map<String, Object> user = new HashMap<>();
+        user.put("name", name);
+        user.put("email", email);
+
+        usersCollection.document(userId).set(user)
+                .addOnSuccessListener(aVoid -> Log.d("FireStoreDataManager", "User added successfully"))
+                .addOnFailureListener(e -> Log.e("FireStoreDataManager", "Error adding user", e));
     }
 
     public void getUser(String userId, final FireStoreDataListener<User> listener) {
-        DocumentReference userRef = usersCollection.document(userId);
-        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        User userData = document.toObject(User.class);
+        usersCollection.document(userId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        User userData = documentSnapshot.toObject(User.class);
                         listener.onSuccess(userData);
                     } else {
                         listener.onFailure("User not found");
                     }
-                } else {
-                    listener.onFailure(task.getException().getMessage());
-                }
-            }
-        });
+                })
+                .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
     }
 
-    private static final String TAG = "FirestoreDataManager";
-    private static final String COLLECTION_NAME = "playlists";
+    private static final String TAG = "FireStoreDataManager";
 
-    public void getPlaylistsFromFirestore(String userId, OnPlaylistsLoadedListener listener) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection(COLLECTION_NAME)
-                .whereEqualTo("userId", userId)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<PlaylistData> playlists = new ArrayList<>();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            PlaylistData playlistData = documentSnapshot.toObject(PlaylistData.class);
-                            playlists.add(playlistData);
-                        }
-                        listener.onPlaylistsLoaded(playlists);
+    public void getPlaylistsFromFirestore(OnPlaylistsLoadedListener listener) {
+        playlistsCollection.get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<PlaylistData> playlists = new ArrayList<>();
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        PlaylistData playlistData = documentSnapshot.toObject(PlaylistData.class);
+                        playlists.add(playlistData);
                     }
+                    listener.onPlaylistsLoaded(playlists);
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error fetching playlists: ", e);
-                        listener.onPlaylistsLoadFailed(e.getMessage());
-                    }
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error fetching playlists: ", e);
+                    listener.onPlaylistsLoadFailed(e.getMessage());
                 });
+    }
+
+    public void getUserIdToNameMap(OnUserIdToNameMapListener listener) {
+        usersCollection.get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Map<String, String> userIdToNameMap = new HashMap<>();
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        String userId = documentSnapshot.getId();
+                        String userName = documentSnapshot.getString("name");
+                        userIdToNameMap.put(userId, userName);
+                    }
+                    listener.onUserIdToNameMapLoaded(userIdToNameMap);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error fetching user IDs and names: ", e);
+                    listener.onUserIdToNameMapLoadFailed(e.getMessage());
+                });
+    }
+
+
+    public void createPlaylist(String userId, PlaylistData playlistData, OnPlaylistCreatedListener listener) {
+        Map<String, Object> playlist = new HashMap<>();
+        playlist.put("titulo", playlistData.getTitulo());
+        playlist.put("descricao", playlistData.getDescricao());
+        playlist.put("nomeCanal", playlistData.getNomeCanal());
+        playlist.put("iframe", playlistData.getIframe());
+        playlist.put("urlCanal", playlistData.getUrlCanal());
+        playlist.put("categoria", playlistData.getCategoria());
+        playlist.put("nomeUsuario", playlistData.getNomeUsuario());
+
+        playlistsCollection.add(playlist)
+                .addOnSuccessListener(documentReference -> {
+                    listener.onPlaylistCreated(documentReference.getId());
+                    usersCollection.document(userId).update("playlistId", documentReference.getId())
+                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Playlist ID updated for user: " + userId))
+                            .addOnFailureListener(e -> Log.e(TAG, "Error updating playlist ID for user: " + userId, e));
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error creating playlist: ", e);
+                    listener.onPlaylistCreationFailed(e.getMessage());
+                });
+    }
+
+    public interface OnUserIdToNameMapListener {
+        void onUserIdToNameMapLoaded(Map<String, String> userIdToNameMap);
+        void onUserIdToNameMapLoadFailed(String errorMessage);
     }
 
     public interface OnPlaylistsLoadedListener {
         void onPlaylistsLoaded(List<PlaylistData> playlists);
         void onPlaylistsLoadFailed(String errorMessage);
+    }
+
+    public interface OnPlaylistCreatedListener {
+        void onPlaylistCreated(String playlistId);
+        void onPlaylistCreationFailed(String errorMessage);
     }
 
     public interface FireStoreDataListener<T> {

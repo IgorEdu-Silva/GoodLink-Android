@@ -33,6 +33,7 @@ public class RegisterAndLogin extends AppCompatActivity {
     private CheckBox checkBoxServices;
     private SessionManager sessionManager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -9,6 +9,10 @@ public class PlaylistData {
     private String categoria;
     private String nomeUsuario;
 
+    public PlaylistData() {
+
+    }
+
     public PlaylistData(String titulo, String descricao, String nomeCanal, String iframe, String urlCanal, String categoria, String nomeUsuario) {
         this.titulo = titulo;
         this.descricao = descricao;

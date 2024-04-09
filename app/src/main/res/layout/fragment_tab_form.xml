@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="700dp"
     tools:context=".Fragments.TabFormFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,16 +14,17 @@
         <EditText
             android:id="@+id/tituloPlaylist_Form"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
+            android:ems="20"
             android:gravity="bottom"
-            android:textAlignment="center"
             android:hint="@string/titulo"
             android:importantForAutofill="no"
             android:inputType="text"
             android:minHeight="48dp"
+            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
@@ -32,7 +33,8 @@
         <EditText
             android:id="@+id/descricaoPlaylist_Form"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
+            android:ems="20"
             android:gravity="bottom"
             android:hint="@string/descri_o"
             android:importantForAutofill="no"
@@ -43,13 +45,14 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.158"
+            app:layout_constraintVertical_bias="0.161"
             tools:ignore="LabelFor,RtlCompat" />
 
         <EditText
             android:id="@+id/nomeCanal_Form"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
+            android:ems="20"
             android:gravity="bottom"
             android:hint="@string/nome_do_canal"
             android:importantForAutofill="no"
@@ -66,7 +69,8 @@
         <EditText
             android:id="@+id/iframe_Form"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
+            android:ems="20"
             android:gravity="bottom"
             android:hint="@string/linkdaplaylist"
             android:importantForAutofill="no"
@@ -78,13 +82,14 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.475"
+            app:layout_constraintVertical_bias="0.469"
             tools:ignore="LabelFor,RtlCompat,TextSizeCheck" />
 
         <EditText
             android:id="@+id/urlCanal_Form"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
+            android:ems="20"
             android:gravity="bottom"
             android:hint="@string/linkdocanal"
             android:importantForAutofill="no"
@@ -96,13 +101,14 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.633"
+            app:layout_constraintVertical_bias="0.623"
             tools:ignore="LabelFor,RtlCompat,TextFields" />
 
         <EditText
             android:id="@+id/categoria_Form"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
+            android:ems="20"
             android:gravity="bottom"
             android:hint="@string/categoria"
             android:importantForAutofill="no"
@@ -114,7 +120,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.792"
+            app:layout_constraintVertical_bias="0.776"
             tools:ignore="LabelFor,RtlCompat" />
 
         <Button
@@ -124,13 +130,12 @@
             android:gravity="center"
             android:importantForAutofill="no"
             android:text="@string/enviar"
-            android:textColor="#212121"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.975" />
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

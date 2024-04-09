@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,14 +29,17 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Map;
+
 public class TabUsersFragment extends Fragment {
     private FireBaseAuthenticate mAuthenticator;
     private SessionManager sessionManager;
     private TextView usernameTextView;
-    private EditText emailEditText;
+    private TextView emailTextView;
     private EditText etOldPassword;
     private EditText etNewPassword;
     private User loggedInUser;
+    private Map<String, String> userIdToNameMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,8 +55,8 @@ public class TabUsersFragment extends Fragment {
         mAuthenticator = new FireBaseAuthenticate(new FireBaseDataBase());
 
         usernameTextView = view.findViewById(R.id.username_Users);
-        emailEditText = view.findViewById(R.id.emailUser_Users);
-        Button buttonDeslogar = view.findViewById(R.id.button);
+        emailTextView = view.findViewById(R.id.email_Users);
+        Button buttonDeslogar = view.findViewById(R.id.btnLogout);
 
         FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -61,10 +65,8 @@ public class TabUsersFragment extends Fragment {
                 @Override
                 public void onSuccess(User userData) {
                     loggedInUser = userData;
-                    String username = userData.getNome();
-                    String email = userData.getEmail();
-                    usernameTextView.setText(username);
-                    emailEditText.setText(email);
+                    usernameTextView.setText(userData.getNome());
+                    emailTextView.setText(userData.getEmail());
                 }
 
                 @Override
@@ -72,7 +74,24 @@ public class TabUsersFragment extends Fragment {
                     Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
                 }
             });
+
+            fireStoreDataManager.getUserIdToNameMap(new FireStoreDataManager.OnUserIdToNameMapListener() {
+                @Override
+                public void onUserIdToNameMapLoaded(Map<String, String> map) {
+                    userIdToNameMap = map;
+                    if (userIdToNameMap.containsKey(currentUser.getUid())) {
+                        String username = userIdToNameMap.get(currentUser.getUid());
+                        usernameTextView.setText(username);
+                    }
+                }
+
+                @Override
+                public void onUserIdToNameMapLoadFailed(String errorMessage) {
+                    Log.e("TabUsersFragment", "Erro ao carregar mapa de ID de usuário para nome de usuário: " + errorMessage);
+                }
+            });
         }
+
 
         buttonDeslogar.setOnClickListener(new View.OnClickListener() {
             @Override

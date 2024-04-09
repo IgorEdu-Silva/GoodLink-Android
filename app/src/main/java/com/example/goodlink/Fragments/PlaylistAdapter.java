@@ -2,9 +2,6 @@ package com.example.goodlink.Fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,25 +16,29 @@ import com.google.firebase.database.DatabaseReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder> {
     private final List<PlaylistData> playlists;
     private static DatabaseReference databaseReference;
-    private Context context;
-    private TextView iframeTextView;
-    private TextView urlCanalTextView;
-    private TextView categoriaTextView;
+    private final Context context;
+    private final Map<String, String> userIdToNameMap;
 
-    public PlaylistAdapter(List<PlaylistData> playlists) {
+
+    public PlaylistAdapter(List<PlaylistData> playlists, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap) {
         this.playlists = playlists;
+        this.context = context;
+        PlaylistAdapter.databaseReference = databaseReference;
+        this.userIdToNameMap = userIdToNameMap;
+
     }
 
     @NonNull
     @Override
     public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.items_playlist_fragment, parent, false);
-        return new PlaylistViewHolder(view, iframeTextView, urlCanalTextView, categoriaTextView);
+        return new PlaylistViewHolder(view);
     }
 
     @Override
@@ -48,65 +49,50 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
     @Override
     public int getItemCount() {
-        return playlists.size();
+        return playlists != null ? playlists.size() : 0;
     }
 
-    public static class PlaylistViewHolder extends RecyclerView.ViewHolder {
+    public class PlaylistViewHolder extends RecyclerView.ViewHolder {
         private final TextView tituloTextView;
         private final TextView descricaoTextView;
         private final TextView nomeCanalTextView;
-        private final TextView iframeTextView;
-        private final TextView urlCanalTextView;
-        private final TextView categoriaTextView;
         private final TextView nomeUsuarioTextView;
         private final TextView dataPubTextView;
+        private TextView iframeTextView;
+        private TextView urlCanalTextView;
+        private TextView categoriaTextView;
+        PlaylistData playlistData;
 
-        public PlaylistViewHolder(@NonNull View itemView, TextView iframeTextView, TextView urlCanalTextView, TextView categoriaTextView) {
+        public PlaylistViewHolder(@NonNull View itemView) {
             super(itemView);
             tituloTextView = itemView.findViewById(R.id.titulo_Playlist);
             descricaoTextView = itemView.findViewById(R.id.descricao_Playlist);
             nomeCanalTextView = itemView.findViewById(R.id.nomeCanal_Playlist);
             nomeUsuarioTextView = itemView.findViewById(R.id.nomeUsuario_Playlist);
             dataPubTextView = itemView.findViewById(R.id.dataPub_Playlist);
-            this.iframeTextView = iframeTextView;
-            this.urlCanalTextView = urlCanalTextView;
-            this.categoriaTextView = categoriaTextView;
+
         }
 
         public void bind(PlaylistData playlistData) {
-            tituloTextView.setText(playlistData.getTitulo());
-            descricaoTextView.setText(playlistData.getDescricao());
-            nomeCanalTextView.setText(playlistData.getNomeCanal());
-            iframeTextView.setText(playlistData.getIframe());
-            urlCanalTextView.setText(playlistData.getUrlCanal());
-            categoriaTextView.setText(playlistData.getCategoria());
-            nomeUsuarioTextView.setText(playlistData.getNomeUsuario());
+            if (playlistData != null) {
+                tituloTextView.setText(playlistData.getTitulo());
+                descricaoTextView.setText(playlistData.getDescricao());
+                nomeCanalTextView.setText(playlistData.getNomeCanal());
 
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            String datePub = sdf.format(new Date());
-            dataPubTextView.setText(datePub);
+                String userId = playlistData.getNomeUsuario();
+                String userName = userIdToNameMap.get(userId);
 
-            setClickableText(urlCanalTextView, playlistData.getUrlCanal(), "urlCanal", databaseReference);
-            setClickableText(iframeTextView, playlistData.getIframe(), "iframe", databaseReference);
-            setClickableText(categoriaTextView, playlistData.getCategoria(), "categoria", databaseReference);
-
-        }
-
-        private void setClickableText(TextView textView, String categoria, String text, DatabaseReference databaseReference) {
-            SpannableString spannableString = new SpannableString(textView.getText());
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(@NonNull View widget) {
-                    databaseReference.child(textView.getResources().getResourceEntryName(textView.getId())).setValue(text);
+                if (userName != null) {
+                    nomeUsuarioTextView.setText(userName);
+                } else {
+                    nomeUsuarioTextView.setText(userId);
                 }
-            };
 
-            int startIndex = textView.getText().toString().indexOf(text);
-            int endIndex = startIndex + text.length();
-
-            spannableString.setSpan(clickableSpan, startIndex, endIndex, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
-            textView.setText(spannableString);
-            textView.setMovementMethod(LinkMovementMethod.getInstance());
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                String datePub = sdf.format(new Date());
+                dataPubTextView.setText(datePub);
+            }
         }
+
     }
 }
