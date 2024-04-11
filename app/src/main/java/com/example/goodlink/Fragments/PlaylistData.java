@@ -8,12 +8,13 @@ public class PlaylistData {
     private String urlCanal;
     private String categoria;
     private String nomeUsuario;
+    private String dataPub;
 
     public PlaylistData() {
 
     }
 
-    public PlaylistData(String titulo, String descricao, String nomeCanal, String iframe, String urlCanal, String categoria, String nomeUsuario) {
+    public PlaylistData(String titulo, String descricao, String nomeCanal, String iframe, String urlCanal, String categoria, String nomeUsuario, String dataPub) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.nomeCanal = nomeCanal;
@@ -21,6 +22,7 @@ public class PlaylistData {
         this.urlCanal = urlCanal;
         this.categoria = categoria;
         this.nomeUsuario = nomeUsuario;
+        this.dataPub = dataPub;
     }
 
     public String getTitulo() {
@@ -77,5 +79,13 @@ public class PlaylistData {
 
     public void setNomeUsuario(String nomeUsuario) {
         this.nomeUsuario = nomeUsuario;
+    }
+
+    public String getDataPub() {
+        return dataPub;
+    }
+
+    public void setDataPub(String dataPub) {
+        this.dataPub = dataPub;
     }
 }

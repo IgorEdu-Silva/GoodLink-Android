@@ -13,22 +13,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.goodlink.R;
 import com.google.firebase.database.DatabaseReference;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder> {
     private final List<PlaylistData> playlists;
+    private final AtomicReference<List<PlaylistData>> playlistsFull = new AtomicReference<>();
     private static DatabaseReference databaseReference;
     private final Context context;
     private final Map<String, String> userIdToNameMap;
+    private final String filterText = "";
 
 
     public PlaylistAdapter(List<PlaylistData> playlists, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap) {
         this.playlists = playlists;
         this.context = context;
+        this.playlistsFull.set(new ArrayList<>(playlists));
         PlaylistAdapter.databaseReference = databaseReference;
         this.userIdToNameMap = userIdToNameMap;
 
@@ -43,13 +46,23 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
     @Override
     public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
-        PlaylistData playlistData = playlists.get(position);
-        holder.bind(playlistData);
+        if (position >= 0 && position < playlists.size()) {
+            holder.bind(playlists.get(position));
+        }
     }
 
     @Override
     public int getItemCount() {
-        return playlists != null ? playlists.size() : 0;
+        return playlists.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void updatePlaylists(List<PlaylistData> updatedPlaylists) {
+        playlists.clear();
+        playlists.addAll(updatedPlaylists);
+        playlistsFull.get().clear();
+        playlistsFull.get().addAll(updatedPlaylists);
+        notifyDataSetChanged();
     }
 
     public class PlaylistViewHolder extends RecyclerView.ViewHolder {
@@ -58,10 +71,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         private final TextView nomeCanalTextView;
         private final TextView nomeUsuarioTextView;
         private final TextView dataPubTextView;
-        private TextView iframeTextView;
-        private TextView urlCanalTextView;
-        private TextView categoriaTextView;
-        PlaylistData playlistData;
+
 
         public PlaylistViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -88,9 +98,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
                     nomeUsuarioTextView.setText(userId);
                 }
 
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                String datePub = sdf.format(new Date());
-                dataPubTextView.setText(datePub);
+                dataPubTextView.setText(playlistData.getDataPub());
             }
         }
 

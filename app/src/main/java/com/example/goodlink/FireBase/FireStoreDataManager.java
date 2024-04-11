@@ -3,6 +3,8 @@ package com.example.goodlink.FireBase;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.goodlink.Fragments.PlaylistData;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -84,14 +86,7 @@ public class FireStoreDataManager {
 
 
     public void createPlaylist(String userId, PlaylistData playlistData, OnPlaylistCreatedListener listener) {
-        Map<String, Object> playlist = new HashMap<>();
-        playlist.put("titulo", playlistData.getTitulo());
-        playlist.put("descricao", playlistData.getDescricao());
-        playlist.put("nomeCanal", playlistData.getNomeCanal());
-        playlist.put("iframe", playlistData.getIframe());
-        playlist.put("urlCanal", playlistData.getUrlCanal());
-        playlist.put("categoria", playlistData.getCategoria());
-        playlist.put("nomeUsuario", playlistData.getNomeUsuario());
+        Map<String, Object> playlist = getStringObjectMap(playlistData);
 
         playlistsCollection.add(playlist)
                 .addOnSuccessListener(documentReference -> {
@@ -104,6 +99,20 @@ public class FireStoreDataManager {
                     Log.e(TAG, "Error creating playlist: ", e);
                     listener.onPlaylistCreationFailed(e.getMessage());
                 });
+    }
+
+    @NonNull
+    private static Map<String, Object> getStringObjectMap(PlaylistData playlistData) {
+        Map<String, Object> playlist = new HashMap<>();
+        playlist.put("titulo", playlistData.getTitulo());
+        playlist.put("descricao", playlistData.getDescricao());
+        playlist.put("nomeCanal", playlistData.getNomeCanal());
+        playlist.put("iframe", playlistData.getIframe());
+        playlist.put("urlCanal", playlistData.getUrlCanal());
+        playlist.put("categoria", playlistData.getCategoria());
+        playlist.put("nomeUsuario", playlistData.getNomeUsuario());
+        playlist.put("dataPub", playlistData.getDataPub());
+        return playlist;
     }
 
     public interface OnUserIdToNameMapListener {

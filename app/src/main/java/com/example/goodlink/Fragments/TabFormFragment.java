@@ -1,5 +1,6 @@
 package com.example.goodlink.Fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,6 +17,9 @@ import com.example.goodlink.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class TabFormFragment extends Fragment {
     private EditText tituloEditText;
@@ -55,12 +59,15 @@ public class TabFormFragment extends Fragment {
                 String urlCanal = urlCanalEditText.getText().toString();
                 String categoria = categoriaEditText.getText().toString();
 
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                String dataPub = sdf.format(new Date());
+
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
 
                 if (currentUser != null) {
                     String userID = currentUser.getUid();
-                    PlaylistData playlistData = new PlaylistData(titulo, descricao, nomeCanal, iframe, urlCanal, categoria, userID);
+                    PlaylistData playlistData = new PlaylistData(titulo, descricao, nomeCanal, iframe, urlCanal, categoria, userID, dataPub);
 
                     fireStoreDataManager.createPlaylist(userID, playlistData, new FireStoreDataManager.OnPlaylistCreatedListener() {
                         @Override
