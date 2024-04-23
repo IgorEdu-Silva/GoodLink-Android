@@ -1,17 +1,14 @@
     package com.example.goodlink.Screens;
 
     import android.os.Bundle;
-    import android.widget.SearchView;
 
     import androidx.activity.EdgeToEdge;
     import androidx.appcompat.app.AppCompatActivity;
     import androidx.core.graphics.Insets;
     import androidx.core.view.ViewCompat;
     import androidx.core.view.WindowInsetsCompat;
-    import androidx.lifecycle.ViewModelProvider;
     import androidx.viewpager2.widget.ViewPager2;
 
-    import com.example.goodlink.Fragments.FilterViewModel;
     import com.example.goodlink.Fragments.PagerAdapterFragments;
     import com.example.goodlink.R;
     import com.google.android.material.tabs.TabLayout;
@@ -19,8 +16,6 @@
 
     public class forum extends AppCompatActivity {
         private boolean telaAtiva = true;
-        private SearchView searchView;
-        private FilterViewModel filterViewModel;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -54,23 +49,6 @@
                         }
                     }
             ).attach();
-
-            filterViewModel = new ViewModelProvider(this).get(FilterViewModel.class);
-            searchView = findViewById(R.id.searchView);
-
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    filterViewModel.setFilterText(newText);
-                    return true;
-                }
-            });
-
         }
 
         @Override

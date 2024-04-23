@@ -27,13 +27,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="playlists">playlists</string>
-    <string name="formul_rio">formulário</string>
+    <string name="formul_rio">Formulário</string>
     <string name="usu_rio">usuário</string>
     <string name="usu_rios">usuários</string>
     <string name="enviar">Enviar</string>
-    <string name="password_description">Senha do usuário\n</string>
-    <string name="password_hint">Senha antiga\n</string>
-    <string name="email_hint">Email\n</string>
+    <string name="password_description">Senha do usuário</string>
+    <string name="password_hint">Senha antiga</string>
+    <string name="email_hint">Email</string>
     <string name="salvar">Salvar</string>
     <string name="nome_do_usu_rio">Nome</string>
     <string name="manter_me_logado">Manter-me logado</string>
@@ -42,5 +42,7 @@
     <string name="esqueceu_a_senha">Esqueceu a senha?</string>
     <string name="voltar">voltar\n</string>
     <string name="confirmar">Confirmar</string>
+    <string name="tenha_consci_ncia_ao_preencher_o_formul_rio_links_suspeitos_ser_o_retirados_e_sua_conta_ser_banida_permanentemente">Tenha consciência ao preencher o formulário, links suspeitos serão retirados e sua conta será banida permanentemente.</string>
+    <string name="ver_mais">ver mais</string>
 
 </resources>

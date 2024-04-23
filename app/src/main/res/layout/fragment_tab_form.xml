@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="700dp"
+    android:layout_height="match_parent"
     tools:context=".Fragments.TabFormFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -11,117 +11,218 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/tituloPlaylist_Form"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:ems="20"
-            android:gravity="bottom"
-            android:hint="@string/titulo"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:minHeight="48dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            tools:ignore="LabelFor,RtlCompat" />
 
-        <EditText
-            android:id="@+id/descricaoPlaylist_Form"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:ems="20"
-            android:gravity="bottom"
-            android:hint="@string/descri_o"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:textAlignment="center"
+        <TextView
+            android:id="@+id/FormInfo"
+            android:layout_width="380dp"
+            android:layout_height="50dp"
+            android:ems="50"
+            android:fontFamily="sans-serif-black"
+            android:gravity="center"
+            android:text="@string/tenha_consci_ncia_ao_preencher_o_formul_rio_links_suspeitos_ser_o_retirados_e_sua_conta_ser_banida_permanentemente"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.516"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.161"
-            tools:ignore="LabelFor,RtlCompat" />
+            app:layout_constraintVertical_bias="0.023"
+            tools:ignore="TextSizeCheck" />
 
-        <EditText
-            android:id="@+id/nomeCanal_Form"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:ems="20"
-            android:gravity="bottom"
-            android:hint="@string/nome_do_canal"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:textAlignment="center"
+        <ScrollView
+            android:layout_width="380dp"
+            android:layout_height="460dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.483"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.316"
-            tools:ignore="LabelFor,RtlCompat,TextSizeCheck" />
+            app:layout_constraintTop_toBottomOf="@id/FormInfo"
+            app:layout_constraintVertical_bias="0.078">
 
-        <EditText
-            android:id="@+id/iframe_Form"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:ems="20"
-            android:gravity="bottom"
-            android:hint="@string/linkdaplaylist"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:minHeight="48dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.469"
-            tools:ignore="LabelFor,RtlCompat,TextSizeCheck" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/urlCanal_Form"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:ems="20"
-            android:gravity="bottom"
-            android:hint="@string/linkdocanal"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:minHeight="48dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.623"
-            tools:ignore="LabelFor,RtlCompat,TextFields" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/light_blue"
+                    android:gravity="center"
+                    android:text="@string/categoria"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp"
+                    tools:ignore="RtlCompat" />
 
-        <EditText
-            android:id="@+id/categoria_Form"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:ems="20"
-            android:gravity="bottom"
-            android:hint="@string/categoria"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:minHeight="48dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.776"
-            tools:ignore="LabelFor,RtlCompat" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/categoria_Form_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/categoria_Form"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="start"
+                        android:importantForAutofill="no"
+                        android:maxLength="20"
+                        android:textSize="15sp"
+                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/light_blue"
+                    android:gravity="center"
+                    android:text="@string/titulo"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp"
+                    tools:ignore="RtlCompat" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tituloPlaylist_Form_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/tituloPlaylist_Form"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="start"
+                        android:importantForAutofill="no"
+                        android:maxLength="20"
+                        android:textSize="15sp"
+                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/light_blue"
+                    android:gravity="center"
+                    android:text="@string/descri_o"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp"
+                    tools:ignore="RtlCompat" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/descricaoPlaylist_Form_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/descricaoPlaylist_Form"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="start"
+                        android:importantForAutofill="no"
+                        android:maxLength="300"
+                        android:textSize="15sp"
+                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
+                    
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/light_blue"
+                    android:gravity="center"
+                    android:text="@string/linkdaplaylist"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp"
+                    tools:ignore="RtlCompat" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/iframe_Form_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/iframe_Form"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:gravity="start"
+                        android:textSize="15sp"
+                        android:fontFamily="sans-serif-light"
+                        android:importantForAutofill="no"
+                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/light_blue"
+                    android:gravity="center"
+                    android:text="@string/nome_do_canal"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp"
+                    tools:ignore="RtlCompat" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/nomeCanal_Form_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/nomeCanal_Form"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:gravity="start"
+                        android:textSize="15sp"
+                        android:fontFamily="sans-serif-light"
+                        android:maxLength="30"
+                        android:importantForAutofill="no"
+                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/light_blue"
+                    android:gravity="center"
+                    android:text="@string/linkdocanal"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp"
+                    tools:ignore="RtlCompat" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/urlCanal_Form_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/urlCanal_Form"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:gravity="start"
+                        android:textSize="15sp"
+                        android:fontFamily="sans-serif-light"
+                        android:importantForAutofill="no"
+                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </ScrollView>
 
         <Button
             android:id="@+id/btnSend_Form"
@@ -135,7 +236,9 @@
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="0.974"
+            tools:ignore="TextContrastCheck" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

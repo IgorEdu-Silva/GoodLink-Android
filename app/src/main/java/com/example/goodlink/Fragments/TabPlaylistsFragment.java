@@ -1,12 +1,17 @@
 package com.example.goodlink.Fragments;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -34,7 +39,10 @@ public class TabPlaylistsFragment extends Fragment {
     private FireStoreDataManager firestoreDataManager;
     private Map<String, String> userIdToNameMap;
     private FilterViewModel filterViewModel;
+    private SearchView searchView;
     private static final int refresh_interval = 5000;
+    private int lastPlaylistPosition = 0;
+
 
 
     @Override
@@ -46,21 +54,30 @@ public class TabPlaylistsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         playlists = new ArrayList<>();
         firestoreDataManager = new FireStoreDataManager();
+        searchView = view.findViewById(R.id.searchView);
+
+        if (savedInstanceState != null) {
+            lastPlaylistPosition = savedInstanceState.getInt("lastPlaylistPosition", 0);
+        }
+
 
         firestoreDataManager.getPlaylistsFromFirestore(new FireStoreDataManager.OnPlaylistsLoadedListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onPlaylistsLoaded(List<PlaylistData> playlists) {
                 if (userIdToNameMap != null) {
-                    TabPlaylistsFragment.this.playlists.clear();
                     TabPlaylistsFragment.this.playlists.addAll(playlists);
-
-                    setupRecyclerView();
+                    adapter.notifyDataSetChanged();
                     Toast.makeText(getContext(), "Playlists carregadas com sucesso", Toast.LENGTH_SHORT).show();
                 } else {
                     firestoreDataManager.getUserIdToNameMap(new FireStoreDataManager.OnUserIdToNameMapListener() {
                         @Override
                         public void onUserIdToNameMapLoaded(Map<String, String> userIdToNameMap) {
+                            for (PlaylistData playlist : playlists) {
+                                String fullDescription = PlaylistDescriptionHelper.getDescriptionFromPlaylist(playlist, getContext());
+                                playlist.setDescricao(fullDescription);
+                            }
+
                             setupRecyclerView();
                             Toast.makeText(getContext(), "Playlists carregadas com sucesso", Toast.LENGTH_SHORT).show();
                         }
@@ -97,7 +114,21 @@ public class TabPlaylistsFragment extends Fragment {
             }
         });
 
+
         filterViewModel = new ViewModelProvider(requireActivity()).get(FilterViewModel.class);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterViewModel.setFilterText(newText);
+                return true;
+            }
+        });
 
         filterViewModel.getFilterText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @SuppressLint("NotifyDataSetChanged")
@@ -123,6 +154,13 @@ public class TabPlaylistsFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("lastPlaylistPosition", lastPlaylistPosition);
+
+        super.onSaveInstanceState(outState);
+    }
+
     private void startAutomaticRefresh() {
         stopAutomaticRefresh();
         refreshHandler.postDelayed(refreshRunnable, refresh_interval);
@@ -139,13 +177,19 @@ public class TabPlaylistsFragment extends Fragment {
             firestoreDataManager.getPlaylistsFromFirestore(new FireStoreDataManager.OnPlaylistsLoadedListener() {
                 @SuppressLint("NotifyDataSetChanged")
                 @Override
-                public void onPlaylistsLoaded(List<PlaylistData> loadedPlaylists) {
-                    playlists.clear();
-                    playlists.addAll(loadedPlaylists);
-                    playlistsFull = new ArrayList<>(loadedPlaylists);
-                    filterViewModel.setPlaylists(playlists);
-                    setupRecyclerView();
-                }
+                    public void onPlaylistsLoaded(List<PlaylistData> loadedPlaylists) {
+                        int scrollPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+                        playlists.clear();
+                        playlists.addAll(loadedPlaylists);
+                        playlistsFull = new ArrayList<>(playlists);
+                        filterViewModel.setPlaylists(playlists);
+                        adapter.notifyDataSetChanged();
+
+                        if (scrollPosition != RecyclerView.NO_POSITION) {
+                            recyclerView.getLayoutManager().scrollToPosition(scrollPosition);
+                        }
+                    }
 
                 @Override
                 public void onPlaylistsLoadFailed(String errorMessage) {
@@ -172,8 +216,20 @@ public class TabPlaylistsFragment extends Fragment {
         return filteredPlaylists;
     }
 
+
+    private void openWebPage(String url) {
+        Uri webpage = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Log.d(TAG, "Não é possível abrir a URL: " + url);
+        }
+    }
+
     private void setupRecyclerView() {
         adapter = new PlaylistAdapter(playlists, playlistsRef, getContext(), userIdToNameMap);
+        adapter.setOnItemClickListener(this::openWebPage);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }

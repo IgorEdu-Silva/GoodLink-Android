@@ -52,12 +52,17 @@ public class TabFormFragment extends Fragment {
         enviarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String titulo = tituloEditText.getText().toString();
-                String descricao = descricaoEditText.getText().toString();
-                String nomeCanal = nomeCanalEditText.getText().toString();
-                String iframe = iframeEditText.getText().toString();
-                String urlCanal = urlCanalEditText.getText().toString();
-                String categoria = categoriaEditText.getText().toString();
+                String titulo = tituloEditText.getText().toString().trim();
+                String descricao = descricaoEditText.getText().toString().trim();
+                String nomeCanal = nomeCanalEditText.getText().toString().trim();
+                String iframe = iframeEditText.getText().toString().trim();
+                String urlCanal = urlCanalEditText.getText().toString().trim();
+                String categoria = categoriaEditText.getText().toString().trim();
+
+                if (titulo.isEmpty() || descricao.isEmpty() || nomeCanal.isEmpty() || iframe.isEmpty() || urlCanal.isEmpty() || categoria.isEmpty()) {
+                    Toast.makeText(getActivity(), "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 String dataPub = sdf.format(new Date());
@@ -73,7 +78,7 @@ public class TabFormFragment extends Fragment {
                         @Override
                         public void onPlaylistCreated(String playlistId) {
                             Toast.makeText(getActivity(), "Playlist criada com sucesso!", Toast.LENGTH_SHORT).show();
-                            clearEditTexts();
+//                            clearEditTexts();
                         }
 
                         @Override
@@ -91,42 +96,42 @@ public class TabFormFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        clearEditTexts();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        clearEditTexts();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        clearEditTexts();
-    }
-
-    private void clearEditTexts() {
-        if (tituloEditText != null) {
-            tituloEditText.setText("");
-        }
-        if (descricaoEditText != null) {
-            descricaoEditText.setText("");
-        }
-        if (nomeCanalEditText != null) {
-            nomeCanalEditText.setText("");
-        }
-        if (iframeEditText != null) {
-            iframeEditText.setText("");
-        }
-        if (urlCanalEditText != null) {
-            urlCanalEditText.setText("");
-        }
-        if (categoriaEditText != null) {
-            categoriaEditText.setText("");
-        }
-    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        clearEditTexts();
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        clearEditTexts();
+//    }
+//
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        clearEditTexts();
+//    }
+//
+//    private void clearEditTexts() {
+//        if (tituloEditText != null) {
+//            tituloEditText.setText("");
+//        }
+//        if (descricaoEditText != null) {
+//            descricaoEditText.setText("");
+//        }
+//        if (nomeCanalEditText != null) {
+//            nomeCanalEditText.setText("");
+//        }
+//        if (iframeEditText != null) {
+//            iframeEditText.setText("");
+//        }
+//        if (urlCanalEditText != null) {
+//            urlCanalEditText.setText("");
+//        }
+//        if (categoriaEditText != null) {
+//            categoriaEditText.setText("");
+//        }
+//    }
 }
