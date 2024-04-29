@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_terrible"
+        android:title="@string/p_ssimo" />
+    <item
+        android:id="@+id/action_bad"
+        android:title="@string/ruim" />
+    <item
+        android:id="@+id/action_regular"
+        android:title="@string/regular" />
+    <item
+        android:id="@+id/action_good"
+        android:title="@string/bom" />
+    <item
+        android:id="@+id/action_excellent"
+        android:title="@string/excelente" />
+</menu>
