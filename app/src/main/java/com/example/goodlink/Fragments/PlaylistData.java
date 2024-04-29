@@ -9,6 +9,8 @@ public class PlaylistData {
     private String categoria;
     private String nomeUsuario;
     private String dataPub;
+    private String avaliacao;
+    private String criadorId;
 
     public PlaylistData() {
 
@@ -23,6 +25,34 @@ public class PlaylistData {
         this.categoria = categoria;
         this.nomeUsuario = nomeUsuario;
         this.dataPub = dataPub;
+    }
+
+    public PlaylistData(String titulo, String descricao, String nomeCanal, String iframe, String urlCanal, String categoria, String nomeUsuario, String dataPub, String avaliacao) {
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.nomeCanal = nomeCanal;
+        this.iframe = iframe;
+        this.urlCanal = urlCanal;
+        this.categoria = categoria;
+        this.nomeUsuario = nomeUsuario;
+        this.dataPub = dataPub;
+        this.avaliacao = avaliacao;
+    }
+
+    public String getCriadorId() {
+        return criadorId;
+    }
+
+    public void setCriadorId(String criadorId) {
+        this.criadorId = criadorId;
+    }
+
+    public String getAvaliacao() {
+        return avaliacao;
+    }
+
+    public void setAvaliacao(String avaliacao) {
+        this.avaliacao = avaliacao;
     }
 
     public String getTitulo() {

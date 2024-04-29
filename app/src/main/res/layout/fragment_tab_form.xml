@@ -59,10 +59,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/categoria_Form"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
+                        android:background="@drawable/border"
                         android:backgroundTint="@android:color/transparent"
                         android:fontFamily="sans-serif-light"
                         android:gravity="start"

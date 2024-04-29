@@ -11,14 +11,21 @@ import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.goodlink.FireBase.FireStoreDataManager;
 import com.example.goodlink.R;
 import com.example.goodlink.Screens.PopUp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
@@ -34,6 +41,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     private final Context context;
     private final Map<String, String> userIdToNameMap;
     private OnItemClickListener clickListener;
+    private OnRefreshPauseListener refreshPauseListener;
+    private FireStoreDataManager fireStoreDataManager;
 
     public PlaylistAdapter(List<PlaylistData> playlists, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap) {
         this.playlists = playlists;
@@ -43,7 +52,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         this.userIdToNameMap = userIdToNameMap;
     }
 
-
     @NonNull
     @Override
     public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,49 +59,124 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         return new PlaylistViewHolder(view);
     }
 
+
+    //FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+    //PlaylistAdapter adapter = new PlaylistAdapter(playlists, databaseReference, context, userIdToNameMap);
+    //adapter.setFireStoreDataManager(fireStoreDataManager);
+
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
         if (position >= 0 && position < playlists.size()) {
             PlaylistData playlist = playlists.get(position);
-            holder.bind(playlists.get(position));
-            holder.tituloTextView.setText(playlist.getTitulo());
-            holder.nomeCanalTextView.setText(playlist.getNomeCanal());
 
-            String descricao = playlist.getDescricao();
-            if (descricao != null) {
-                if (descricao.length() > 48) {
-                    SpannableString spannableString = getSpannableString(descricao);
-                    holder.descricaoTextView.setText(spannableString);
-                    holder.descricaoTextView.setMovementMethod(LinkMovementMethod.getInstance());
+            if (playlist != null) {
+                holder.bind(playlist);
+                holder.tituloTextView.setText(playlist.getTitulo());
+                holder.nomeCanalTextView.setText(playlist.getNomeCanal());
+
+                boolean isCreator = playlist.getCriadorId() != null && playlist.getCriadorId().equals(getCurrentUserId());
+
+                if (isCreator) {
+                    holder.avaliacaoPlaylist.setSelection(getRatingIndex("Péssima"));
                 } else {
-                    holder.descricaoTextView.setText(descricao);
+                    String avaliacao = playlist.getAvaliacao();
+                    if (avaliacao != null) {
+                        int ratingIndex = getRatingIndex(avaliacao);
+                        holder.avaliacaoPlaylist.setSelection(ratingIndex);
+                    }
+                }
+
+                String descricao = playlist.getDescricao();
+                if (descricao != null) {
+                    if (descricao.length() > 48) {
+                        SpannableString spannableString = getSpannableString(descricao);
+                        holder.descricaoTextView.setText(spannableString);
+                        holder.descricaoTextView.setMovementMethod(LinkMovementMethod.getInstance());
+                    } else {
+                        holder.descricaoTextView.setText(descricao);
+                        holder.descricaoTextView.setMovementMethod(null);
+                    }
+                } else {
+                    holder.descricaoTextView.setText("");
                     holder.descricaoTextView.setMovementMethod(null);
                 }
-            } else {
-                holder.descricaoTextView.setText("");
-                holder.descricaoTextView.setMovementMethod(null);
+
+                holder.nomeCanalTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (clickListener != null) {
+                            clickListener.onItemClick(playlist.getUrlCanal());
+                        }
+                    }
+                });
+
+                holder.tituloTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (clickListener != null) {
+                            clickListener.onItemClick(playlist.getIframe());
+                        }
+                    }
+                });
+
+                ArrayAdapter<String> ratingAdapter = getStringArrayAdapter();
+                holder.avaliacaoPlaylist.setAdapter(ratingAdapter);
+
+                holder.setSpinnerSelectionFromCode(true);
+
+                holder.avaliacaoPlaylist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if (!holder.isSpinnerSelectionFromCode()) {
+                            String selectedRating = parent.getItemAtPosition(position).toString();
+                            Toast.makeText(context, "Avaliação selecionada: " + selectedRating, Toast.LENGTH_SHORT).show();
+
+                            playlist.setAvaliacao(selectedRating);
+                            String userId = getCurrentUserId();
+                            if (userId != null) {
+                                fireStoreDataManager.savePlaylistRating(userId, playlist, selectedRating, new FireStoreDataManager.OnPlaylistRatingSavedListener() {
+                                    @Override
+                                    public void onPlaylistRatingSaved(String playlistId) {
+                                        if (refreshPauseListener != null) {
+                                            refreshPauseListener.pauseAutomaticRefresh();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onPlaylistRatingSaveFailed(String errorMessage) {
+
+                                    }
+                                });
+                            }
+                        } else {
+                            holder.setSpinnerSelectionFromCode(false);
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
             }
-
-            holder.nomeCanalTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (clickListener != null) {
-                        clickListener.onItemClick(playlist.getUrlCanal());
-                    }
-                }
-            });
-
-
-            holder.tituloTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (clickListener != null) {
-                        clickListener.onItemClick(playlist.getIframe());
-                    }
-                }
-            });
         }
+    }
+
+
+    @NonNull
+    private ArrayAdapter<String> getStringArrayAdapter() {
+        List<String> ratingOptions = new ArrayList<>();
+        ratingOptions.add("Péssimo");
+        ratingOptions.add("Ruim");
+        ratingOptions.add("Regular");
+        ratingOptions.add("Bom");
+        ratingOptions.add("Excelente");
+
+        ArrayAdapter<String> ratingAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, ratingOptions);
+        ratingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        return ratingAdapter;
     }
 
     @NonNull
@@ -118,6 +201,30 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         return spannableString;
     }
 
+    private String getCurrentUserId() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            return currentUser.getUid();
+        } else {
+            return null;
+        }
+    }
+
+    private int getRatingIndex(String rating) {
+        ArrayAdapter<String> ratingAdapter = getStringArrayAdapter();
+        for (int i = 0; i < ratingAdapter.getCount(); i++) {
+            if (ratingAdapter.getItem(i).equals(rating)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void setFireStoreDataManager(FireStoreDataManager fireStoreDataManager) {
+        this.fireStoreDataManager = fireStoreDataManager;
+    }
+
     private void openPopUp(String fullDescription) {
         PopUp popUp = PopUp.newInstance(fullDescription);
         popUp.show(((FragmentActivity) context).getSupportFragmentManager(), "pop_up_verMais");
@@ -131,6 +238,15 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         this.clickListener = listener;
     }
 
+    public void setOnRefreshPauseListener(OnRefreshPauseListener refreshPauseListener) {
+        this.refreshPauseListener = refreshPauseListener;
+    }
+
+    public interface OnRefreshPauseListener {
+        void pauseAutomaticRefresh();
+    }
+
+
     @Override
     public int getItemCount() {
         return playlists.size();
@@ -142,7 +258,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         private final TextView nomeCanalTextView;
         private final TextView nomeUsuarioTextView;
         private final TextView dataPubTextView;
-
+        private final Spinner avaliacaoPlaylist;
+        private boolean isSpinnerSelectionFromCode = false;
 
         public PlaylistViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -151,6 +268,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
             nomeCanalTextView = itemView.findViewById(R.id.nomeCanal_Playlist);
             nomeUsuarioTextView = itemView.findViewById(R.id.nomeUsuario_Playlist);
             dataPubTextView = itemView.findViewById(R.id.dataPub_Playlist);
+            avaliacaoPlaylist = itemView.findViewById(R.id.ratingBar);
+
 
         }
 
@@ -173,5 +292,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
             }
         }
 
+        public void setSpinnerSelectionFromCode(boolean fromCode) {
+            isSpinnerSelectionFromCode = fromCode;
+        }
+
+        public boolean isSpinnerSelectionFromCode() {
+            return isSpinnerSelectionFromCode;
+        }
     }
 }

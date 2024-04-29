@@ -8,8 +8,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.goodlink.FireBase.FireStoreDataManager;
@@ -19,7 +21,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class TabFormFragment extends Fragment {
     private EditText tituloEditText;
@@ -27,7 +31,7 @@ public class TabFormFragment extends Fragment {
     private EditText nomeCanalEditText;
     private EditText iframeEditText;
     private EditText urlCanalEditText;
-    private EditText categoriaEditText;
+    private Spinner categoriaSpinner;
     private Button enviarButton;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -46,8 +50,11 @@ public class TabFormFragment extends Fragment {
         nomeCanalEditText = view.findViewById(R.id.nomeCanal_Form);
         iframeEditText = view.findViewById(R.id.iframe_Form);
         urlCanalEditText = view.findViewById(R.id.urlCanal_Form);
-        categoriaEditText = view.findViewById(R.id.categoria_Form);
+        categoriaSpinner = view.findViewById(R.id.categoria_Form);
         enviarButton = view.findViewById(R.id.btnSend_Form);
+
+        loadCategories();
+
 
         enviarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +64,7 @@ public class TabFormFragment extends Fragment {
                 String nomeCanal = nomeCanalEditText.getText().toString().trim();
                 String iframe = iframeEditText.getText().toString().trim();
                 String urlCanal = urlCanalEditText.getText().toString().trim();
-                String categoria = categoriaEditText.getText().toString().trim();
+                String categoria = categoriaSpinner.getSelectedItem().toString().trim();
 
                 if (titulo.isEmpty() || descricao.isEmpty() || nomeCanal.isEmpty() || iframe.isEmpty() || urlCanal.isEmpty() || categoria.isEmpty()) {
                     Toast.makeText(getActivity(), "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show();
@@ -96,6 +103,31 @@ public class TabFormFragment extends Fragment {
         return view;
     }
 
+    private void loadCategories() {
+        FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+        fireStoreDataManager.getPlaylistsFromFirestore(new FireStoreDataManager.OnPlaylistsLoadedListener() {
+            @Override
+            public void onPlaylistsLoaded(List<PlaylistData> playlists) {
+                List<String> categories = new ArrayList<>();
+                for (PlaylistData playlist : playlists) {
+                    String category = playlist.getCategoria();
+                    if (!categories.contains(category)) {
+                        categories.add(category);
+                    }
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
+                        android.R.layout.simple_spinner_item, categories);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                categoriaSpinner.setAdapter(adapter);
+            }
+
+            @Override
+            public void onPlaylistsLoadFailed(String errorMessage) {
+                Toast.makeText(getActivity(), "Erro ao carregar categorias: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 //    @Override
 //    public void onPause() {
 //        super.onPause();

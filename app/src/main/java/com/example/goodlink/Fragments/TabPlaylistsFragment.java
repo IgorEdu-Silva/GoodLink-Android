@@ -9,8 +9,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -55,6 +59,8 @@ public class TabPlaylistsFragment extends Fragment {
         playlists = new ArrayList<>();
         firestoreDataManager = new FireStoreDataManager();
         searchView = view.findViewById(R.id.searchView);
+        ImageButton btnCategoryFilter = view.findViewById(R.id.ButtonFilter);
+
 
         if (savedInstanceState != null) {
             lastPlaylistPosition = savedInstanceState.getInt("lastPlaylistPosition", 0);
@@ -68,6 +74,7 @@ public class TabPlaylistsFragment extends Fragment {
                 if (userIdToNameMap != null) {
                     TabPlaylistsFragment.this.playlists.addAll(playlists);
                     adapter.notifyDataSetChanged();
+                    playlistsFull = new ArrayList<>(playlists);
                     Toast.makeText(getContext(), "Playlists carregadas com sucesso", Toast.LENGTH_SHORT).show();
                 } else {
                     firestoreDataManager.getUserIdToNameMap(new FireStoreDataManager.OnUserIdToNameMapListener() {
@@ -79,6 +86,7 @@ public class TabPlaylistsFragment extends Fragment {
                             }
 
                             setupRecyclerView();
+                            playlistsFull = new ArrayList<>(playlists);
                             Toast.makeText(getContext(), "Playlists carregadas com sucesso", Toast.LENGTH_SHORT).show();
                         }
 
@@ -136,7 +144,9 @@ public class TabPlaylistsFragment extends Fragment {
             public void onChanged(String newFilterText) {
                 if (newFilterText.isEmpty()) {
                     playlists.clear();
-                    playlists.addAll(playlistsFull);
+                    if (playlistsFull != null) {
+                        playlists.addAll(playlistsFull);
+                    }
                     adapter.notifyDataSetChanged();
                     startAutomaticRefresh();
                 } else {
@@ -149,9 +159,67 @@ public class TabPlaylistsFragment extends Fragment {
             }
         });
 
+        btnCategoryFilter.setOnClickListener(this::showCategoryMenu);
+
         startAutomaticRefresh();
 
         return view;
+    }
+
+    private void showCategoryMenu(View anchorView) {
+        stopAutomaticRefresh();
+
+        PopupMenu popupMenu = new PopupMenu(requireContext(), anchorView);
+        Menu menu = popupMenu.getMenu();
+
+        List<String> categories = getCategoryList();
+        for (String category : categories) {
+            menu.add(category);
+        }
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                String category = item.getTitle().toString();
+                filterPlaylistsByCategory(category);
+                startAutomaticRefresh();
+                return true;
+            }
+        });
+
+        popupMenu.show();
+
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                startAutomaticRefresh();
+            }
+        });
+    }
+
+    private List<String> getCategoryList() {
+        List<String> categories = new ArrayList<>();
+        for (PlaylistData playlist : playlistsFull) {
+            String category = playlist.getCategoria();
+            if (!categories.contains(category)) {
+                categories.add(category);
+            }
+        }
+        return categories;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void filterPlaylistsByCategory(String category) {
+        List<PlaylistData> filteredPlaylists = new ArrayList<>();
+        for (PlaylistData playlist : playlistsFull) {
+            if (playlist.getCategoria().equalsIgnoreCase(category)) {
+                filteredPlaylists.add(playlist);
+            }
+        }
+
+        playlists.clear();
+        playlists.addAll(filteredPlaylists);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

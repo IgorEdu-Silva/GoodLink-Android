@@ -44,5 +44,11 @@
     <string name="confirmar">Confirmar</string>
     <string name="tenha_consci_ncia_ao_preencher_o_formul_rio_links_suspeitos_ser_o_retirados_e_sua_conta_ser_banida_permanentemente">Tenha consciência ao preencher o formulário, links suspeitos serão retirados e sua conta será banida permanentemente.</string>
     <string name="ver_mais">ver mais</string>
+    <string name="regular">Regular</string>
+    <string name="ruim">Ruim</string>
+    <string name="p_ssimo">Péssimo</string>
+    <string name="bom">Bom</string>
+    <string name="excelente">Excelente</string>
+    <string name="coment_rios">Comentários</string>
 
 </resources>

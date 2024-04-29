@@ -9,6 +9,7 @@ import com.example.goodlink.Fragments.PlaylistData;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,6 +115,49 @@ public class FireStoreDataManager {
         playlist.put("dataPub", playlistData.getDataPub());
         return playlist;
     }
+
+    public void savePlaylistRating(String userId, PlaylistData playlistData, String rating, OnPlaylistRatingSavedListener listener) {
+        Map<String, Object> ratingData = new HashMap<>();
+        ratingData.put("avaliacao", rating);
+
+        playlistsCollection.add(getStringObjectMap(playlistData))
+                .addOnSuccessListener(documentReference -> {
+                    String playlistId = documentReference.getId();
+                    listener.onPlaylistRatingSaved(playlistId); // Notificar o ID da playlist
+                    CollectionReference userPlaylistRef = usersCollection.document(userId).collection("userPlaylists");
+                    userPlaylistRef.document(playlistId).set(ratingData, SetOptions.merge())
+                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Rating saved successfully"))
+                            .addOnFailureListener(e -> {
+                                Log.e(TAG, "Error saving rating", e);
+                                listener.onPlaylistRatingSaveFailed(e.getMessage());
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error creating playlist: ", e);
+                    listener.onPlaylistRatingSaveFailed(e.getMessage());
+                });
+    }
+
+
+    public void loadPlaylistRating(String userId, String playlistId, FireStoreDataListener<String> listener) {
+        CollectionReference userPlaylistRef = usersCollection.document(userId).collection("userPlaylists");
+        userPlaylistRef.document(playlistId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String rating = documentSnapshot.getString("avaliacao");
+                        listener.onSuccess(rating);
+                    } else {
+                        listener.onFailure("Rating not found");
+                    }
+                })
+                .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
+    }
+
+    public interface OnPlaylistRatingSavedListener {
+        void onPlaylistRatingSaved(String playlistId);
+        void onPlaylistRatingSaveFailed(String errorMessage);
+    }
+
 
     public interface OnUserIdToNameMapListener {
         void onUserIdToNameMapLoaded(Map<String, String> userIdToNameMap);
