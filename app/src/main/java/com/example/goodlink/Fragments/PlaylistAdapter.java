@@ -11,11 +11,9 @@ import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -41,15 +39,19 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     private final Context context;
     private final Map<String, String> userIdToNameMap;
     private OnItemClickListener clickListener;
-    private OnRefreshPauseListener refreshPauseListener;
-    private FireStoreDataManager fireStoreDataManager;
+    private final FireStoreDataManager fireStoreDataManager;
 
     public PlaylistAdapter(List<PlaylistData> playlists, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap) {
+        this(playlists, databaseReference, context, userIdToNameMap, null);
+    }
+
+    public PlaylistAdapter(List<PlaylistData> playlists, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap, FireStoreDataManager fireStoreDataManager) {
         this.playlists = playlists;
         this.context = context;
         this.playlistsFull.set(new ArrayList<>(playlists));
         PlaylistAdapter.databaseReference = databaseReference;
         this.userIdToNameMap = userIdToNameMap;
+        this.fireStoreDataManager = fireStoreDataManager;
     }
 
     @NonNull
@@ -58,12 +60,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.items_playlist_fragment, parent, false);
         return new PlaylistViewHolder(view);
     }
-
-
-    //FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-    //PlaylistAdapter adapter = new PlaylistAdapter(playlists, databaseReference, context, userIdToNameMap);
-    //adapter.setFireStoreDataManager(fireStoreDataManager);
-
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -75,18 +71,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
                 holder.bind(playlist);
                 holder.tituloTextView.setText(playlist.getTitulo());
                 holder.nomeCanalTextView.setText(playlist.getNomeCanal());
-
-                boolean isCreator = playlist.getCriadorId() != null && playlist.getCriadorId().equals(getCurrentUserId());
-
-                if (isCreator) {
-                    holder.avaliacaoPlaylist.setSelection(getRatingIndex("Péssima"));
-                } else {
-                    String avaliacao = playlist.getAvaliacao();
-                    if (avaliacao != null) {
-                        int ratingIndex = getRatingIndex(avaliacao);
-                        holder.avaliacaoPlaylist.setSelection(ratingIndex);
-                    }
-                }
 
                 String descricao = playlist.getDescricao();
                 if (descricao != null) {
@@ -117,53 +101,17 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
                     public void onClick(View v) {
                         if (clickListener != null) {
                             clickListener.onItemClick(playlist.getIframe());
+
                         }
                     }
                 });
 
                 ArrayAdapter<String> ratingAdapter = getStringArrayAdapter();
                 holder.avaliacaoPlaylist.setAdapter(ratingAdapter);
-
                 holder.setSpinnerSelectionFromCode(true);
-
-                holder.avaliacaoPlaylist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        if (!holder.isSpinnerSelectionFromCode()) {
-                            String selectedRating = parent.getItemAtPosition(position).toString();
-                            Toast.makeText(context, "Avaliação selecionada: " + selectedRating, Toast.LENGTH_SHORT).show();
-
-                            playlist.setAvaliacao(selectedRating);
-                            String userId = getCurrentUserId();
-                            if (userId != null) {
-                                fireStoreDataManager.savePlaylistRating(userId, playlist, selectedRating, new FireStoreDataManager.OnPlaylistRatingSavedListener() {
-                                    @Override
-                                    public void onPlaylistRatingSaved(String playlistId) {
-                                        if (refreshPauseListener != null) {
-                                            refreshPauseListener.pauseAutomaticRefresh();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onPlaylistRatingSaveFailed(String errorMessage) {
-
-                                    }
-                                });
-                            }
-                        } else {
-                            holder.setSpinnerSelectionFromCode(false);
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
             }
         }
     }
-
 
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
@@ -197,6 +145,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
             }
         };
+
         spannableString.setSpan(clickableSpan, descricaoResumida.length() - 8, descricaoResumida.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;
     }
@@ -211,41 +160,33 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         }
     }
 
-    private int getRatingIndex(String rating) {
-        ArrayAdapter<String> ratingAdapter = getStringArrayAdapter();
-        for (int i = 0; i < ratingAdapter.getCount(); i++) {
-            if (ratingAdapter.getItem(i).equals(rating)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public void setFireStoreDataManager(FireStoreDataManager fireStoreDataManager) {
-        this.fireStoreDataManager = fireStoreDataManager;
-    }
-
     private void openPopUp(String fullDescription) {
         PopUp popUp = PopUp.newInstance(fullDescription);
         popUp.show(((FragmentActivity) context).getSupportFragmentManager(), "pop_up_verMais");
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(String url);
+    public String getLink(int position) {
+        if (position >= 0 && position < playlists.size()) {
+            PlaylistData playlist = playlists.get(position);
+            if (playlist != null) {
+                if (playlist.getIframe() != null && !playlist.getIframe().isEmpty()) {
+                    return playlist.getIframe();
+                } else if (playlist.getUrlCanal() != null && !playlist.getUrlCanal().isEmpty()) {
+                    return playlist.getUrlCanal();
+                }
+            }
+        }
+        return null;
     }
+
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.clickListener = listener;
     }
 
-    public void setOnRefreshPauseListener(OnRefreshPauseListener refreshPauseListener) {
-        this.refreshPauseListener = refreshPauseListener;
+    public interface OnItemClickListener {
+        void onItemClick(String url);
     }
-
-    public interface OnRefreshPauseListener {
-        void pauseAutomaticRefresh();
-    }
-
 
     @Override
     public int getItemCount() {
@@ -269,8 +210,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
             nomeUsuarioTextView = itemView.findViewById(R.id.nomeUsuario_Playlist);
             dataPubTextView = itemView.findViewById(R.id.dataPub_Playlist);
             avaliacaoPlaylist = itemView.findViewById(R.id.ratingBar);
-
-
         }
 
         public void bind(PlaylistData playlistData) {
@@ -294,10 +233,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
         public void setSpinnerSelectionFromCode(boolean fromCode) {
             isSpinnerSelectionFromCode = fromCode;
-        }
-
-        public boolean isSpinnerSelectionFromCode() {
-            return isSpinnerSelectionFromCode;
         }
     }
 }

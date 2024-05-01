@@ -85,7 +85,6 @@ public class FireStoreDataManager {
                 });
     }
 
-
     public void createPlaylist(String userId, PlaylistData playlistData, OnPlaylistCreatedListener listener) {
         Map<String, Object> playlist = getStringObjectMap(playlistData);
 
@@ -138,7 +137,6 @@ public class FireStoreDataManager {
                 });
     }
 
-
     public void loadPlaylistRating(String userId, String playlistId, FireStoreDataListener<String> listener) {
         CollectionReference userPlaylistRef = usersCollection.document(userId).collection("userPlaylists");
         userPlaylistRef.document(playlistId).get()
@@ -157,7 +155,6 @@ public class FireStoreDataManager {
         void onPlaylistRatingSaved(String playlistId);
         void onPlaylistRatingSaveFailed(String errorMessage);
     }
-
 
     public interface OnUserIdToNameMapListener {
         void onUserIdToNameMapLoaded(Map<String, String> userIdToNameMap);

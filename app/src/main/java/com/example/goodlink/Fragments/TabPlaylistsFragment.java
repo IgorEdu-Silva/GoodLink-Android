@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,10 +43,6 @@ public class TabPlaylistsFragment extends Fragment {
     private Map<String, String> userIdToNameMap;
     private FilterViewModel filterViewModel;
     private SearchView searchView;
-    private static final int refresh_interval = 5000;
-    private int lastPlaylistPosition = 0;
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,18 +56,12 @@ public class TabPlaylistsFragment extends Fragment {
         searchView = view.findViewById(R.id.searchView);
         ImageButton btnCategoryFilter = view.findViewById(R.id.ButtonFilter);
 
-
-        if (savedInstanceState != null) {
-            lastPlaylistPosition = savedInstanceState.getInt("lastPlaylistPosition", 0);
-        }
-
-
         firestoreDataManager.getPlaylistsFromFirestore(new FireStoreDataManager.OnPlaylistsLoadedListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onPlaylistsLoaded(List<PlaylistData> playlists) {
+            public void onPlaylistsLoaded(List<PlaylistData> loadedPlaylists) {
                 if (userIdToNameMap != null) {
-                    TabPlaylistsFragment.this.playlists.addAll(playlists);
+                    playlists.addAll(loadedPlaylists);
                     adapter.notifyDataSetChanged();
                     playlistsFull = new ArrayList<>(playlists);
                     Toast.makeText(getContext(), "Playlists carregadas com sucesso", Toast.LENGTH_SHORT).show();
@@ -80,13 +69,13 @@ public class TabPlaylistsFragment extends Fragment {
                     firestoreDataManager.getUserIdToNameMap(new FireStoreDataManager.OnUserIdToNameMapListener() {
                         @Override
                         public void onUserIdToNameMapLoaded(Map<String, String> userIdToNameMap) {
-                            for (PlaylistData playlist : playlists) {
+                            for (PlaylistData playlist : loadedPlaylists) {
                                 String fullDescription = PlaylistDescriptionHelper.getDescriptionFromPlaylist(playlist, getContext());
                                 playlist.setDescricao(fullDescription);
                             }
 
                             setupRecyclerView();
-                            playlistsFull = new ArrayList<>(playlists);
+                            playlistsFull = new ArrayList<>(loadedPlaylists);
                             Toast.makeText(getContext(), "Playlists carregadas com sucesso", Toast.LENGTH_SHORT).show();
                         }
 
@@ -96,7 +85,6 @@ public class TabPlaylistsFragment extends Fragment {
                         }
                     });
                 }
-
             }
 
             @Override
@@ -108,10 +96,6 @@ public class TabPlaylistsFragment extends Fragment {
         firestoreDataManager.getUserIdToNameMap(new FireStoreDataManager.OnUserIdToNameMapListener() {
             @Override
             public void onUserIdToNameMapLoaded(Map<String, String> userIdToNameMap) {
-                for (Map.Entry<String, String> entry : userIdToNameMap.entrySet()) {
-                    Log.d("UserMap", "UserId: " + entry.getKey() + ", UserName: " + entry.getValue());
-                }
-
                 TabPlaylistsFragment.this.userIdToNameMap = userIdToNameMap;
                 setupRecyclerView();
             }
@@ -121,7 +105,6 @@ public class TabPlaylistsFragment extends Fragment {
                 Log.e("TabPlaylistsFragment", "Erro ao carregar mapa de ID de usuário para nome de usuário: " + errorMessage);
             }
         });
-
 
         filterViewModel = new ViewModelProvider(requireActivity()).get(FilterViewModel.class);
 
@@ -148,27 +131,21 @@ public class TabPlaylistsFragment extends Fragment {
                         playlists.addAll(playlistsFull);
                     }
                     adapter.notifyDataSetChanged();
-                    startAutomaticRefresh();
                 } else {
                     playlists.clear();
                     playlists.addAll(filterPlaylists(playlistsFull, newFilterText));
                     adapter.notifyDataSetChanged();
-                    stopAutomaticRefresh();
                 }
-                adapter.notifyDataSetChanged();
             }
         });
 
+        setupRecyclerView();
         btnCategoryFilter.setOnClickListener(this::showCategoryMenu);
-
-        startAutomaticRefresh();
 
         return view;
     }
 
     private void showCategoryMenu(View anchorView) {
-        stopAutomaticRefresh();
-
         PopupMenu popupMenu = new PopupMenu(requireContext(), anchorView);
         Menu menu = popupMenu.getMenu();
 
@@ -182,19 +159,11 @@ public class TabPlaylistsFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 String category = item.getTitle().toString();
                 filterPlaylistsByCategory(category);
-                startAutomaticRefresh();
                 return true;
             }
         });
 
         popupMenu.show();
-
-        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
-            @Override
-            public void onDismiss(PopupMenu menu) {
-                startAutomaticRefresh();
-            }
-        });
     }
 
     private List<String> getCategoryList() {
@@ -222,52 +191,12 @@ public class TabPlaylistsFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putInt("lastPlaylistPosition", lastPlaylistPosition);
-
-        super.onSaveInstanceState(outState);
+    private void setupRecyclerView() {
+        adapter = new PlaylistAdapter(playlists, playlistsRef, getContext(), userIdToNameMap);
+        adapter.setOnItemClickListener(this::openWebPage);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
-
-    private void startAutomaticRefresh() {
-        stopAutomaticRefresh();
-        refreshHandler.postDelayed(refreshRunnable, refresh_interval);
-    }
-
-    private void stopAutomaticRefresh() {
-        refreshHandler.removeCallbacks(refreshRunnable);
-    }
-
-    private final Handler refreshHandler = new Handler();
-    private final Runnable refreshRunnable = new Runnable() {
-        @Override
-        public void run() {
-            firestoreDataManager.getPlaylistsFromFirestore(new FireStoreDataManager.OnPlaylistsLoadedListener() {
-                @SuppressLint("NotifyDataSetChanged")
-                @Override
-                    public void onPlaylistsLoaded(List<PlaylistData> loadedPlaylists) {
-                        int scrollPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-
-                        playlists.clear();
-                        playlists.addAll(loadedPlaylists);
-                        playlistsFull = new ArrayList<>(playlists);
-                        filterViewModel.setPlaylists(playlists);
-                        adapter.notifyDataSetChanged();
-
-                        if (scrollPosition != RecyclerView.NO_POSITION) {
-                            recyclerView.getLayoutManager().scrollToPosition(scrollPosition);
-                        }
-                    }
-
-                @Override
-                public void onPlaylistsLoadFailed(String errorMessage) {
-                    Log.e("TabPlaylistsFragment", "Erro ao carregar playlists" + errorMessage);
-                }
-            });
-
-            startAutomaticRefresh();
-        }
-    };
 
     private List<PlaylistData> filterPlaylists(List<PlaylistData> allPlaylists, String filterText) {
         if (allPlaylists == null) {
@@ -284,7 +213,6 @@ public class TabPlaylistsFragment extends Fragment {
         return filteredPlaylists;
     }
 
-
     private void openWebPage(String url) {
         Uri webpage = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
@@ -293,12 +221,5 @@ public class TabPlaylistsFragment extends Fragment {
         } else {
             Log.d(TAG, "Não é possível abrir a URL: " + url);
         }
-    }
-
-    private void setupRecyclerView() {
-        adapter = new PlaylistAdapter(playlists, playlistsRef, getContext(), userIdToNameMap);
-        adapter.setOnItemClickListener(this::openWebPage);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 }
