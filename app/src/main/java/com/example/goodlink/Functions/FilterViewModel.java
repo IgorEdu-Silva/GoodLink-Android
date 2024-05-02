@@ -1,4 +1,4 @@
-package com.example.goodlink.Fragments;
+package com.example.goodlink.Functions;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

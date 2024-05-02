@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.goodlink.FireBase.FireStoreDataManager;
 import com.example.goodlink.FireBase.PlaylistData;
 import com.example.goodlink.R;
-import com.example.goodlink.Screens.PopUp;
+import com.example.goodlink.Functions.PopUp;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;

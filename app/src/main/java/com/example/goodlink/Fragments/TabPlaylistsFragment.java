@@ -26,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.goodlink.FireBase.FireBaseDataBase;
 import com.example.goodlink.FireBase.FireStoreDataManager;
 import com.example.goodlink.FireBase.PlaylistData;
+import com.example.goodlink.Functions.FilterViewModel;
+import com.example.goodlink.Functions.PlaylistDescriptionHelper;
 import com.example.goodlink.R;
 import com.google.firebase.database.DatabaseReference;
 

@@ -1,4 +1,4 @@
-package com.example.goodlink.Fragments;
+package com.example.goodlink.Functions;
 
 import android.content.Context;
 

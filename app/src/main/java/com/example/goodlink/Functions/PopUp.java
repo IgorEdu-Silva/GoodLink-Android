@@ -1,4 +1,4 @@
-package com.example.goodlink.Screens;
+package com.example.goodlink.Functions;
 
 import androidx.fragment.app.DialogFragment;
 import android.graphics.Color;
