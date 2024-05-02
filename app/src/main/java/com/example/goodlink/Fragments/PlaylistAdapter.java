@@ -179,7 +179,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         return null;
     }
 
-
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.clickListener = listener;
     }

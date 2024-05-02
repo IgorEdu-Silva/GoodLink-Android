@@ -7,44 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".Screens.forum">
 
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="357dp"
-        android:layout_height="30dp"
-        android:text="@string/este_aplicativo_foi_criado_para_fins_estudantis"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.296"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.99"
-        tools:ignore="TextSizeCheck,VisualLintOverlap" />
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="170dp"
-        android:layout_height="30dp"
-        android:text="@string/goodlink"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.066"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.947"
-        tools:ignore="TextSizeCheck,VisualLintOverlap" />
-
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_width="390dp"
-        android:layout_height="690dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.476"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayoutInfo"
-        app:layout_constraintVertical_bias="0.0" />
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayoutInfo"
         android:layout_width="match_parent"
@@ -57,7 +19,6 @@
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="TextSizeCheck">
 
-
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabPlaylists"
             android:layout_width="wrap_content"
@@ -65,8 +26,8 @@
             android:contentDescription="@string/playlists"
             android:text="@string/playlists"
             tools:ignore="SpeakableTextPresentCheck"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp" />
+            tools:layout_editor_absoluteX="-2dp"
+            tools:layout_editor_absoluteY="5dp" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabForm"
@@ -87,5 +48,68 @@
             tools:layout_editor_absoluteX="272dp"
             tools:layout_editor_absoluteY="100dp" />
     </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="685dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayoutInfo"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="170dp"
+        android:layout_height="30dp"
+        android:text="@string/goodlink"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.957"
+        tools:ignore="TextSizeCheck,VisualLintOverlap" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="@string/este_aplicativo_foi_criado_para_fins_estudantis"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.144"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="TextSizeCheck,VisualLintOverlap" />
+
+    <ImageButton
+        android:id="@+id/buttonSuggestion"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@android:drawable/ic_menu_help"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.855"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.977"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck,ImageContrastCheck" />
+
+    <ImageButton
+        android:id="@+id/buttonReportBug"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@android:drawable/stat_notify_error"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.958"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.977"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck,ImageContrastCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

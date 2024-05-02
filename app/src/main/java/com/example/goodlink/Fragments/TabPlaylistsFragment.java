@@ -28,9 +28,14 @@ import com.example.goodlink.FireBase.FireStoreDataManager;
 import com.example.goodlink.R;
 import com.google.firebase.database.DatabaseReference;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class TabPlaylistsFragment extends Fragment {
@@ -43,6 +48,8 @@ public class TabPlaylistsFragment extends Fragment {
     private Map<String, String> userIdToNameMap;
     private FilterViewModel filterViewModel;
     private SearchView searchView;
+    ImageButton btnReloadPlaylists;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +62,9 @@ public class TabPlaylistsFragment extends Fragment {
         firestoreDataManager = new FireStoreDataManager();
         searchView = view.findViewById(R.id.searchView);
         ImageButton btnCategoryFilter = view.findViewById(R.id.ButtonFilter);
+        btnReloadPlaylists = view.findViewById(R.id.ButtonReloadPlaylists);
+        ImageButton btnSortBy = view.findViewById(R.id.ButtonSortBy);
+        btnSortBy.setOnClickListener(this::showSortMenu);
 
         firestoreDataManager.getPlaylistsFromFirestore(new FireStoreDataManager.OnPlaylistsLoadedListener() {
             @SuppressLint("NotifyDataSetChanged")
@@ -65,6 +75,12 @@ public class TabPlaylistsFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                     playlistsFull = new ArrayList<>(playlists);
                     Toast.makeText(getContext(), "Playlists carregadas com sucesso", Toast.LENGTH_SHORT).show();
+
+                    if (recyclerView != null && adapter != null) {
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        setupRecyclerView();
+                    }
                 } else {
                     firestoreDataManager.getUserIdToNameMap(new FireStoreDataManager.OnUserIdToNameMapListener() {
                         @Override
@@ -139,11 +155,91 @@ public class TabPlaylistsFragment extends Fragment {
             }
         });
 
-        setupRecyclerView();
         btnCategoryFilter.setOnClickListener(this::showCategoryMenu);
+
+        btnReloadPlaylists.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reloadPlaylists();
+            }
+        });
 
         return view;
     }
+
+    private void showSortMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), view);
+        popupMenu.getMenu().add(Menu.NONE, 0, Menu.NONE, "Ordenar por Ordem Alfabética");
+        popupMenu.getMenu().add(Menu.NONE, 1, Menu.NONE, "Ordenar por Data");
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == 0) {
+                sortPlaylistsAlphabetically();
+                return true;
+            } else if (itemId == 1) {
+                sortPlaylistsByDate();
+                return true;
+            }
+            return false;
+        });
+        popupMenu.show();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void sortPlaylistsAlphabetically() {
+        playlists.sort(new Comparator<PlaylistData>() {
+            @Override
+            public int compare(PlaylistData playlist1, PlaylistData playlist2) {
+                if (playlist1.getTitulo() == null && playlist2.getTitulo() == null) {
+                    return 0;
+                } else if (playlist1.getTitulo() == null) {
+                    return 1;
+                } else if (playlist2.getTitulo() == null) {
+                    return -1;
+                } else {
+                    return playlist1.getTitulo().compareToIgnoreCase(playlist2.getTitulo());
+                }
+            }
+        });
+        adapter.notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void sortPlaylistsByDate() {
+        playlists.sort(new Comparator<PlaylistData>() {
+            @Override
+            public int compare(PlaylistData playlist1, PlaylistData playlist2) {
+                if (playlist1.getDataPub() == null || playlist2.getDataPub() == null) {
+                    return 0;
+                }
+
+                String[] date1 = playlist1.getDataPub().split("/");
+                String[] date2 = playlist2.getDataPub().split("/");
+
+                int day1 = Integer.parseInt(date1[0]);
+                int month1 = Integer.parseInt(date1[1]);
+                int year1 = Integer.parseInt(date1[2]);
+
+                int day2 = Integer.parseInt(date2[0]);
+                int month2 = Integer.parseInt(date2[1]);
+                int year2 = Integer.parseInt(date2[2]);
+
+                if (year1 != year2) {
+                    return year1 - year2;
+                }
+
+                if (month1 != month2) {
+                    return month1 - month2;
+                }
+
+                return day1 - day2;
+            }
+        });
+        adapter.notifyDataSetChanged();
+    }
+
+
 
     private void showCategoryMenu(View anchorView) {
         PopupMenu popupMenu = new PopupMenu(requireContext(), anchorView);
@@ -164,6 +260,26 @@ public class TabPlaylistsFragment extends Fragment {
         });
 
         popupMenu.show();
+    }
+
+    public void reloadPlaylists() {
+        firestoreDataManager.getPlaylistsFromFirestore(new FireStoreDataManager.OnPlaylistsLoadedListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onPlaylistsLoaded(List<PlaylistData> loadedPlaylists) {
+                playlistsFull = new ArrayList<>(loadedPlaylists);
+                playlists.clear();
+                playlists.addAll(loadedPlaylists);
+                adapter.notifyDataSetChanged();
+                Toast.makeText(getContext(), "Playlists recarregadas com sucesso", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPlaylistsLoadFailed(String errorMessage) {
+                Log.e("TabPlaylistsFragment", "Erro ao carregar playlists do Firestore: " + errorMessage);
+                Toast.makeText(getContext(), "Erro ao recarregar playlists", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private List<String> getCategoryList() {
@@ -204,14 +320,21 @@ public class TabPlaylistsFragment extends Fragment {
         }
         List<PlaylistData> filteredPlaylists = new ArrayList<>();
         for (PlaylistData playlist : allPlaylists) {
-            if (playlist.getTitulo().toLowerCase().contains(filterText.toLowerCase()) ||
-                    playlist.getCategoria().toLowerCase().contains(filterText.toLowerCase()) ||
-                    playlist.getNomeCanal().toLowerCase().contains(filterText.toLowerCase())) {
-                filteredPlaylists.add(playlist);
+            String titulo = playlist.getTitulo();
+            String categoria = playlist.getCategoria();
+            String nomeCanal = playlist.getNomeCanal();
+
+            if (titulo != null && categoria != null && nomeCanal != null) {
+                if (titulo.toLowerCase().contains(filterText.toLowerCase()) ||
+                        categoria.toLowerCase().contains(filterText.toLowerCase()) ||
+                        nomeCanal.toLowerCase().contains(filterText.toLowerCase())) {
+                    filteredPlaylists.add(playlist);
+                }
             }
         }
         return filteredPlaylists;
     }
+
 
     private void openWebPage(String url) {
         Uri webpage = Uri.parse(url);

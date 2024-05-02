@@ -50,5 +50,7 @@
     <string name="bom">Bom</string>
     <string name="excelente">Excelente</string>
     <string name="coment_rios">Comentários</string>
+    <string name="ordenar_por_ordem_alfab_tica">Ordenar por Ordem Alfabética</string>
+    <string name="ordenar_por_data">Ordenar por Data</string>
 
 </resources>
