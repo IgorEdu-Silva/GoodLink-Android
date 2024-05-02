@@ -1,4 +1,4 @@
-package com.example.goodlink.Fragments;
+package com.example.goodlink.FireBase;
 
 public class PlaylistData {
     private String titulo;

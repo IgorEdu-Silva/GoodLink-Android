@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.goodlink.FireBase.FireStoreDataManager;
+import com.example.goodlink.FireBase.PlaylistData;
 import com.example.goodlink.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
