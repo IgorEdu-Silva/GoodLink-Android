@@ -28,14 +28,10 @@ import com.example.goodlink.FireBase.FireStoreDataManager;
 import com.example.goodlink.R;
 import com.google.firebase.database.DatabaseReference;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class TabPlaylistsFragment extends Fragment {
