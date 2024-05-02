@@ -22,8 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.goodlink.FireBase.FireStoreDataManager;
 import com.example.goodlink.R;
 import com.example.goodlink.Screens.PopUp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
