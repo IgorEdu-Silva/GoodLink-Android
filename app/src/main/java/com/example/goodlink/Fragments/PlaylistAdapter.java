@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder> {
     private final List<PlaylistData> playlists;
     private final AtomicReference<List<PlaylistData>> playlistsFull = new AtomicReference<>();

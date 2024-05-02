@@ -26,7 +26,6 @@ import com.example.goodlink.FireBase.FireBaseDataBase;
 import com.example.goodlink.FireBase.SessionManager;
 import com.example.goodlink.R;
 
-
 public class RegisterAndLogin extends AppCompatActivity {
     private FireBaseAuthenticate mAuthenticator;
     private FireBaseDataBase mDatabase;

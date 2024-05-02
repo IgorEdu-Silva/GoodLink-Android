@@ -8,7 +8,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-
 public class FireBaseDataBase {
     @SuppressLint("StaticFieldLeak")
     private static FirebaseFirestore mFirestore;

@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 
 import com.example.goodlink.R;
 
-
 public class PopUp extends DialogFragment {
     private String fullDescriptionText;
     private static final String FULL_DESCRIPTION_KEY = "fullDescription";

@@ -56,7 +56,6 @@ public class TabFormFragment extends Fragment {
 
         loadCategories();
 
-
         enviarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +85,6 @@ public class TabFormFragment extends Fragment {
                         @Override
                         public void onPlaylistCreated(String playlistId) {
                             Toast.makeText(getActivity(), "Playlist criada com sucesso!", Toast.LENGTH_SHORT).show();
-//                            clearEditTexts();
                         }
 
                         @Override
@@ -129,42 +127,4 @@ public class TabFormFragment extends Fragment {
             }
         });
     }
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        clearEditTexts();
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        clearEditTexts();
-//    }
-//
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        clearEditTexts();
-//    }
-//
-//    private void clearEditTexts() {
-//        if (tituloEditText != null) {
-//            tituloEditText.setText("");
-//        }
-//        if (descricaoEditText != null) {
-//            descricaoEditText.setText("");
-//        }
-//        if (nomeCanalEditText != null) {
-//            nomeCanalEditText.setText("");
-//        }
-//        if (iframeEditText != null) {
-//            iframeEditText.setText("");
-//        }
-//        if (urlCanalEditText != null) {
-//            urlCanalEditText.setText("");
-//        }
-//        if (categoriaEditText != null) {
-//            categoriaEditText.setText("");
-//        }
-//    }
 }

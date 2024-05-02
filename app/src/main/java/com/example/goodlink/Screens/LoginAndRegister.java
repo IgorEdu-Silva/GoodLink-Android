@@ -23,7 +23,6 @@ import com.example.goodlink.FireBase.SessionManager;
 import com.example.goodlink.R;
 import com.google.firebase.auth.FirebaseUser;
 
-
 public class LoginAndRegister extends AppCompatActivity {
     private FireBaseAuthenticate mAuthenticator;
     private FireBaseDataBase mDatabase;

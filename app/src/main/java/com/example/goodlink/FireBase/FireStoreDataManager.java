@@ -1,6 +1,5 @@
 package com.example.goodlink.FireBase;
 
-
 import android.util.Log;
 
 import androidx.annotation.NonNull;
