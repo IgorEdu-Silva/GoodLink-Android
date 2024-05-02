@@ -150,33 +150,9 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         return spannableString;
     }
 
-    private String getCurrentUserId() {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            return currentUser.getUid();
-        } else {
-            return null;
-        }
-    }
-
     private void openPopUp(String fullDescription) {
         PopUp popUp = PopUp.newInstance(fullDescription);
         popUp.show(((FragmentActivity) context).getSupportFragmentManager(), "pop_up_verMais");
-    }
-
-    public String getLink(int position) {
-        if (position >= 0 && position < playlists.size()) {
-            PlaylistData playlist = playlists.get(position);
-            if (playlist != null) {
-                if (playlist.getIframe() != null && !playlist.getIframe().isEmpty()) {
-                    return playlist.getIframe();
-                } else if (playlist.getUrlCanal() != null && !playlist.getUrlCanal().isEmpty()) {
-                    return playlist.getUrlCanal();
-                }
-            }
-        }
-        return null;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

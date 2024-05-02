@@ -46,7 +46,6 @@ public class TabPlaylistsFragment extends Fragment {
     private SearchView searchView;
     ImageButton btnReloadPlaylists;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FireBaseDataBase firebaseDatabase = new FireBaseDataBase();
@@ -235,8 +234,6 @@ public class TabPlaylistsFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-
-
     private void showCategoryMenu(View anchorView) {
         PopupMenu popupMenu = new PopupMenu(requireContext(), anchorView);
         Menu menu = popupMenu.getMenu();
@@ -330,7 +327,6 @@ public class TabPlaylistsFragment extends Fragment {
         }
         return filteredPlaylists;
     }
-
 
     private void openWebPage(String url) {
         Uri webpage = Uri.parse(url);
