@@ -222,12 +222,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         void onItemClick(String url);
     }
 
-    public interface OnPlaylistRatingSavedListener {
-        void onPlaylistRatingSaved(String playlistId);
-
-        void onPlaylistRatingSaveFailed(String errorMessage);
-    }
-
     @Override
     public int getItemCount() {
         return playlists.size();

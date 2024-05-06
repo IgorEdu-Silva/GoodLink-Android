@@ -22,7 +22,6 @@ public class FireStoreDataManager {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final FirebaseAuth firebaseAuth;
 
-
     public FireStoreDataManager() {
         firestore = FirebaseFirestore.getInstance();
         usersCollection = firestore.collection("users");
