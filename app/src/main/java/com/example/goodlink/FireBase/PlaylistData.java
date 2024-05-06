@@ -9,8 +9,8 @@ public class PlaylistData {
     private String categoria;
     private String nomeUsuario;
     private String dataPub;
-    private String avaliacao;
-    private String criadorId;
+    private String userId;
+    private String playlistId;
 
     public PlaylistData() {
 
@@ -27,32 +27,25 @@ public class PlaylistData {
         this.dataPub = dataPub;
     }
 
-    public PlaylistData(String titulo, String descricao, String nomeCanal, String iframe, String urlCanal, String categoria, String nomeUsuario, String dataPub, String avaliacao) {
-        this.titulo = titulo;
-        this.descricao = descricao;
-        this.nomeCanal = nomeCanal;
-        this.iframe = iframe;
-        this.urlCanal = urlCanal;
-        this.categoria = categoria;
-        this.nomeUsuario = nomeUsuario;
-        this.dataPub = dataPub;
-        this.avaliacao = avaliacao;
+    public PlaylistData(String userId, String playlistId) {
+        this.userId = userId;
+        this.playlistId = playlistId;
     }
 
-    public String getCriadorId() {
-        return criadorId;
+    public String getPlaylistId() {
+        return playlistId;
     }
 
-    public void setCriadorId(String criadorId) {
-        this.criadorId = criadorId;
+    public void setPlaylistId(String playlistId) {
+        this.playlistId = playlistId;
     }
 
-    public String getAvaliacao() {
-        return avaliacao;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setAvaliacao(String avaliacao) {
-        this.avaliacao = avaliacao;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getTitulo() {
@@ -118,4 +111,5 @@ public class PlaylistData {
     public void setDataPub(String dataPub) {
         this.dataPub = dataPub;
     }
+
 }

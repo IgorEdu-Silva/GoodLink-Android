@@ -4,10 +4,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,11 +19,15 @@ public class FireStoreDataManager {
     private final FirebaseFirestore firestore;
     private final CollectionReference usersCollection;
     private final CollectionReference playlistsCollection;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseAuth firebaseAuth;
+
 
     public FireStoreDataManager() {
         firestore = FirebaseFirestore.getInstance();
         usersCollection = firestore.collection("users");
         playlistsCollection = firestore.collection("playlists");
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     public void addUser(String userId, String name, String email) {
@@ -49,6 +54,20 @@ public class FireStoreDataManager {
     }
 
     private static final String TAG = "FireStoreDataManager";
+
+    public String getCurrentUserId() {
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null) {
+            return currentUser.getUid();
+        } else {
+            Log.e(TAG, "Current user is null");
+            return null;
+        }
+    }
+
+    public String generatePlaylistId() {
+        return playlistsCollection.document().getId();
+    }
 
     public void getPlaylistsFromFirestore(OnPlaylistsLoadedListener listener) {
         playlistsCollection.get()
@@ -84,19 +103,29 @@ public class FireStoreDataManager {
     }
 
     public void createPlaylist(String userId, PlaylistData playlistData, OnPlaylistCreatedListener listener) {
-        Map<String, Object> playlist = getStringObjectMap(playlistData);
+        if (userId != null && !userId.isEmpty()) {
+            Map<String, Object> playlist = getStringObjectMap(playlistData);
 
-        playlistsCollection.add(playlist)
-                .addOnSuccessListener(documentReference -> {
-                    listener.onPlaylistCreated(documentReference.getId());
-                    usersCollection.document(userId).update("playlistId", documentReference.getId())
-                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Playlist ID updated for user: " + userId))
-                            .addOnFailureListener(e -> Log.e(TAG, "Error updating playlist ID for user: " + userId, e));
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error creating playlist: ", e);
-                    listener.onPlaylistCreationFailed(e.getMessage());
-                });
+            playlistsCollection.add(playlist)
+                    .addOnSuccessListener(documentReference -> {
+                        String playlistId = documentReference.getId();
+                        playlistData.setPlaylistId(playlistId);
+                        playlistData.setUserId(userId);
+                        listener.onPlaylistCreated(playlistId);
+                        Map<String, Object> playlistIdMap = new HashMap<>();
+                        playlistIdMap.put("playlistId", playlistId);
+                        usersCollection.document(userId).collection("userPlaylists").add(playlistIdMap)
+                                .addOnSuccessListener(documentReference1 -> Log.d(TAG, "Playlist ID added to user's collection: " + userId))
+                                .addOnFailureListener(e -> Log.e(TAG, "Error adding playlist ID to user's collection: " + userId, e));
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Error creating playlist: ", e);
+                        listener.onPlaylistCreationFailed(e.getMessage());
+                    });
+        } else {
+            Log.e(TAG, "Error creating playlist: UserId is null or empty");
+            listener.onPlaylistCreationFailed("UserId is null or empty");
+        }
     }
 
     @NonNull
@@ -113,45 +142,23 @@ public class FireStoreDataManager {
         return playlist;
     }
 
-    public void savePlaylistRating(String userId, PlaylistData playlistData, String rating, OnPlaylistRatingSavedListener listener) {
-        Map<String, Object> ratingData = new HashMap<>();
-        ratingData.put("avaliacao", rating);
+    public void savePlaylistRating(String userId, String playlistId, String rating, OnPlaylistRatingSavedListener listener) {
+        if (userId != null && playlistId != null && rating != null) {
+            RatingManager ratingManager = new RatingManager(rating, userId, playlistId);
 
-        playlistsCollection.add(getStringObjectMap(playlistData))
-                .addOnSuccessListener(documentReference -> {
-                    String playlistId = documentReference.getId();
-                    listener.onPlaylistRatingSaved(playlistId); // Notificar o ID da playlist
-                    CollectionReference userPlaylistRef = usersCollection.document(userId).collection("userPlaylists");
-                    userPlaylistRef.document(playlistId).set(ratingData, SetOptions.merge())
-                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Rating saved successfully"))
-                            .addOnFailureListener(e -> {
-                                Log.e(TAG, "Error saving rating", e);
-                                listener.onPlaylistRatingSaveFailed(e.getMessage());
-                            });
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error creating playlist: ", e);
-                    listener.onPlaylistRatingSaveFailed(e.getMessage());
-                });
-    }
-
-    public void loadPlaylistRating(String userId, String playlistId, FireStoreDataListener<String> listener) {
-        CollectionReference userPlaylistRef = usersCollection.document(userId).collection("userPlaylists");
-        userPlaylistRef.document(playlistId).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        String rating = documentSnapshot.getString("avaliacao");
-                        listener.onSuccess(rating);
-                    } else {
-                        listener.onFailure("Rating not found");
-                    }
-                })
-                .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
-    }
-
-    public interface OnPlaylistRatingSavedListener {
-        void onPlaylistRatingSaved(String playlistId);
-        void onPlaylistRatingSaveFailed(String errorMessage);
+            usersCollection.document(userId).collection("userRatings").document(playlistId).set(ratingManager)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "Rating saved successfully for playlist: " + playlistId);
+                        listener.onPlaylistRatingSaved(playlistId);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Error saving rating for playlist: " + playlistId, e);
+                        listener.onPlaylistRatingSaveFailed(e.getMessage());
+                    });
+        } else {
+            Log.e(TAG, "One or more required fields are null");
+            listener.onPlaylistRatingSaveFailed("One or more required fields are null");
+        }
     }
 
     public interface OnUserIdToNameMapListener {
@@ -174,4 +181,10 @@ public class FireStoreDataManager {
         void onFailure(String errorMessage);
     }
 
+    public interface OnPlaylistRatingSavedListener {
+
+        void onPlaylistRatingSaved(String playlistId);
+
+        void onPlaylistRatingSaveFailed(String errorMessage);
+    }
 }

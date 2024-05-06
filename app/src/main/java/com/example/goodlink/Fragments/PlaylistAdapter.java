@@ -1,5 +1,7 @@
 package com.example.goodlink.Fragments;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -8,9 +10,11 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,8 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goodlink.FireBase.FireStoreDataManager;
 import com.example.goodlink.FireBase.PlaylistData;
-import com.example.goodlink.R;
 import com.example.goodlink.Functions.PopUp;
+import com.example.goodlink.R;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
@@ -40,7 +44,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     private final FireStoreDataManager fireStoreDataManager;
 
     public PlaylistAdapter(List<PlaylistData> playlists, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap) {
-        this(playlists, databaseReference, context, userIdToNameMap, null);
+        this(playlists, databaseReference, context, userIdToNameMap, new FireStoreDataManager());
     }
 
     public PlaylistAdapter(List<PlaylistData> playlists, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap, FireStoreDataManager fireStoreDataManager) {
@@ -49,7 +53,18 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         this.playlistsFull.set(new ArrayList<>(playlists));
         PlaylistAdapter.databaseReference = databaseReference;
         this.userIdToNameMap = userIdToNameMap;
-        this.fireStoreDataManager = fireStoreDataManager;
+        this.fireStoreDataManager = fireStoreDataManager != null ? fireStoreDataManager : new FireStoreDataManager();
+
+        for (PlaylistData playlist : playlists) {
+            if (playlist.getUserId() == null) {
+                Log.e(TAG, "Error: UserId is null for playlist: " + playlist.getTitulo());
+                playlist.setUserId("defaultValue");
+            }
+            if (playlist.getPlaylistId() == null) {
+                Log.e(TAG, "Error: PlaylistId is null for playlist: " + playlist.getTitulo());
+                playlist.setPlaylistId("defaultValue");
+            }
+        }
     }
 
     @NonNull
@@ -59,7 +74,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         return new PlaylistViewHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "ClickableViewAccessibility", "NotifyDataSetChanged"})
     @Override
     public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
         if (position >= 0 && position < playlists.size()) {
@@ -106,7 +121,52 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
                 ArrayAdapter<String> ratingAdapter = getStringArrayAdapter();
                 holder.avaliacaoPlaylist.setAdapter(ratingAdapter);
-                holder.setSpinnerSelectionFromCode(true);
+
+                holder.avaliacaoPlaylist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String rating = parent.getItemAtPosition(position).toString();
+
+                        if (rating != null && !rating.isEmpty()) {
+                            PlaylistData playlist = playlists.get(holder.getAdapterPosition());
+
+                            if (playlist != null) {
+                                FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+                                String userId = fireStoreDataManager.getCurrentUserId();
+                                String playlistId = playlist.getPlaylistId();
+
+                                if (playlistId == null || playlistId.isEmpty()) {
+                                    playlistId = fireStoreDataManager.generatePlaylistId();
+                                    playlist.setPlaylistId(playlistId);
+                                }
+
+                                if (userId != null && playlistId != null) {
+                                    String finalPlaylistId = playlistId;
+                                    fireStoreDataManager.savePlaylistRating(userId, playlistId, rating, new FireStoreDataManager.OnPlaylistRatingSavedListener() {
+                                        @Override
+                                        public void onPlaylistRatingSaved(String savedPlaylistId) {
+                                            Log.d(TAG, "Rating saved successfully for playlist: " + savedPlaylistId);
+                                        }
+
+                                        @Override
+                                        public void onPlaylistRatingSaveFailed(String errorMessage) {
+                                            Log.e(TAG, "Error saving rating for playlist: " + finalPlaylistId);
+                                        }
+                                    });
+                                } else {
+                                    Log.e(TAG, "One or more required IDs are null");
+                                }
+                            } else {
+                                Log.e(TAG, "PlaylistData is null");
+                            }
+                        } else {
+                            Log.e(TAG, "Rating is null or empty");
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {}
+                });
             }
         }
     }
@@ -114,6 +174,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
         List<String> ratingOptions = new ArrayList<>();
+
         ratingOptions.add("Péssimo");
         ratingOptions.add("Ruim");
         ratingOptions.add("Regular");
@@ -161,6 +222,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         void onItemClick(String url);
     }
 
+    public interface OnPlaylistRatingSavedListener {
+        void onPlaylistRatingSaved(String playlistId);
+
+        void onPlaylistRatingSaveFailed(String errorMessage);
+    }
+
     @Override
     public int getItemCount() {
         return playlists.size();
@@ -173,7 +240,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         private final TextView nomeUsuarioTextView;
         private final TextView dataPubTextView;
         private final Spinner avaliacaoPlaylist;
-        private boolean isSpinnerSelectionFromCode = false;
 
         public PlaylistViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -202,10 +268,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
                 dataPubTextView.setText(playlistData.getDataPub());
             }
-        }
-
-        public void setSpinnerSelectionFromCode(boolean fromCode) {
-            isSpinnerSelectionFromCode = fromCode;
         }
     }
 }

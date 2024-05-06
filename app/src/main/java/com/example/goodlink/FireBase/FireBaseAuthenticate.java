@@ -27,21 +27,21 @@ public class FireBaseAuthenticate {
 
     public void loginUser(String email, String password, final LoginAndRegister.AuthenticationListener listener) {
         mAuth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    if (user != null) {
-                        if (user.isEmailVerified()) {
-                            listener.onLoginSuccess(user);
-                        } else {
-                            listener.onLoginFailure("Por favor, verifique seu email para fazer login.");
-                            mAuth.signOut();
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            if (user.isEmailVerified()) {
+                                listener.onLoginSuccess(user);
+                            } else {
+                                listener.onLoginFailure("Por favor, verifique seu email para fazer login.");
+                                mAuth.signOut();
+                            }
                         }
+                    } else {
+                        listener.onLoginFailure("Usuário não cadastrado");
                     }
-                } else {
-                    listener.onLoginFailure("Usuário não cadastrado");
-                }
-            });
+                });
     }
 
     public void registerUser(String nome, String email, String password, final Context context) {
@@ -51,54 +51,54 @@ public class FireBaseAuthenticate {
         }
 
             mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            if (user != null) {
-                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                        .setDisplayName(nome)
-                                        .build();
+                    .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                if (user != null) {
+                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(nome)
+                                            .build();
 
-                                user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-                                            fireStoreDataManager.addUser(user.getUid(), nome, email);
+                                    user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+                                                fireStoreDataManager.addUser(user.getUid(), nome, email);
 
-                                            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        Toast.makeText(context, "E-mail de verificação enviado.", Toast.LENGTH_SHORT).show();
-                                                        FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-                                                        fireStoreDataManager.addUser(user.getUid(), nome, email);
+                                                user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            Toast.makeText(context, "E-mail de verificação enviado.", Toast.LENGTH_SHORT).show();
+                                                            FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+                                                            fireStoreDataManager.addUser(user.getUid(), nome, email);
 
-                                                        if (callback != null) {
-                                                            callback.onRegistrationSuccess();
+                                                            if (callback != null) {
+                                                                callback.onRegistrationSuccess();
+                                                            }
+                                                        } else {
+                                                            Toast.makeText(context, "Falha ao enviar e-mail de verificação.", Toast.LENGTH_SHORT).show();
                                                         }
-                                                    } else {
-                                                        Toast.makeText(context, "Falha ao enviar e-mail de verificação.", Toast.LENGTH_SHORT).show();
                                                     }
-                                                }
-                                            });
-                                        } else {
-                                            Toast.makeText(context, "Falha ao atualizar o nome de usuário.", Toast.LENGTH_SHORT).show();
+                                                });
+                                            } else {
+                                                Toast.makeText(context, "Falha ao atualizar o nome de usuário.", Toast.LENGTH_SHORT).show();
+                                            }
                                         }
-                                    }
-                                });
-                            }
-                        } else {
-                            Toast.makeText(context, "Registro falhou.", Toast.LENGTH_SHORT).show();
+                                    });
+                                }
+                            } else {
+                                Toast.makeText(context, "Registro falhou.", Toast.LENGTH_SHORT).show();
 
-                            if (callback != null) {
-                                callback.onRegistrationFailure("Registro falhou.");
+                                if (callback != null) {
+                                    callback.onRegistrationFailure("Registro falhou.");
+                                }
                             }
                         }
-                    }
-                });
+                    });
     }
 
     public void resetPassword(String email, ResetPasswordListener context) {
