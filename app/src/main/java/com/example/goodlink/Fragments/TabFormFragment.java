@@ -19,6 +19,8 @@ import com.example.goodlink.FireBase.PlaylistData;
 import com.example.goodlink.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -76,6 +78,10 @@ public class TabFormFragment extends Fragment {
 
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+                CollectionReference playlistsRef = db.collection("playlists");
+                String playlistId = fireStoreDataManager.generatePlaylistId();
+                DocumentReference newPlaylistRef = playlistsRef.document(playlistId);
+
 
                 if (currentUser != null) {
                     String userID = currentUser.getUid();

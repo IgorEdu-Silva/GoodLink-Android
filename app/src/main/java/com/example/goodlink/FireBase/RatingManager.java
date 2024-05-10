@@ -2,13 +2,17 @@ package com.example.goodlink.FireBase;
 
 public class RatingManager {
     private String rating;
-    private String avaliador;
-    private String avaliado;
+    private String currentUserRating;
+    private String UserRated;
 
-    public RatingManager(String rating, String avaliador, String avaliado) {
+    public RatingManager(){
+
+    }
+
+    public RatingManager(String rating, String avaliador, String UserRated) {
         this.rating = rating;
-        this.avaliador = avaliador;
-        this.avaliado = avaliado;
+        this.currentUserRating = avaliador;
+        this.UserRated = UserRated;
     }
 
     public String getRating() {
@@ -19,19 +23,19 @@ public class RatingManager {
         this.rating = rating;
     }
 
-    public String getAvaliador() {
-        return avaliador;
+    public String getCurrentUserRating() {
+        return currentUserRating;
     }
 
-    public void setAvaliador(String avaliador) {
-        this.avaliador = avaliador;
+    public void setCurrentUserRating(String currentUserRating) {
+        this.currentUserRating = currentUserRating;
     }
 
-    public String getAvaliado() {
-        return avaliado;
+    public String getUserRated() {
+        return UserRated;
     }
 
-    public void setAvaliado(String avaliado) {
-        this.avaliado = avaliado;
+    public void setUserRated(String userRated) {
+        this.UserRated = userRated;
     }
 }
