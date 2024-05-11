@@ -46,7 +46,7 @@ public class ResetPass extends AppCompatActivity {
         backToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ResetPass.this, LoginAndRegister.class));
+                startActivity(new Intent(ResetPass.this, Login.class));
                 finish();
             }
         });

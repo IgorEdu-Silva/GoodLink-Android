@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.example.goodlink.FireBase.FireBaseAuthenticate;
 import com.example.goodlink.FireBase.FireBaseDataBase;
 import com.example.goodlink.FireBase.FireStoreDataManager;
-import com.example.goodlink.Screens.LoginAndRegister;
+import com.example.goodlink.Screens.Login;
 import com.example.goodlink.R;
 import com.example.goodlink.FireBase.SessionManager;
 import com.example.goodlink.FireBase.User;
@@ -98,7 +98,7 @@ public class TabUsersFragment extends Fragment {
             public void onClick(View v) {
                 sessionManager.setLogin(false);
 
-                Intent intent = new Intent(getActivity(), LoginAndRegister.class);
+                Intent intent = new Intent(getActivity(), Login.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }

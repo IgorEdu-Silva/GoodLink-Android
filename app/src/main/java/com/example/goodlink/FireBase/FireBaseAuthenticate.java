@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.goodlink.Screens.LoginAndRegister;
+import com.example.goodlink.Screens.Login;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,7 +25,7 @@ public class FireBaseAuthenticate {
         mDatabase = database;
     }
 
-    public void loginUser(String email, String password, final LoginAndRegister.AuthenticationListener listener) {
+    public void loginUser(String email, String password, final Login.AuthenticationListener listener) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

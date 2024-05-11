@@ -23,7 +23,7 @@ import com.example.goodlink.FireBase.SessionManager;
 import com.example.goodlink.R;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginAndRegister extends AppCompatActivity {
+public class Login extends AppCompatActivity {
     private FireBaseAuthenticate mAuthenticator;
     private FireBaseDataBase mDatabase;
     private CheckBox checkBoxServices;
@@ -33,7 +33,7 @@ public class LoginAndRegister extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_login_and_register);
+        setContentView(R.layout.activity_login);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -52,7 +52,7 @@ public class LoginAndRegister extends AppCompatActivity {
         buttonRegisterPager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginAndRegister.this, RegisterAndLogin.class);
+                Intent intent = new Intent(Login.this, Register.class);
                 startActivity(intent);
             }
         });
@@ -61,8 +61,8 @@ public class LoginAndRegister extends AppCompatActivity {
         buttonLoginPager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!LoginAndRegister.this.getClass().equals(LoginAndRegister.class)) {
-                    Intent intent = new Intent(LoginAndRegister.this, LoginAndRegister.class);
+                if (!Login.this.getClass().equals(Login.class)) {
+                    Intent intent = new Intent(Login.this, Login.class);
                     startActivity(intent);
                 }
             }
@@ -79,7 +79,7 @@ public class LoginAndRegister extends AppCompatActivity {
                 String senha = editTextPassword.getText().toString();
 
                 if (TextUtils.isEmpty(email) || TextUtils.isEmpty(senha)) {
-                    Toast.makeText(LoginAndRegister.this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -88,14 +88,14 @@ public class LoginAndRegister extends AppCompatActivity {
                 mAuthenticator.loginUser(email, senha, new AuthenticationListener() {
                     @Override
                     public void onLoginSuccess(FirebaseUser user) {
-                        Intent intent = new Intent(LoginAndRegister.this, forum.class);
+                        Intent intent = new Intent(Login.this, forum.class);
                         startActivity(intent);
                         finish();
                     }
 
                     @Override
                     public void onLoginFailure(String errorMessage) {
-                        Toast.makeText(LoginAndRegister.this, errorMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 });
                 if (manterLogado) {
@@ -108,7 +108,7 @@ public class LoginAndRegister extends AppCompatActivity {
         textViewForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginAndRegister.this, ResetPass.class);
+                Intent intent = new Intent(Login.this, ResetPass.class);
                 startActivity(intent);
             }
         });

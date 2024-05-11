@@ -160,82 +160,6 @@ public class FireStoreDataManager {
         return playlist;
     }
 
-    public void saveOrUpdateUserRating(String userId, String playlistId, String rating, OnPlaylistRatingSavedListener listener) {
-        if (userId != null && !userId.isEmpty() && playlistId != null && !playlistId.isEmpty() && rating != null && !rating.isEmpty()) {
-            Map<String, Object> ratingMap = new HashMap<>();
-            ratingMap.put("rating", rating);
-
-            usersCollection.document(userId).collection("ratings").document(playlistId).set(ratingMap)
-                    .addOnSuccessListener(aVoid -> {
-                        Log.d(TAG, "Rating saved successfully for user: " + userId);
-                        listener.onPlaylistRatingSaved(playlistId);
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.e(TAG, "Error saving rating for user: " + userId, e);
-                        listener.onPlaylistRatingSaveFailed(e.getMessage());
-                    });
-        } else {
-            Log.e(TAG, "One or more required fields are null or empty");
-            listener.onPlaylistRatingSaveFailed("One or more required fields are null or empty");
-        }
-    }
-
-    public void getUserRating(String userId, String playlistId, OnPlaylistRatingLoadedListener listener) {
-        if (userId != null && !userId.isEmpty() && playlistId != null && !playlistId.isEmpty()) {
-            usersCollection.document(userId).collection("ratings").document(playlistId).get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            RatingManager ratingManager = documentSnapshot.toObject(RatingManager.class);
-                            listener.onPlaylistRatingLoaded(ratingManager, playlistId);
-                        } else {
-                            listener.onPlaylistRatingLoadFailed("Rating not found for user: " + userId);
-                        }
-                    })
-                    .addOnFailureListener(e -> listener.onPlaylistRatingLoadFailed(e.getMessage()));
-        } else {
-            listener.onPlaylistRatingLoadFailed("One or more required fields are null or empty");
-        }
-    }
-
-    public void updateUserRating(String userId, PlaylistData playlistData, String rating, OnPlaylistRatingUpdatedListener listener) {
-        if (userId != null && !userId.isEmpty() && playlistData != null && rating != null && !rating.isEmpty()) {
-            String playlistId = playlistData.getPlaylistId();
-            if (playlistId != null && !playlistId.isEmpty()) {
-                usersCollection.document(userId).collection("ratings").document(playlistId).get()
-                        .addOnSuccessListener(documentSnapshot -> {
-                            if (documentSnapshot.exists()) {
-                                Map<String, Object> ratingMap = new HashMap<>();
-                                ratingMap.put("rating", rating);
-
-                                usersCollection.document(userId).collection("ratings").document(playlistId).update(ratingMap)
-                                        .addOnSuccessListener(aVoid -> {
-                                            Log.d(TAG, "Rating updated successfully for user: " + userId);
-                                            listener.onPlaylistRatingUpdated();
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            Log.e(TAG, "Error updating rating for user: " + userId, e);
-                                            listener.onPlaylistRatingUpdateFailed(e.getMessage());
-                                        });
-                            } else {
-                                Log.e(TAG, "Rating document does not exist for playlist: " + playlistId);
-                                listener.onPlaylistRatingUpdateFailed("This playlist has not been rated yet");
-                            }
-                        })
-                        .addOnFailureListener(e -> {
-                            Log.e(TAG, "Error checking if rating exists for playlist: " + playlistId, e);
-                            listener.onPlaylistRatingUpdateFailed(e.getMessage());
-                        });
-            } else {
-                Log.e(TAG, "Playlist ID is null or empty");
-                listener.onPlaylistRatingUpdateFailed("Playlist ID is null or empty");
-            }
-        } else {
-            Log.e(TAG, "One or more required fields are null");
-            listener.onPlaylistRatingUpdateFailed("One or more required fields are null");
-        }
-    }
-
-
     public interface OnUserIdToNameMapListener {
         void onUserIdToNameMapLoaded(Map<String, String> userIdToNameMap);
         void onUserIdToNameMapLoadFailed(String errorMessage);
@@ -254,31 +178,5 @@ public class FireStoreDataManager {
     public interface FireStoreDataListener<T> {
         void onSuccess(T data);
         void onFailure(String errorMessage);
-    }
-
-    public interface OnPlaylistRatingSavedListener {
-
-        void onPlaylistRatingSaved(String playlistId);
-
-        void onPlaylistRatingSaveFailed(String errorMessage);
-    }
-
-    public interface OnPlaylistRatingLoadedListener {
-
-        void onPlaylistRatingLoaded(RatingManager ratingManager, String playlistId);
-
-        void onPlaylistRatingLoadFailed(String errorMessage);
-    }
-
-    public interface OnPlaylistRatingUpdatedListener {
-        void onPlaylistRatingUpdated();
-
-        void onPlaylistRatingUpdateFailed(String errorMessage);
-    }
-
-    public interface OnPlaylistIdAndUserIdLoadedListener {
-        void onPlaylistIdAndUserIdLoaded(String userId, String playlistId);
-
-        void onPlaylistIdAndUserIdLoadFailed(String errorMessage);
     }
 }

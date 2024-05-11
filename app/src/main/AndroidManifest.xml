@@ -33,13 +33,13 @@
             android:name=".Screens.Termos"
             android:exported="false" />
         <activity
-            android:name=".Screens.LoginAndRegister"
+            android:name=".Screens.Login"
             android:exported="false" />
         <activity
             android:name=".Screens.forum"
             android:exported="false" />
         <activity
-            android:name=".Screens.RegisterAndLogin"
+            android:name=".Screens.Register"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

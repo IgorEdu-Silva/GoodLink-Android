@@ -1,10 +1,10 @@
 package com.example.goodlink.Fragments;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +14,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.goodlink.FireBase.FireStoreDataManager;
 import com.example.goodlink.FireBase.PlaylistData;
 import com.example.goodlink.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class TabFormFragment extends Fragment {
     private EditText tituloEditText;
@@ -38,6 +43,22 @@ public class TabFormFragment extends Fragment {
     private Button enviarButton;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
+    private final DatabaseReference databaseReference;
+    private final Map<String, String> userIdToNameMap;
+    private final RecyclerView recyclerView;
+    private List<PlaylistData> playlists;
+    private PlaylistAdapter playlistAdapter;
+
+    public TabFormFragment(DatabaseReference databaseReference, Map<String, String> userIdToNameMap, RecyclerView recyclerView) {
+        this.databaseReference = databaseReference;
+        this.userIdToNameMap = userIdToNameMap;
+        this.recyclerView = recyclerView;
+    }
+    public TabFormFragment() {
+        this.databaseReference = null;
+        this.userIdToNameMap = null;
+        this.recyclerView = null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +76,10 @@ public class TabFormFragment extends Fragment {
         urlCanalEditText = view.findViewById(R.id.urlCanal_Form);
         categoriaSpinner = view.findViewById(R.id.categoria_Form);
         enviarButton = view.findViewById(R.id.btnSend_Form);
+
+        playlists = new ArrayList<>();
+        playlistAdapter = new PlaylistAdapter(playlists, databaseReference, requireContext(), userIdToNameMap);
+
 
         loadCategories();
 
@@ -82,14 +107,18 @@ public class TabFormFragment extends Fragment {
                 String playlistId = fireStoreDataManager.generatePlaylistId();
                 DocumentReference newPlaylistRef = playlistsRef.document(playlistId);
 
-
                 if (currentUser != null) {
                     String userID = currentUser.getUid();
                     PlaylistData playlistData = new PlaylistData(titulo, descricao, nomeCanal, iframe, urlCanal, categoria, userID, dataPub);
+                    PlaylistData playlistDataIDs = new PlaylistData(userID, playlistId);
+                    Log.d(TAG, "PlaylistID = " + playlistData.getPlaylistId());
 
                     fireStoreDataManager.createPlaylist(userID, playlistData, new FireStoreDataManager.OnPlaylistCreatedListener() {
+                        @SuppressLint("NotifyDataSetChanged")
                         @Override
                         public void onPlaylistCreated(String playlistId) {
+                            playlists.add(playlistData);
+                            playlistAdapter.notifyDataSetChanged();
                             Toast.makeText(getActivity(), "Playlist criada com sucesso!", Toast.LENGTH_SHORT).show();
                         }
 

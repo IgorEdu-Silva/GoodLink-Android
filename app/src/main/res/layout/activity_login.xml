@@ -2,22 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="ScreenLight"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Screens.RegisterAndLogin">
-
-    <CheckBox
-        android:id="@+id/checkBoxServices"
-        android:layout_width="280dp"
-        android:layout_height="48dp"
-        android:text="@string/li_e_aceito_os_termos_e_politica"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.519"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegister"
-        app:layout_constraintVertical_bias="0.0" />
+    tools:context=".Screens.Login">
 
     <Button
         android:id="@+id/buttonLoginPager"
@@ -51,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:text="@string/cadastrar_se_com_email"
+        android:text="@string/conectar_se_com_o_email"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/buttonRegisterPager"
         app:layout_constraintHorizontal_bias="0.48"
@@ -71,15 +60,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.519"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextName"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="HardcodedText,LabelFor,MissingConstraints,SpeakableTextPresentCheck" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.393"
+        tools:ignore="HardcodedText,LabelFor,MissingConstraints,SpeakableTextPresentCheck,TextContrastCheck" />
 
     <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="280dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="328dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="Senha"
@@ -88,35 +76,48 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.519"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.464"
         tools:ignore="HardcodedText,LabelFor,SpeakableTextPresentCheck" />
 
     <Button
-        android:id="@+id/btnRegister"
+        android:id="@+id/btnLogin"
         android:layout_width="280dp"
         android:layout_height="48dp"
-        android:text="@string/criar_nova_conta"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.519"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
-        android:id="@+id/editTextName"
-        android:layout_width="280dp"
-        android:layout_height="48dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/nome_e_sobrenome"
-        android:inputType="text"
+        android:text="@string/entrar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.519"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.393" />
+        app:layout_constraintVertical_bias="0.534"
+        tools:ignore="VisualLintOverlap" />
 
+    <CheckBox
+        android:id="@+id/checkBoxLog"
+        android:layout_width="280dp"
+        android:layout_height="48dp"
+        android:text="@string/manter_me_logado"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.519"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.604" />
+
+    <TextView
+        android:id="@+id/forgotePass"
+        android:layout_width="280dp"
+        android:layout_height="48dp"
+        android:gravity=""
+        android:text="@string/esqueceu_a_senha"
+        android:paddingStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.519"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.674"
+        tools:ignore="RtlSymmetry,TextSizeCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

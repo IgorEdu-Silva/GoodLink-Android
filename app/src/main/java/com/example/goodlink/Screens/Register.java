@@ -26,7 +26,7 @@ import com.example.goodlink.FireBase.FireBaseDataBase;
 import com.example.goodlink.FireBase.SessionManager;
 import com.example.goodlink.R;
 
-public class RegisterAndLogin extends AppCompatActivity {
+public class Register extends AppCompatActivity {
     private FireBaseAuthenticate mAuthenticator;
     private FireBaseDataBase mDatabase;
     private CheckBox checkBoxServices;
@@ -37,7 +37,7 @@ public class RegisterAndLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_register_and_login);
+        setContentView(R.layout.activity_register);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -56,7 +56,7 @@ public class RegisterAndLogin extends AppCompatActivity {
         buttonLoginPager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Intent intent = new Intent(RegisterAndLogin.this, LoginAndRegister.class);
+                    Intent intent = new Intent(Register.this, Login.class);
                     startActivity(intent);
             }
         });
@@ -65,8 +65,8 @@ public class RegisterAndLogin extends AppCompatActivity {
         buttonRegisterPager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!RegisterAndLogin.this.getClass().equals(RegisterAndLogin.class)) {
-                    Intent intent = new Intent(RegisterAndLogin.this, RegisterAndLogin.class);
+                if (!Register.this.getClass().equals(Register.class)) {
+                    Intent intent = new Intent(Register.this, Register.class);
                     startActivity(intent);
                 }
             }
@@ -88,18 +88,18 @@ public class RegisterAndLogin extends AppCompatActivity {
                 boolean aceitouTermos = checkBoxServices.isChecked();
 
                 if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
-                    Toast.makeText(RegisterAndLogin.this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register.this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show();
                 } else if (senha.length() < 8) {
-                    Toast.makeText(RegisterAndLogin.this, "A senha deve ter no mínimo " + 8 + " caracteres", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register.this, "A senha deve ter no mínimo " + 8 + " caracteres", Toast.LENGTH_SHORT).show();
                 } else if (!aceitouTermos) {
-                    Toast.makeText(RegisterAndLogin.this, "Por favor, aceite os termos e condições", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register.this, "Por favor, aceite os termos e condições", Toast.LENGTH_SHORT).show();
                 } else {
-                    mAuthenticator.registerUser(nome, email, senha, RegisterAndLogin.this);
+                    mAuthenticator.registerUser(nome, email, senha, Register.this);
 
                     FireBaseAuthenticate.RegistrationCallback registrationCallback = new FireBaseAuthenticate.RegistrationCallback() {
                         @Override
                         public void onRegistrationSuccess() {
-                            Intent intent = new Intent(RegisterAndLogin.this, LoginAndRegister.class);
+                            Intent intent = new Intent(Register.this, Login.class);
                             startActivity(intent);
                             finish();
                         }
