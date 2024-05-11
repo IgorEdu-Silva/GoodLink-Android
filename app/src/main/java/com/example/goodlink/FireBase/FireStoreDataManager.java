@@ -160,6 +160,30 @@ public class FireStoreDataManager {
         return playlist;
     }
 
+    public void savePlaylistRating(String userId, String playlistId, String rating, OnPlaylistRatingSavedListener listener) {
+        if (userId != null && playlistId != null && rating != null) {
+            DocumentReference userRatingRef = usersCollection.document(userId).collection("userRatings").document(playlistId);
+
+            Map<String, Object> newRating = new HashMap<>();
+            newRating.put("rating", rating);
+            newRating.put("userRating", userId);
+            newRating.put("playlistRated", playlistId);
+
+            userRatingRef.set(newRating)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "Rating saved successfully for playlist: " + playlistId);
+                        listener.onPlaylistRatingSaved(playlistId);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Error saving rating for playlist: " + playlistId, e);
+                        listener.onPlaylistRatingSaveFailed(e.getMessage());
+                    });
+        } else {
+            Log.e(TAG, "One or more required fields are null");
+            listener.onPlaylistRatingSaveFailed("One or more required fields are null");
+        }
+    }
+
     public interface OnUserIdToNameMapListener {
         void onUserIdToNameMapLoaded(Map<String, String> userIdToNameMap);
         void onUserIdToNameMapLoadFailed(String errorMessage);
@@ -178,5 +202,16 @@ public class FireStoreDataManager {
     public interface FireStoreDataListener<T> {
         void onSuccess(T data);
         void onFailure(String errorMessage);
+    }
+
+    public interface OnPlaylistRatingSavedListener {
+        void onPlaylistRatingSaved(String playlistId);
+        void onPlaylistRatingSaveFailed(String errorMessage);
+    }
+
+    public interface OnPlaylistIdsLoadedListener {
+        void onPlaylistIdsLoaded(List<String> playlistIds);
+
+        void onPlaylistIdsLoadFailed(String errorMessage);
     }
 }

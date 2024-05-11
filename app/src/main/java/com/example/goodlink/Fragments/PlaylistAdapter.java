@@ -12,8 +12,10 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -132,6 +134,57 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
                 });
 
                 ArrayAdapter<String> ratingAdapter = getStringArrayAdapter();
+                holder.avaliacaoPlaylist.setAdapter(ratingAdapter);
+
+                holder.avaliacaoPlaylist.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return false;
+                    }
+                });
+
+                holder.avaliacaoPlaylist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if (position > 0) {
+                            String rating = parent.getItemAtPosition(position).toString();
+                            if (rating != null && !rating.isEmpty()) {
+                                PlaylistData playlist = playlists.get(holder.getAdapterPosition());
+                                if (playlist != null) {
+                                    FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+                                    String userId = fireStoreDataManager.getCurrentUserId();
+                                    String playlistId = playlist.getPlaylistId();
+                                    if (playlistId == null || playlistId.isEmpty()) {
+                                        playlistId = fireStoreDataManager.generatePlaylistId();
+                                        playlist.setPlaylistId(playlistId);
+                                    }
+                                    if (userId != null && playlistId != null) {
+                                        String finalPlaylistId = playlistId;
+                                        fireStoreDataManager.savePlaylistRating(userId, playlistId, rating, new FireStoreDataManager.OnPlaylistRatingSavedListener() {
+                                            @Override
+                                            public void onPlaylistRatingSaved(String savedPlaylistId) {
+                                                Log.d(TAG, "Rating saved successfully for playlist: " + savedPlaylistId);
+                                            }
+                                            @Override
+                                            public void onPlaylistRatingSaveFailed(String errorMessage) {
+                                                Log.e(TAG, "Error saving rating for playlist: " + finalPlaylistId);
+                                            }
+                                        });
+                                    } else {
+                                        Log.e(TAG, "One or more required IDs are null");
+                                    }
+                                } else {
+                                    Log.e(TAG, "PlaylistData is null");
+                                }
+                            } else {
+                                Log.e(TAG, "Rating is null or empty");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {}
+                });
             }
         }
     }
@@ -199,7 +252,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         private final TextView nomeUsuarioTextView;
         private final TextView dataPubTextView;
         private final Spinner avaliacaoPlaylist;
-        private final TextView RatingOnOff;
 
         public PlaylistViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -209,7 +261,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
             nomeUsuarioTextView = itemView.findViewById(R.id.nomeUsuario_Playlist);
             dataPubTextView = itemView.findViewById(R.id.dataPub_Playlist);
             avaliacaoPlaylist = itemView.findViewById(R.id.ratingBar);
-            RatingOnOff = itemView.findViewById(R.id.RatingOnOff);
         }
 
         public void bind(PlaylistData playlistData) {
