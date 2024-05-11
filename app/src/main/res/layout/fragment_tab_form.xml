@@ -47,12 +47,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginStart="10dp"
-                    android:textColor="@color/light_blue"
                     android:gravity="center"
                     android:text="@string/categoria"
                     android:textAlignment="textStart"
+                    android:textColor="@color/light_blue"
                     android:textSize="18sp"
-                    tools:ignore="RtlCompat" />
+                    tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/categoria_Form_layout"
@@ -78,12 +78,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginStart="10dp"
-                    android:textColor="@color/light_blue"
                     android:gravity="center"
                     android:text="@string/titulo"
                     android:textAlignment="textStart"
+                    android:textColor="@color/light_blue"
                     android:textSize="18sp"
-                    tools:ignore="RtlCompat" />
+                    tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tituloPlaylist_Form_layout"
@@ -108,12 +108,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginStart="10dp"
-                    android:textColor="@color/light_blue"
                     android:gravity="center"
                     android:text="@string/descri_o"
                     android:textAlignment="textStart"
+                    android:textColor="@color/light_blue"
                     android:textSize="18sp"
-                    tools:ignore="RtlCompat" />
+                    tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/descricaoPlaylist_Form_layout"
@@ -138,12 +138,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginStart="10dp"
-                    android:textColor="@color/light_blue"
                     android:gravity="center"
                     android:text="@string/linkdaplaylist"
                     android:textAlignment="textStart"
+                    android:textColor="@color/light_blue"
                     android:textSize="18sp"
-                    tools:ignore="RtlCompat" />
+                    tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/iframe_Form_layout"
