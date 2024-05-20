@@ -209,10 +209,4 @@
             void onPlaylistRatingSaved(String playlistId);
             void onPlaylistRatingSaveFailed(String errorMessage);
         }
-
-        public interface OnPlaylistIdsLoadedListener {
-            void onPlaylistIdsLoaded(List<String> playlistIds);
-
-            void onPlaylistIdsLoadFailed(String errorMessage);
-        }
     }

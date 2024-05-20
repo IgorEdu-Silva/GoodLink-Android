@@ -74,13 +74,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void updatePlaylists(List<PlaylistData> playlists) {
-        this.playlists.clear();
-        this.playlists.addAll(playlists);
-        notifyDataSetChanged();
-    }
-
     @NonNull
     @Override
     public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -154,7 +147,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
                                 Log.d(TAG, "UserId: " + userId + ", PlaylistId: " + playlistId);
 
                                 if (userId != null && playlistId != null) {
-                                    fireStoreDataManager.savePlaylistRating(userId, playlistId, rating, new FireStoreDataManager.OnPlaylistRatingSavedListener() {
+                                     fireStoreDataManager.savePlaylistRating(userId, playlistId, rating, new FireStoreDataManager.OnPlaylistRatingSavedListener() {
                                         @Override
                                         public void onPlaylistRatingSaved(String savedPlaylistId) {
                                             Log.d(TAG, "Rating saved successfully for playlist: " + savedPlaylistId);
