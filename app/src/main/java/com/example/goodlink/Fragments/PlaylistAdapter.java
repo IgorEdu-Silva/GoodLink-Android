@@ -149,32 +149,24 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
                         if (position > 0) {
                             String rating = parent.getItemAtPosition(position).toString();
                             if (rating != null && !rating.isEmpty()) {
-                                PlaylistData playlist = playlists.get(holder.getAdapterPosition());
-                                if (playlist != null) {
-                                    FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-                                    String userId = fireStoreDataManager.getCurrentUserId();
-                                    String playlistId = playlist.getPlaylistId();
-                                    if (playlistId == null || playlistId.isEmpty()) {
-                                        playlistId = fireStoreDataManager.generatePlaylistId();
-                                        playlist.setPlaylistId(playlistId);
-                                    }
-                                    if (userId != null && playlistId != null) {
-                                        String finalPlaylistId = playlistId;
-                                        fireStoreDataManager.savePlaylistRating(userId, playlistId, rating, new FireStoreDataManager.OnPlaylistRatingSavedListener() {
-                                            @Override
-                                            public void onPlaylistRatingSaved(String savedPlaylistId) {
-                                                Log.d(TAG, "Rating saved successfully for playlist: " + savedPlaylistId);
-                                            }
-                                            @Override
-                                            public void onPlaylistRatingSaveFailed(String errorMessage) {
-                                                Log.e(TAG, "Error saving rating for playlist: " + finalPlaylistId);
-                                            }
-                                        });
-                                    } else {
-                                        Log.e(TAG, "One or more required IDs are null");
-                                    }
+                                String userId = fireStoreDataManager.getCurrentUserId();
+                                String playlistId = playlist.getPlaylistId();
+                                Log.d(TAG, "UserId: " + userId + ", PlaylistId: " + playlistId);
+
+                                if (userId != null && playlistId != null) {
+                                    fireStoreDataManager.savePlaylistRating(userId, playlistId, rating, new FireStoreDataManager.OnPlaylistRatingSavedListener() {
+                                        @Override
+                                        public void onPlaylistRatingSaved(String savedPlaylistId) {
+                                            Log.d(TAG, "Rating saved successfully for playlist: " + savedPlaylistId);
+                                        }
+
+                                        @Override
+                                        public void onPlaylistRatingSaveFailed(String errorMessage) {
+                                            Log.e(TAG, "Error saving rating for playlist: " + playlistId);
+                                        }
+                                    });
                                 } else {
-                                    Log.e(TAG, "PlaylistData is null");
+                                    Log.e(TAG, "One or more required IDs are null");
                                 }
                             } else {
                                 Log.e(TAG, "Rating is null or empty");
@@ -185,6 +177,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {}
                 });
+
             }
         }
     }

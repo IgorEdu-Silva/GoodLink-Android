@@ -111,7 +111,8 @@ public class TabFormFragment extends Fragment {
                     String userID = currentUser.getUid();
                     PlaylistData playlistData = new PlaylistData(titulo, descricao, nomeCanal, iframe, urlCanal, categoria, userID, dataPub);
                     PlaylistData playlistDataIDs = new PlaylistData(userID, playlistId);
-                    Log.d(TAG, "PlaylistID = " + playlistData.getPlaylistId());
+                    Log.d(TAG, "PlaylistID = " + playlistId);
+                    playlistData.setPlaylistId(playlistId);
 
                     fireStoreDataManager.createPlaylist(userID, playlistData, new FireStoreDataManager.OnPlaylistCreatedListener() {
                         @SuppressLint("NotifyDataSetChanged")
