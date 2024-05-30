@@ -34,6 +34,7 @@
             android:gravity="center"
             android:textAlignment="center"
             android:textColor="@color/light_blue"
+            android:textSize="12sp"
             tools:ignore="RtlCompat,VisualLintOverlap,SpeakableTextPresentCheck" />
 
         <TextView
@@ -50,6 +51,7 @@
             android:layout_marginBottom="40dp"
             android:gravity="center"
             android:textAlignment="center"
+            android:textSize="12sp"
             tools:ignore="RtlCompat,VisualLintOverlap" />
 
         <TextView
@@ -69,6 +71,7 @@
             android:gravity="center"
             android:textAlignment="center"
             android:textColor="@color/light_blue"
+            android:textSize="12sp"
             tools:ignore="RtlCompat,SpeakableTextPresentCheck,VisualLintOverlap" />
 
         <TextView
@@ -85,6 +88,7 @@
             android:layout_marginBottom="90dp"
             android:gravity="center"
             android:textAlignment="center"
+            android:textSize="12sp"
             tools:ignore="RtlCompat,VisualLintBounds" />
 
         <TextView
@@ -101,14 +105,16 @@
             android:layout_marginBottom="40dp"
             android:gravity="center"
             android:textAlignment="center"
+            android:textSize="12sp"
             tools:ignore="RtlCompat,VisualLintBounds" />
 
         <TextView
-            android:id="@+id/comentarios_playlist"
+            android:id="@+id/comentariosPlaylists"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:text="@string/coment_rios"
             android:gravity="center"
+            android:textColor="@color/light_blue"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
@@ -117,6 +123,7 @@
             android:layout_marginTop="100dp"
             android:layout_marginEnd="260dp"
             android:layout_marginBottom="0dp"
+            android:textSize="12sp"
             tools:ignore="VisualLintOverlap" />
 
         <Spinner

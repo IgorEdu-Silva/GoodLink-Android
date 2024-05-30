@@ -63,6 +63,8 @@ public class TabPlaylistsFragment extends Fragment {
         btnReloadPlaylists = view.findViewById(R.id.ButtonReloadPlaylists);
         ImageButton btnSortBy = view.findViewById(R.id.ButtonSortBy);
         btnSortBy.setOnClickListener(this::showSortMenu);
+        adapter = new PlaylistAdapter(playlists, playlistsRef, getContext(), userIdToNameMap);
+        setupRecyclerView();
 
         firestoreDataManager.getPlaylistsFromFirestore(new FireStoreDataManager.OnPlaylistsLoadedListener() {
             @SuppressLint("NotifyDataSetChanged")
@@ -73,12 +75,6 @@ public class TabPlaylistsFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                     playlistsFull = new ArrayList<>(playlists);
                     Toast.makeText(getContext(), "Playlists carregadas com sucesso", Toast.LENGTH_SHORT).show();
-
-                    if (recyclerView != null && adapter != null) {
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        setupRecyclerView();
-                    }
                 } else {
                     firestoreDataManager.getUserIdToNameMap(new FireStoreDataManager.OnUserIdToNameMapListener() {
                         @Override
@@ -303,11 +299,13 @@ public class TabPlaylistsFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void setupRecyclerView() {
         adapter = new PlaylistAdapter(playlists, playlistsRef, getContext(), userIdToNameMap);
         adapter.setOnItemClickListener(this::openWebPage);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter.notifyDataSetChanged();
     }
 
     private List<PlaylistData> filterPlaylists(List<PlaylistData> allPlaylists, String filterText) {

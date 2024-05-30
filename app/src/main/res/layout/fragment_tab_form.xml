@@ -15,11 +15,12 @@
         <TextView
             android:id="@+id/FormInfo"
             android:layout_width="380dp"
-            android:layout_height="50dp"
+            android:layout_height="70dp"
             android:ems="50"
             android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:text="@string/tenha_consci_ncia_ao_preencher_o_formul_rio_links_suspeitos_ser_o_retirados_e_sua_conta_ser_banida_permanentemente"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.516"
@@ -51,7 +52,7 @@
                     android:text="@string/categoria"
                     android:textAlignment="textStart"
                     android:textColor="@color/light_blue"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -69,7 +70,7 @@
                         android:gravity="start"
                         android:importantForAutofill="no"
                         android:maxLength="20"
-                        android:textSize="15sp"
+                        android:textSize="12sp"
                         tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -82,7 +83,7 @@
                     android:text="@string/titulo"
                     android:textAlignment="textStart"
                     android:textColor="@color/light_blue"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -99,7 +100,7 @@
                         android:gravity="start"
                         android:importantForAutofill="no"
                         android:maxLength="20"
-                        android:textSize="15sp"
+                        android:textSize="12sp"
                         tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -112,7 +113,7 @@
                     android:text="@string/descri_o"
                     android:textAlignment="textStart"
                     android:textColor="@color/light_blue"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -129,9 +130,9 @@
                         android:gravity="start"
                         android:importantForAutofill="no"
                         android:maxLength="300"
-                        android:textSize="15sp"
+                        android:textSize="12sp"
                         tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
-                    
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -142,7 +143,7 @@
                     android:text="@string/linkdaplaylist"
                     android:textAlignment="textStart"
                     android:textColor="@color/light_blue"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -156,7 +157,7 @@
                         android:layout_height="80dp"
                         android:backgroundTint="@android:color/transparent"
                         android:gravity="start"
-                        android:textSize="15sp"
+                        android:textSize="12sp"
                         android:fontFamily="sans-serif-light"
                         android:importantForAutofill="no"
                         tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
@@ -171,7 +172,7 @@
                     android:gravity="center"
                     android:text="@string/nome_do_canal"
                     android:textAlignment="textStart"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:ignore="RtlCompat" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -185,7 +186,7 @@
                         android:layout_height="80dp"
                         android:backgroundTint="@android:color/transparent"
                         android:gravity="start"
-                        android:textSize="15sp"
+                        android:textSize="12sp"
                         android:fontFamily="sans-serif-light"
                         android:maxLength="30"
                         android:importantForAutofill="no"
@@ -201,7 +202,7 @@
                     android:gravity="center"
                     android:text="@string/linkdocanal"
                     android:textAlignment="textStart"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:ignore="RtlCompat" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -215,7 +216,7 @@
                         android:layout_height="80dp"
                         android:backgroundTint="@android:color/transparent"
                         android:gravity="start"
-                        android:textSize="15sp"
+                        android:textSize="12sp"
                         android:fontFamily="sans-serif-light"
                         android:importantForAutofill="no"
                         tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
@@ -232,6 +233,7 @@
             android:gravity="center"
             android:importantForAutofill="no"
             android:text="@string/enviar"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"

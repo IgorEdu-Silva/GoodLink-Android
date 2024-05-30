@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -27,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.goodlink.FireBase.FireStoreDataManager;
 import com.example.goodlink.FireBase.PlaylistData;
 import com.example.goodlink.Functions.PopUp;
+import com.example.goodlink.Functions.PopUpComment;
 import com.example.goodlink.R;
 import com.google.firebase.database.DatabaseReference;
 
@@ -171,6 +173,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
                     public void onNothingSelected(AdapterView<?> parent) {}
                 });
 
+                holder.comentariosPlaylists.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPopUpCommentActivity(playlist.getPlaylistId());
+                    }
+                });
             }
         }
     }
@@ -218,6 +226,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         popUp.show(((FragmentActivity) context).getSupportFragmentManager(), "pop_up_verMais");
     }
 
+    private void showPopUpCommentActivity(String playlistId){
+        Intent intent = new Intent(context, PopUpComment.class);
+        intent.putExtra("playlistId", playlistId);
+        context.startActivity(intent);
+    }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.clickListener = listener;
     }
@@ -238,6 +252,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         private final TextView nomeUsuarioTextView;
         private final TextView dataPubTextView;
         private final Spinner avaliacaoPlaylist;
+        private final TextView comentariosPlaylists;
 
         public PlaylistViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -247,6 +262,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
             nomeUsuarioTextView = itemView.findViewById(R.id.nomeUsuario_Playlist);
             dataPubTextView = itemView.findViewById(R.id.dataPub_Playlist);
             avaliacaoPlaylist = itemView.findViewById(R.id.ratingBar);
+            comentariosPlaylists = itemView.findViewById(R.id.comentariosPlaylists);
         }
 
         public void bind(PlaylistData playlistData) {

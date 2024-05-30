@@ -1,5 +1,6 @@
     package com.example.goodlink.FireBase;
 
+    import android.annotation.SuppressLint;
     import android.util.Log;
 
     import androidx.annotation.NonNull;
@@ -185,6 +186,41 @@
             }
         }
 
+        public void saveUserComment(String commentText, String playlistId, String userName, OnCommentSavedListener listener) {
+            String commentId = db.collection("userComments").document().getId();
+            CommentManager comment = new CommentManager(userName, commentText, playlistId);
+
+            db.collection("userComments")
+                    .document(commentId)
+                    .set(comment)
+                    .addOnSuccessListener(aVoid -> listener.onCommentSaved())
+                    .addOnFailureListener(e -> listener.onCommentSaveFailed(e.getMessage()));
+        }
+
+        public void getCommentsByPlaylistId(String playlistId, OnCommentsLoadedListener listener) {
+            db.collectionGroup("userComments")
+                    .whereEqualTo("playlistId", playlistId)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<CommentManager> comments = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                CommentManager comment = document.toObject(CommentManager.class);
+                                comments.add(comment);
+                            }
+                            listener.onCommentsLoaded(comments);
+                        } else {
+                            listener.onCommentsLoadFailed(task.getException().getMessage());
+                        }
+                    });
+        }
+
+        public interface OnCommentSavedListener {
+            void onCommentSaved();
+            void onCommentSaveFailed(String errorMessage);
+        }
+
+
         public interface OnUserIdToNameMapListener {
             void onUserIdToNameMapLoaded(Map<String, String> userIdToNameMap);
             void onUserIdToNameMapLoadFailed(String errorMessage);
@@ -208,5 +244,12 @@
         public interface OnPlaylistRatingSavedListener {
             void onPlaylistRatingSaved(String playlistId);
             void onPlaylistRatingSaveFailed(String errorMessage);
+        }
+
+        public interface OnCommentsLoadedListener {
+            @SuppressLint("NotifyDataSetChanged")
+            void onCommentsLoaded(List<CommentManager> comments);
+
+            void onCommentsLoadFailed(String errorMessage);
         }
     }
