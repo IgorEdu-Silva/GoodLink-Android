@@ -54,5 +54,6 @@
     <string name="ordenar_por_data">Ordenar por Data</string>
     <string name="avaliado">Avaliado</string>
     <string name="insira_seu_coment_rio">Insira seu comentário</string>
-
+    <string name="default_notification_channel_id" translatable="false">channel_id</string>
+    <string name="fcm_message">FCM Message</string>
 </resources>

@@ -9,8 +9,8 @@
 
     <EditText
         android:id="@+id/EmailForReset"
-        android:layout_width="324dp"
-        android:layout_height="51dp"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:ems="10"
         android:inputType="textEmailAddress"
         android:hint="@string/email_hint"
@@ -20,11 +20,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.408"
-        android:importantForAutofill="no" />
+        app:layout_constraintWidth_percent="0.8"
+        android:importantForAutofill="no"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <Button
         android:id="@+id/ConfirmReset"
-        android:layout_width="130dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:text="@string/confirmar"
         android:textAlignment="center"
@@ -34,11 +36,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.524"
-        tools:ignore="TextContrastCheck,TextSizeCheck" />
+        app:layout_constraintWidth_percent="0.4"
+        tools:ignore="TextContrastCheck,TextSizeCheck,VisualLintButtonSize" />
 
     <ImageButton
         android:id="@+id/BackToLogin"
-        android:layout_width="130dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="#00FFFFFF"
         android:importantForAccessibility="no"
@@ -48,6 +51,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.636"
+        app:layout_constraintWidth_percent="0.3"
         app:srcCompat="?attr/homeAsUpIndicator"
         tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

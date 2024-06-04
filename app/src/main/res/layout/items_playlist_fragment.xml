@@ -7,15 +7,14 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout3"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="140dp"
         android:background="@drawable/border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintWidth_percent="0.99">
 
         <TextView
             android:id="@+id/titulo_Playlist"
@@ -45,9 +44,9 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="150dp"
+            android:layout_marginStart="149dp"
             android:layout_marginTop="0dp"
-            android:layout_marginEnd="150dp"
+            android:layout_marginEnd="151dp"
             android:layout_marginBottom="40dp"
             android:gravity="center"
             android:textAlignment="center"
@@ -112,9 +111,6 @@
             android:id="@+id/comentariosPlaylists"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:text="@string/coment_rios"
-            android:gravity="center"
-            android:textColor="@color/light_blue"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
@@ -123,8 +119,11 @@
             android:layout_marginTop="100dp"
             android:layout_marginEnd="260dp"
             android:layout_marginBottom="0dp"
+            android:gravity="center"
+            android:text="@string/coment_rios"
+            android:textColor="@color/light_blue"
             android:textSize="12sp"
-            tools:ignore="VisualLintOverlap" />
+            tools:ignore="VisualLintOverlap,TextContrastCheck" />
 
         <Spinner
             android:id="@+id/ratingBar"
@@ -134,9 +133,9 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="150dp"
+            android:layout_marginStart="151dp"
             android:layout_marginTop="100dp"
-            android:layout_marginEnd="0dp"
+            android:layout_marginEnd="-1dp"
             android:layout_marginBottom="0dp"
             android:max="5"
             android:progress="0"

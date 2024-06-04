@@ -5,34 +5,34 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Functions.PopUpComment">
+    tools:context=".PopUp.PopUpComment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/commentsShow"
         android:layout_width="match_parent"
-        android:layout_height="640dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/RelativeContentComment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
         android:id="@+id/RelativeContentComment"
-        android:layout_width="411dp"
-        android:layout_height="89dp"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.998">
+        app:layout_constraintVertical_bias="0.998"
+        app:layout_constraintWidth_percent="1">
 
         <EditText
             android:id="@+id/commentAdd"
-            android:layout_width="392dp"
-            android:layout_height="58dp"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
@@ -45,21 +45,22 @@
             android:textSize="14sp"
             android:hint="@string/insira_seu_coment_rio"
             android:inputType="text"
-            tools:ignore="Autofill" />
+            tools:ignore="Autofill,VisualLintTextFieldSize" />
 
         <ImageButton
             android:id="@+id/commentBtnSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/commentAdd"
+            android:layout_alignEnd="@+id/commentAdd"
+            android:layout_alignBottom="@+id/commentAdd"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="360dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginStart="363dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="18dp"
             android:background="@android:drawable/ic_menu_send"
+            android:backgroundTint="@color/light_blue"
             android:importantForAccessibility="no"
             tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
     </RelativeLayout>

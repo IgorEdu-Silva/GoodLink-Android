@@ -139,28 +139,17 @@ public class TabFormFragment extends Fragment {
     }
 
     private void loadCategories() {
-        FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-        fireStoreDataManager.getPlaylistsFromFirestore(new FireStoreDataManager.OnPlaylistsLoadedListener() {
-            @Override
-            public void onPlaylistsLoaded(List<PlaylistData> playlists) {
-                List<String> categories = new ArrayList<>();
-                for (PlaylistData playlist : playlists) {
-                    String category = playlist.getCategoria();
-                    if (!categories.contains(category)) {
-                        categories.add(category);
-                    }
-                }
+        List<String> categories = new ArrayList<>();
+        categories.add("Programação");
+        categories.add("Matemática");
+        categories.add("Português");
+        categories.add("Ciência");
+        categories.add("Geografia");
+        categories.add("História");
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
-                        android.R.layout.simple_spinner_item, categories);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                categoriaSpinner.setAdapter(adapter);
-            }
-
-            @Override
-            public void onPlaylistsLoadFailed(String errorMessage) {
-                Toast.makeText(getActivity(), "Erro ao carregar categorias: " + errorMessage, Toast.LENGTH_SHORT).show();
-            }
-        });
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_spinner_item, categories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categoriaSpinner.setAdapter(adapter);
     }
 }

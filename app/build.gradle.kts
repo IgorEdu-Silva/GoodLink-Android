@@ -33,7 +33,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -45,7 +44,12 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+    //noinspection UseTomlInstead
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    //noinspection UseTomlInstead
     implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-firestore:23.0.3")
+    //noinspection UseTomlInstead
+    implementation("com.google.firebase:firebase-firestore:25.0.0")
+    //noinspection UseTomlInstead
+    implementation("com.google.firebase:firebase-messaging:24.0.0")
 }

@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/textViewTermosDeUso"
-        android:layout_width="350dp"
+        android:layout_width="0dp"
         android:layout_height="35dp"
         android:layout_gravity="center_horizontal"
         android:fontFamily="sans-serif"
@@ -21,28 +21,35 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022"
+        app:layout_constraintVertical_bias="0.021"
+        app:layout_constraintWidth_percent="0.8"
         tools:ignore="RtlCompat,TextSizeCheck" />
 
-    <TextView
-        android:id="@+id/textViewContainerTermos"
-        android:layout_width="391dp"
-        android:layout_height="668dp"
-        android:layout_gravity="center"
-        android:fontFamily="sans-serif"
-        android:gravity="fill_horizontal"
-        android:lineSpacingExtra="16dp"
-        android:lineSpacingMultiplier="0.4"
-        android:text="@string/Politica_de_privacidade_e_termos_de_uso_juntos"
-        android:textStyle="bold"
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTermosDeUso"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.793"
-        tools:ignore="RtlCompat" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.96"
+        app:layout_constraintHeight_percent="0.92">
+
+        <TextView
+            android:id="@+id/textViewContainerTermos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="fill_horizontal"
+            android:lineSpacingExtra="16dp"
+            android:lineSpacingMultiplier="0.6"
+            android:text="@string/Politica_de_privacidade_e_termos_de_uso_juntos"
+            android:textStyle="bold"
+            tools:ignore="RtlCompat" />
+
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

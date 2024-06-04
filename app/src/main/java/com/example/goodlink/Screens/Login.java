@@ -88,7 +88,7 @@ public class Login extends AppCompatActivity {
                 mAuthenticator.loginUser(email, senha, new AuthenticationListener() {
                     @Override
                     public void onLoginSuccess(FirebaseUser user) {
-                        Intent intent = new Intent(Login.this, forum.class);
+                        Intent intent = new Intent(Login.this, Forum.class);
                         startActivity(intent);
                         finish();
                     }
@@ -115,7 +115,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void goToActivity() {
-        Intent intent = new Intent(this, forum.class);
+        Intent intent = new Intent(this, Forum.class);
         startActivity(intent);
         finish();
     }

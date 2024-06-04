@@ -27,8 +27,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goodlink.FireBase.FireStoreDataManager;
 import com.example.goodlink.FireBase.PlaylistData;
-import com.example.goodlink.Functions.PopUp;
-import com.example.goodlink.Functions.PopUpComment;
+import com.example.goodlink.PopUp.PopUpDescription;
+import com.example.goodlink.PopUp.PopUpComment;
 import com.example.goodlink.R;
 import com.google.firebase.database.DatabaseReference;
 
@@ -222,8 +222,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     }
 
     private void openPopUp(String fullDescription) {
-        PopUp popUp = PopUp.newInstance(fullDescription);
-        popUp.show(((FragmentActivity) context).getSupportFragmentManager(), "pop_up_verMais");
+        PopUpDescription popUpDescription = PopUpDescription.newInstance(fullDescription);
+        popUpDescription.show(((FragmentActivity) context).getSupportFragmentManager(), "pop_up_verMais");
     }
 
     private void showPopUpCommentActivity(String playlistId){
