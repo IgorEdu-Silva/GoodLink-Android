@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/category_programing"
+        android:title="Programação" />
+    <item
+        android:id="@+id/category_mathematic"
+        android:title="Matemática" />
+    <item
+        android:id="@+id/category_portuguese"
+        android:title="Português" />
+    <item
+        android:id="@+id/category_science"
+        android:title="Ciência" />
+    <item
+        android:id="@+id/category_geography"
+        android:title="Geografia" />
+    <item
+        android:id="@+id/category_history"
+        android:title="História" />
+</menu>
