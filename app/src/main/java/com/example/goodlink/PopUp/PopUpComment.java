@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goodlink.FireBase.CommentManager;
 import com.example.goodlink.FireBase.FireStoreDataManager;
+import com.example.goodlink.FireBase.MyFirebaseMessagingService;
 import com.example.goodlink.Fragments.CommentAdapter;
 import com.example.goodlink.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +61,6 @@ public class PopUpComment extends AppCompatActivity {
             userName = currentUser.getDisplayName();
             SharedPreferences sharedPreferences = getSharedPreferences("_", MODE_PRIVATE);
             fcmToken = sharedPreferences.getString("fcm_token", null);
-
         } else {
             Log.e("PopUpComment", "currentUser is null");
             return;
@@ -78,6 +79,8 @@ public class PopUpComment extends AppCompatActivity {
                     public void onCommentSaved() {
                         Toast.makeText(PopUpComment.this, "Comentário enviado com sucesso!", Toast.LENGTH_SHORT).show();
                         loadComments();
+                        sendNotificationToPlaylistOwner();
+
                     }
 
                     @Override
@@ -116,5 +119,15 @@ public class PopUpComment extends AppCompatActivity {
                 Log.e("PopUpComment", "Erro ao carregar comentários: " + errorMessage);
             }
         });
+    }
+
+    private void sendNotificationToPlaylistOwner() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        String token = task.getResult();
+                        MyFirebaseMessagingService.sendNotificationToToken(this, token, "Novo comentário", "Você recebeu um novo comentário na sua playlist.");
+                    }
+                });
     }
 }
