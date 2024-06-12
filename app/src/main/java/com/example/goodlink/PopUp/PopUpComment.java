@@ -125,7 +125,8 @@ public class PopUpComment extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
                         String token = task.getResult();
-                        MessagingService.sendNotificationToToken(this, token, "Novo comentário", "Mais comentários são feitos, atualize e veja-os.");
+                        int uniqueNotificationId = MessagingService.generateUniqueNotificationId();
+                        MessagingService.sendNotificationToToken(this, token, uniqueNotificationId, "Novo comentário", "Mais comentários são feitos, atualize e veja-os.");
                     }
                 });
     }
