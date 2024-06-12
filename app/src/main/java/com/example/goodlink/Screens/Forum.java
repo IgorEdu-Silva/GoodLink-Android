@@ -79,7 +79,8 @@ public class Forum extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
                         String token = task.getResult();
-                        MessagingService.sendNotificationToToken(this, token, "Gostou do que viu?", "Ajude mais pessoas da comunidade e compartilhe um pouco do seu conhecimento!");
+                        int uniqueNotificationId = MessagingService.generateUniqueNotificationId();
+                        MessagingService.sendNotificationToToken(this, token, uniqueNotificationId, "Gostou do que viu?", "Ajude mais pessoas da comunidade e compartilhe um pouco do seu conhecimento!");
                     }
                 });
     }
