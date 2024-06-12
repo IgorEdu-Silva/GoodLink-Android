@@ -11,10 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <TextView
             android:id="@+id/FormInfo"
-            android:layout_width="380dp"
+            android:layout_width="0dp"
             android:layout_height="70dp"
             android:ems="50"
             android:fontFamily="sans-serif-black"
@@ -27,17 +26,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.023"
+            app:layout_constraintWidth_percent="0.90"
             tools:ignore="TextSizeCheck" />
 
         <ScrollView
-            android:layout_width="380dp"
-            android:layout_height="460dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/scrollView2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnSend_Form"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.60"
             app:layout_constraintHorizontal_bias="0.483"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/FormInfo"
-            app:layout_constraintVertical_bias="0.078">
+            app:layout_constraintWidth_percent="0.90">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -52,7 +54,7 @@
                     android:text="@string/categoria"
                     android:textAlignment="textStart"
                     android:textColor="@color/light_blue"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -83,7 +85,7 @@
                     android:text="@string/titulo"
                     android:textAlignment="textStart"
                     android:textColor="@color/light_blue"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -100,8 +102,8 @@
                         android:gravity="start"
                         android:importantForAutofill="no"
                         android:maxLength="20"
-                        android:textSize="12sp"
-                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
+                        android:textSize="16sp"
+                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,7 +115,7 @@
                     android:text="@string/descri_o"
                     android:textAlignment="textStart"
                     android:textColor="@color/light_blue"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -130,8 +132,8 @@
                         android:gravity="start"
                         android:importantForAutofill="no"
                         android:maxLength="300"
-                        android:textSize="12sp"
-                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
+                        android:textSize="16sp"
+                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -143,7 +145,7 @@
                     android:text="@string/linkdaplaylist"
                     android:textAlignment="textStart"
                     android:textColor="@color/light_blue"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -156,23 +158,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         android:backgroundTint="@android:color/transparent"
-                        android:gravity="start"
-                        android:textSize="12sp"
                         android:fontFamily="sans-serif-light"
+                        android:gravity="start"
                         android:importantForAutofill="no"
-                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
+                        android:textSize="16sp"
+                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="45dp"
                     android:layout_marginStart="10dp"
-                    android:textColor="@color/light_blue"
                     android:gravity="center"
                     android:text="@string/nome_do_canal"
                     android:textAlignment="textStart"
-                    android:textSize="16sp"
+                    android:textColor="@color/light_blue"
+                    android:textSize="18sp"
                     tools:ignore="RtlCompat" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -185,12 +187,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         android:backgroundTint="@android:color/transparent"
-                        android:gravity="start"
-                        android:textSize="12sp"
                         android:fontFamily="sans-serif-light"
-                        android:maxLength="30"
+                        android:gravity="start"
                         android:importantForAutofill="no"
-                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
+                        android:maxLength="30"
+                        android:textSize="16sp"
+                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -198,11 +200,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginStart="10dp"
-                    android:textColor="@color/light_blue"
                     android:gravity="center"
                     android:text="@string/linkdocanal"
                     android:textAlignment="textStart"
-                    android:textSize="16sp"
+                    android:textColor="@color/light_blue"
+                    android:textSize="18sp"
                     tools:ignore="RtlCompat" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -215,11 +217,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         android:backgroundTint="@android:color/transparent"
-                        android:gravity="start"
-                        android:textSize="12sp"
                         android:fontFamily="sans-serif-light"
+                        android:gravity="start"
                         android:importantForAutofill="no"
-                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
+                        android:textSize="16sp"
+                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -239,9 +241,8 @@
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.974"
+            app:layout_constraintVertical_bias="0.937"
             tools:ignore="TextContrastCheck" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

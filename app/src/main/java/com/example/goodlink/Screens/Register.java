@@ -1,5 +1,7 @@
 package com.example.goodlink.Screens;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -8,6 +10,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -23,15 +26,19 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.goodlink.FireBase.FireBaseAuthenticate;
 import com.example.goodlink.FireBase.FireBaseDataBase;
+import com.example.goodlink.FireBase.MessagingService;
 import com.example.goodlink.FireBase.SessionManager;
+import com.example.goodlink.Functions.NotificationHelper;
 import com.example.goodlink.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class Register extends AppCompatActivity {
     private FireBaseAuthenticate mAuthenticator;
     private FireBaseDataBase mDatabase;
     private CheckBox checkBoxServices;
     private SessionManager sessionManager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,8 @@ public class Register extends AppCompatActivity {
         FireBaseDataBase database = new FireBaseDataBase();
         mAuthenticator = new FireBaseAuthenticate(database);
         sessionManager = new SessionManager(this);
+
+        NotificationHelper.requestNotificationPermission(this);
 
         if (sessionManager.isLoggedIn()) {
             goToActivity();
@@ -99,6 +108,19 @@ public class Register extends AppCompatActivity {
                     FireBaseAuthenticate.RegistrationCallback registrationCallback = new FireBaseAuthenticate.RegistrationCallback() {
                         @Override
                         public void onRegistrationSuccess() {
+                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (task.isSuccessful() && task.getResult() != null) {
+                                        String token = task.getResult();
+                                        MessagingService messagingService = new MessagingService();
+                                        messagingService.saveTokenToPrefs(token);
+                                    } else {
+                                        Log.e(TAG, "Erro ao obter o token FCM: " + task.getException());
+                                    }
+                                }
+                            });
+
                             Intent intent = new Intent(Register.this, Login.class);
                             startActivity(intent);
                             finish();
@@ -151,7 +173,7 @@ public class Register extends AppCompatActivity {
     }
 
     private void goToActivity() {
-        Intent intent = new Intent(this, forum.class);
+        Intent intent = new Intent(this, Forum.class);
         startActivity(intent);
         finish();
     }

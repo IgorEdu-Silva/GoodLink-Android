@@ -1,6 +1,7 @@
-package com.example.goodlink.Functions;
+package com.example.goodlink.PopUp;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -13,16 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goodlink.FireBase.CommentManager;
 import com.example.goodlink.FireBase.FireStoreDataManager;
+import com.example.goodlink.FireBase.MessagingService;
 import com.example.goodlink.Fragments.CommentAdapter;
 import com.example.goodlink.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PopUpComment extends AppCompatActivity {
-
     private EditText commentAdd;
     private ImageButton sendButton;
     private RecyclerView commentsShow;
@@ -33,6 +35,7 @@ public class PopUpComment extends AppCompatActivity {
     private String userName;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    private String fcmToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,8 @@ public class PopUpComment extends AppCompatActivity {
 
         if (currentUser != null) {
             userName = currentUser.getDisplayName();
+            SharedPreferences sharedPreferences = getSharedPreferences("_", MODE_PRIVATE);
+            fcmToken = sharedPreferences.getString("fcm_token", null);
         } else {
             Log.e("PopUpComment", "currentUser is null");
             return;
@@ -74,6 +79,7 @@ public class PopUpComment extends AppCompatActivity {
                     public void onCommentSaved() {
                         Toast.makeText(PopUpComment.this, "Comentário enviado com sucesso!", Toast.LENGTH_SHORT).show();
                         loadComments();
+                        sendNotificationToPlaylistOwner();
                     }
 
                     @Override
@@ -112,5 +118,15 @@ public class PopUpComment extends AppCompatActivity {
                 Log.e("PopUpComment", "Erro ao carregar comentários: " + errorMessage);
             }
         });
+    }
+
+    private void sendNotificationToPlaylistOwner() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        String token = task.getResult();
+                        MessagingService.sendNotificationToToken(this, token, "Novo comentário", "Mais comentários são feitos, atualize e veja-os.");
+                    }
+                });
     }
 }

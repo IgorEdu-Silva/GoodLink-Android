@@ -1,6 +1,5 @@
-package com.example.goodlink.Functions;
+package com.example.goodlink.PopUp;
 
-import androidx.fragment.app.DialogFragment;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,18 +10,19 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.goodlink.R;
 
-public class PopUp extends DialogFragment {
+public class PopUpDescription extends DialogFragment {
     private String fullDescriptionText;
     private static final String FULL_DESCRIPTION_KEY = "fullDescription";
 
-    public PopUp() {
+    public PopUpDescription() {
     }
 
-    public static PopUp newInstance(String fullDescription) {
-        PopUp fragment = new PopUp();
+    public static PopUpDescription newInstance(String fullDescription) {
+        PopUpDescription fragment = new PopUpDescription();
         Bundle args = new Bundle();
         args.putString(FULL_DESCRIPTION_KEY, fullDescription);
         fragment.setArguments(args);

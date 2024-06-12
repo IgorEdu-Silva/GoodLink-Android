@@ -1,4 +1,4 @@
-package com.example.goodlink.Functions;
+package com.example.goodlink.Utils;
 
 import android.app.Activity;
 import android.graphics.Rect;
@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 
 public class KeyboardUtils {
+
     public interface KeyboardVisibilityListener {
         void onKeyboardVisibilityChanged(boolean isVisible, int keyboardHeight);
     }

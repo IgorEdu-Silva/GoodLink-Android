@@ -1,5 +1,6 @@
 package com.example.goodlink.Screens;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -9,12 +10,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.goodlink.FireBase.MessagingService;
 import com.example.goodlink.Fragments.PagerAdapterFragments;
+import com.example.goodlink.Functions.NotificationHelper;
 import com.example.goodlink.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.messaging.FirebaseMessaging;
 
-public class forum extends AppCompatActivity {
+public class Forum extends AppCompatActivity {
     private boolean telaAtiva = true;
 
     @Override
@@ -28,11 +32,23 @@ public class forum extends AppCompatActivity {
             return insets;
         });
 
+        NotificationHelper.requestNotificationPermission(this);
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        String token = task.getResult();
+                        sendTokenToMessagingService(token);
+                    }
+                });
+
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         TabLayout tabLayout = findViewById(R.id.tabLayoutInfo);
 
         PagerAdapterFragments pagerAdapter = new PagerAdapterFragments(this);
         viewPager.setAdapter(pagerAdapter);
+
+        sendNotificationToPlaylistOwner();
 
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> {
@@ -49,6 +65,23 @@ public class forum extends AppCompatActivity {
                     }
                 }
         ).attach();
+    }
+
+    private void sendTokenToMessagingService(String token) {
+        Intent intent = new Intent(this, MessagingService.class);
+        intent.setAction(MessagingService.ACTION_TOKEN_RECEIVED);
+        intent.putExtra(MessagingService.EXTRA_TOKEN, token);
+        startService(intent);
+    }
+
+    private void sendNotificationToPlaylistOwner() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        String token = task.getResult();
+                        MessagingService.sendNotificationToToken(this, token, "Gostou do que viu?", "Ajude mais pessoas da comunidade e compartilhe um pouco do seu conhecimento!");
+                    }
+                });
     }
 
     @Override

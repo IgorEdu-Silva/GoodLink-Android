@@ -1,4 +1,4 @@
-package com.example.goodlink.Functions;
+package com.example.goodlink.Utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
