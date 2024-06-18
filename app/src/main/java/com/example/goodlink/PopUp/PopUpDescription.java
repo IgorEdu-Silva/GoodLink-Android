@@ -1,14 +1,14 @@
 package com.example.goodlink.PopUp;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
@@ -30,30 +30,53 @@ public class PopUpDescription extends DialogFragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.customDialogStyle);
+        setCancelable(false);
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_pop_up, container, false);
+        View view = inflater.inflate(R.layout.fragment_pop_up_description, container, false);
 
         TextView fullDescriptionTextView = view.findViewById(R.id.fullDescription);
+        Button closeButton = view.findViewById(R.id.closeButton);
 
         if (getArguments() != null) {
             fullDescriptionText = getArguments().getString(FULL_DESCRIPTION_KEY);
+            Log.d("PopUpDescription", "Full Description: " + fullDescriptionText);
         }
 
         if (fullDescriptionTextView != null) {
             fullDescriptionTextView.setText(fullDescriptionText);
+            Log.d("PopUpDescription", "TextView set with text: " + fullDescriptionText);
         }
 
-        fullDescriptionTextView.setVisibility(View.VISIBLE);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
+        int dialogWidth = (int) (screenWidth * 0.9);
+        int dialogHeight = (int) (screenHeight * 0.3);
+
+        if (getDialog() != null && getDialog().getWindow() != null) {
+            getDialog().getWindow().setLayout(dialogWidth, dialogHeight);
+        }
+    }
 }

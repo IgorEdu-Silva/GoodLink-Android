@@ -215,6 +215,72 @@
                     });
         }
 
+        public void getLinksPlaylists(String playlistId, FireStoreDataListener<PlaylistData> listener) {
+            playlistsCollection.document(playlistId).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            PlaylistData playlistData = documentSnapshot.toObject(PlaylistData.class);
+                            listener.onSuccess(playlistData);
+                        } else {
+                            listener.onFailure("Playlist not found");
+                        }
+                    })
+                    .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
+        }
+
+        public void removePlaylistFromFavorites(String userId, String playlistId, OnPlaylistRemovedFromFavoritesListener listener) {
+            if (userId != null && playlistId != null) {
+                usersCollection.document(userId)
+                        .collection("userFavorites")
+                        .document(playlistId)
+                        .delete()
+                        .addOnSuccessListener(aVoid -> {
+                            Log.d(TAG, "Playlist removed from favorites for user: " + userId);
+                            listener.onPlaylistRemovedFromFavorites(playlistId);
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e(TAG, "Error removing playlist from favorites for user: " + userId, e);
+                            listener.onPlaylistRemoveFromFavoritesFailed(e.getMessage());
+                        });
+
+                playlistsCollection.document(playlistId)
+                        .update("favorited", false)
+                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Playlist updated as not favorited: " + playlistId))
+                        .addOnFailureListener(e -> Log.e(TAG, "Error updating playlist as not favorited: " + playlistId, e));
+            } else {
+                Log.e(TAG, "One or more required fields are null");
+                listener.onPlaylistRemoveFromFavoritesFailed("One or more required fields are null");
+            }
+        }
+
+        public void addPlaylistToFavorites(String userId, String playlistId, OnPlaylistAddedToFavoritesListener listener) {
+            if (userId != null && playlistId != null) {
+                Map<String, Object> playlistIdMap = new HashMap<>();
+                playlistIdMap.put("playlistId", playlistId);
+
+                usersCollection.document(userId)
+                        .collection("userFavorites")
+                        .document(playlistId)
+                        .set(playlistIdMap)
+                        .addOnSuccessListener(aVoid -> {
+                            Log.d(TAG, "Playlist added to favorites for user: " + userId);
+                            listener.onPlaylistAddedToFavorites(playlistId);
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e(TAG, "Error adding playlist to favorites for user: " + userId, e);
+                            listener.onPlaylistAddToFavoritesFailed(e.getMessage());
+                        });
+
+                playlistsCollection.document(playlistId)
+                        .update("favorited", true)
+                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Playlist updated as favorited: " + playlistId))
+                        .addOnFailureListener(e -> Log.e(TAG, "Error updating playlist as favorited: " + playlistId, e));
+            } else {
+                Log.e(TAG, "One or more required fields are null");
+                listener.onPlaylistAddToFavoritesFailed("One or more required fields are null");
+            }
+        }
+
         public interface OnCommentSavedListener {
             void onCommentSaved();
             void onCommentSaveFailed(String errorMessage);
@@ -251,5 +317,17 @@
             void onCommentsLoaded(List<CommentManager> comments);
 
             void onCommentsLoadFailed(String errorMessage);
+        }
+
+        public interface OnPlaylistRemovedFromFavoritesListener {
+            void onPlaylistRemovedFromFavorites(String removedPlaylistId);
+
+            void onPlaylistRemoveFromFavoritesFailed(String errorMessage);
+        }
+
+        public interface OnPlaylistAddedToFavoritesListener {
+            void onPlaylistAddedToFavorites(String addedPlaylistId);
+
+            void onPlaylistAddToFavoritesFailed(String errorMessage);
         }
     }
