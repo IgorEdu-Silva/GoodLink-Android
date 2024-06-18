@@ -54,7 +54,7 @@ public class TabPlaylistsFragment extends Fragment {
         FireBaseDataBase firebaseDatabase = new FireBaseDataBase();
 //        firebaseDatabase.testConnection();
 
-        View view = inflater.inflate(R.layout.fragment_playlists, container, false);
+        View view = inflater.inflate(R.layout.fragment_tab_playlists, container, false);
         recyclerView = view.findViewById(R.id.viewPlaylists);
         playlists = new ArrayList<>();
         firestoreDataManager = new FireStoreDataManager();

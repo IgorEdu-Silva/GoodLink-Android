@@ -3,6 +3,7 @@ package com.example.goodlink.Fragments;
 import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -20,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.goodlink.FireBase.FireStoreDataManager;
 import com.example.goodlink.FireBase.PlaylistData;
 import com.example.goodlink.R;
+import com.example.goodlink.Utils.KeyboardUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -80,8 +83,18 @@ public class TabFormFragment extends Fragment {
         playlists = new ArrayList<>();
         playlistAdapter = new PlaylistAdapter(playlists, databaseReference, requireContext(), userIdToNameMap);
 
-
         loadCategories();
+
+        KeyboardUtils.setKeyboardVisibilityListener(requireActivity(), new KeyboardUtils.KeyboardVisibilityListener() {
+            @Override
+            public void onKeyboardVisibilityChanged(boolean isVisible, int keyboardHeight) {
+                if (isVisible) {
+                    scrollIfNeeded(view, R.id.categoria_Form);
+                } else {
+                    resetScroll(view);
+                }
+            }
+        });
 
         enviarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +149,34 @@ public class TabFormFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void scrollIfNeeded(View view, int categoriaPlaylistForm) {
+        View focusedEditText = view.findFocus();
+        if (focusedEditText instanceof TextView) {
+            int[] location = new int[2];
+            focusedEditText.getLocationOnScreen(location);
+
+            Rect rect = new Rect();
+            view.getWindowVisibleDisplayFrame(rect);
+
+            int screenHeight = view.getHeight();
+            int keyboardHeight = screenHeight - rect.bottom;
+            int editTextBottom = location[1] + focusedEditText.getHeight();
+
+            View btnSend = view.findViewById(R.id.btnSend_Form);
+            int btnSendHeight = btnSend.getHeight();
+            int btnSendBottom = btnSend.getBottom();
+
+            if (keyboardHeight > 0 && btnSendBottom > rect.bottom) {
+                int scrollAmount = btnSendBottom - rect.bottom + focusedEditText.getPaddingBottom() + 100;
+                view.scrollBy(0, scrollAmount);
+            }
+        }
+    }
+
+    private void resetScroll(View view) {
+        view.scrollTo(0, 0);
     }
 
     private void loadCategories() {

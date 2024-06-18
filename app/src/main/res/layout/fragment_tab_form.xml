@@ -30,7 +30,7 @@
             tools:ignore="TextSizeCheck" />
 
         <ScrollView
-            android:id="@+id/scrollView2"
+            android:id="@+id/scrollViewForm"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/btnSend_Form"
@@ -65,7 +65,7 @@
                     <Spinner
                         android:id="@+id/categoria_Form"
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
+                        android:layout_height="60dp"
                         android:background="@drawable/border_blue"
                         android:backgroundTint="@android:color/transparent"
                         android:fontFamily="sans-serif-light"
@@ -96,7 +96,7 @@
                     <EditText
                         android:id="@+id/tituloPlaylist_Form"
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
+                        android:layout_height="60dp"
                         android:backgroundTint="@android:color/transparent"
                         android:fontFamily="sans-serif-light"
                         android:gravity="start"
@@ -126,7 +126,7 @@
                     <EditText
                         android:id="@+id/descricaoPlaylist_Form"
                         android:layout_width="match_parent"
-                        android:layout_height="120dp"
+                        android:layout_height="80dp"
                         android:backgroundTint="@android:color/transparent"
                         android:fontFamily="sans-serif-light"
                         android:gravity="start"
@@ -156,7 +156,7 @@
                     <EditText
                         android:id="@+id/iframe_Form"
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
+                        android:layout_height="60dp"
                         android:backgroundTint="@android:color/transparent"
                         android:fontFamily="sans-serif-light"
                         android:gravity="start"
@@ -175,7 +175,7 @@
                     android:textAlignment="textStart"
                     android:textColor="@color/light_blue"
                     android:textSize="18sp"
-                    tools:ignore="RtlCompat" />
+                    tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/nomeCanal_Form_layout"
@@ -185,7 +185,7 @@
                     <EditText
                         android:id="@+id/nomeCanal_Form"
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
+                        android:layout_height="60dp"
                         android:backgroundTint="@android:color/transparent"
                         android:fontFamily="sans-serif-light"
                         android:gravity="start"
@@ -215,7 +215,7 @@
                     <EditText
                         android:id="@+id/urlCanal_Form"
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
+                        android:layout_height="60dp"
                         android:backgroundTint="@android:color/transparent"
                         android:fontFamily="sans-serif-light"
                         android:gravity="start"
