@@ -1,14 +1,14 @@
-package com.example.goodlink.FireBase;
+package com.example.goodlink.FireBaseManager;
 
-public class User {
+public class ManagerUser {
     private String nome;
     private String email;
 
-    public User() {
+    public ManagerUser() {
 
     }
 
-    public User(String nome, String email) {
+    public ManagerUser(String nome, String email) {
         this.nome = nome;
         this.email = email;
     }

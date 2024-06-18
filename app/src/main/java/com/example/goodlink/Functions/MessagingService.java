@@ -1,4 +1,4 @@
-package com.example.goodlink.FireBase;
+package com.example.goodlink.Functions;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

@@ -1,4 +1,4 @@
-package com.example.goodlink.Fragments;
+package com.example.goodlink.Adapter;
 
 import static android.content.ContentValues.TAG;
 
@@ -32,10 +32,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.goodlink.FireBase.FireStoreDataManager;
-import com.example.goodlink.FireBase.PlaylistData;
+import com.example.goodlink.FireBaseManager.FireStoreDataManager;
+import com.example.goodlink.FireBaseManager.ManagerPlaylist;
 import com.example.goodlink.PopUp.PopUpComment;
-import com.example.goodlink.PopUp.PopUpCreatePlaylist;
 import com.example.goodlink.PopUp.PopUpDescription;
 import com.example.goodlink.R;
 import com.google.firebase.database.DatabaseReference;
@@ -45,30 +44,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder> {
-    private final List<PlaylistData> playlists;
-    private final AtomicReference<List<PlaylistData>> playlistsFull = new AtomicReference<>();
+public class AdapterPlaylist extends RecyclerView.Adapter<AdapterPlaylist.PlaylistViewHolder> {
+    private final List<ManagerPlaylist> playlists;
+    private final AtomicReference<List<ManagerPlaylist>> playlistsFull = new AtomicReference<>();
     private static DatabaseReference databaseReference;
     private final Context context;
     private final Map<String, String> userIdToNameMap;
     private OnItemClickListener clickListener;
     private final FireStoreDataManager fireStoreDataManager;
 
-    public PlaylistAdapter(List<PlaylistData> playlists, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap) {
+    public AdapterPlaylist(List<ManagerPlaylist> playlists, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap) {
         this(playlists, databaseReference, context, userIdToNameMap, new FireStoreDataManager());
     }
 
-    public PlaylistAdapter(List<PlaylistData> playlists, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap, FireStoreDataManager fireStoreDataManager) {
+    public AdapterPlaylist(List<ManagerPlaylist> playlists, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap, FireStoreDataManager fireStoreDataManager) {
         this.context = context;
         this.playlistsFull.set(new ArrayList<>(playlists));
-        PlaylistAdapter.databaseReference = databaseReference;
+        AdapterPlaylist.databaseReference = databaseReference;
         this.userIdToNameMap = userIdToNameMap;
         this.fireStoreDataManager = fireStoreDataManager != null ? fireStoreDataManager : new FireStoreDataManager();
 
         if (playlists != null) {
             this.playlists = playlists;
             this.playlistsFull.set(new ArrayList<>(this.playlists));
-            for (PlaylistData playlist : playlists) {
+            for (ManagerPlaylist playlist : playlists) {
                 if (playlist.getUserId() == null) {
                     Log.d(TAG, "UserID is null for playlist: " + playlist.getUserId());
                     playlist.setUserId("defaultValue");
@@ -95,7 +94,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     @Override
     public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
         if (position >= 0 && position < playlists.size()) {
-            PlaylistData playlist = playlists.get(position);
+            ManagerPlaylist playlist = playlists.get(position);
 
             if (playlist != null) {
                 holder.bind(playlist);
@@ -198,7 +197,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         }
     }
 
-    private void showPopupMenu(View view, PlaylistData playlist) {
+    private void showPopupMenu(View view, ManagerPlaylist playlist) {
         PopupMenu popupMenu = new PopupMenu(context, view);
         popupMenu.inflate(R.menu.menu_options_items_playlist);
 
@@ -242,11 +241,11 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
     private void copyLinkBoth(String playlistId) {
         FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-        fireStoreDataManager.getLinksPlaylists(playlistId, new FireStoreDataManager.FireStoreDataListener<PlaylistData>() {
+        fireStoreDataManager.getLinksPlaylists(playlistId, new FireStoreDataManager.FireStoreDataListener<ManagerPlaylist>() {
             @Override
-            public void onSuccess(PlaylistData playlistData) {
-                String linkCanal = playlistData.getUrlCanal();
-                String linkPlaylist = playlistData.getIframe();
+            public void onSuccess(ManagerPlaylist managerPlaylist) {
+                String linkCanal = managerPlaylist.getUrlCanal();
+                String linkPlaylist = managerPlaylist.getIframe();
                 String textToCopy = "Link do canal: " + linkCanal + "\nLink da playlist: " + linkPlaylist;
                 copyTextToClipboard("Ambos os links", textToCopy);
             }
@@ -260,10 +259,10 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
     private void copyLinkPlaylist(String playlistId) {
         FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-        fireStoreDataManager.getLinksPlaylists(playlistId, new FireStoreDataManager.FireStoreDataListener<PlaylistData>() {
+        fireStoreDataManager.getLinksPlaylists(playlistId, new FireStoreDataManager.FireStoreDataListener<ManagerPlaylist>() {
             @Override
-            public void onSuccess(PlaylistData playlistData) {
-                String linkPlaylist = playlistData.getIframe();
+            public void onSuccess(ManagerPlaylist managerPlaylist) {
+                String linkPlaylist = managerPlaylist.getIframe();
                 copyTextToClipboard("Link da playlist", linkPlaylist);
             }
 
@@ -276,10 +275,10 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
     private void copyLinkCanal(String playlistId) {
         FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-        fireStoreDataManager.getLinksPlaylists(playlistId, new FireStoreDataManager.FireStoreDataListener<PlaylistData>() {
+        fireStoreDataManager.getLinksPlaylists(playlistId, new FireStoreDataManager.FireStoreDataListener<ManagerPlaylist>() {
             @Override
-            public void onSuccess(PlaylistData playlistData) {
-                String linkCanal = playlistData.getUrlCanal();
+            public void onSuccess(ManagerPlaylist managerPlaylist) {
+                String linkCanal = managerPlaylist.getUrlCanal();
                 copyTextToClipboard("Link do canal", linkCanal);
             }
 
@@ -296,7 +295,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 //        popupCreatePlaylist.show(anchorView);
 //    }
 
-    private void favorityPlaylist(PlaylistData playlist) {
+    private void favorityPlaylist(ManagerPlaylist playlist) {
         String userId = fireStoreDataManager.getCurrentUserId();
         String playlistId = playlist.getPlaylistId();
 
@@ -421,13 +420,13 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
         }
 
-        public void bind(PlaylistData playlistData) {
-            if (playlistData != null) {
-                tituloTextView.setText(playlistData.getTitulo());
-                descricaoTextView.setText(playlistData.getDescricao());
-                nomeCanalTextView.setText(playlistData.getNomeCanal());
+        public void bind(ManagerPlaylist managerPlaylist) {
+            if (managerPlaylist != null) {
+                tituloTextView.setText(managerPlaylist.getTitulo());
+                descricaoTextView.setText(managerPlaylist.getDescricao());
+                nomeCanalTextView.setText(managerPlaylist.getNomeCanal());
 
-                String userId = playlistData.getNomeUsuario();
+                String userId = managerPlaylist.getNomeUsuario();
                 String userName = userIdToNameMap.get(userId);
 
                 if (userName != null) {
@@ -436,7 +435,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
                     nomeUsuarioTextView.setText(userId);
                 }
 
-                dataPubTextView.setText(playlistData.getDataPub());
+                dataPubTextView.setText(managerPlaylist.getDataPub());
             }
         }
     }

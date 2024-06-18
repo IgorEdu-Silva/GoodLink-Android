@@ -1,4 +1,4 @@
-    package com.example.goodlink.FireBase;
+    package com.example.goodlink.FireBaseManager;
 
     import android.annotation.SuppressLint;
     import android.util.Log;
@@ -55,18 +55,18 @@
             user.put("email", email);
 
             usersCollection.document(userId).set(user)
-                    .addOnSuccessListener(aVoid -> Log.d("FireStoreDataManager", "User added successfully"))
+                    .addOnSuccessListener(aVoid -> Log.d("FireStoreDataManager", "ManagerUser added successfully"))
                     .addOnFailureListener(e -> Log.e("FireStoreDataManager", "Error adding user", e));
         }
 
-        public void getUser(String userId, final FireStoreDataListener<User> listener) {
+        public void getUser(String userId, final FireStoreDataListener<ManagerUser> listener) {
             usersCollection.document(userId).get()
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
-                            User userData = documentSnapshot.toObject(User.class);
-                            listener.onSuccess(userData);
+                            ManagerUser managerUserData = documentSnapshot.toObject(ManagerUser.class);
+                            listener.onSuccess(managerUserData);
                         } else {
-                            listener.onFailure("User not found");
+                            listener.onFailure("ManagerUser not found");
                         }
                     })
                     .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
@@ -91,11 +91,11 @@
         public void getPlaylistsFromFirestore(OnPlaylistsLoadedListener listener) {
             playlistsCollection.get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
-                        List<PlaylistData> playlists = new ArrayList<>();
+                        List<ManagerPlaylist> playlists = new ArrayList<>();
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            PlaylistData playlistData = documentSnapshot.toObject(PlaylistData.class);
-                            playlistData.setPlaylistId(documentSnapshot.getId());
-                            playlists.add(playlistData);
+                            ManagerPlaylist managerPlaylist = documentSnapshot.toObject(ManagerPlaylist.class);
+                            managerPlaylist.setPlaylistId(documentSnapshot.getId());
+                            playlists.add(managerPlaylist);
                         }
                         listener.onPlaylistsLoaded(playlists);
                     })
@@ -122,15 +122,15 @@
                     });
         }
 
-        public void createPlaylist(String userId, PlaylistData playlistData, OnPlaylistCreatedListener listener) {
+        public void createPlaylist(String userId, ManagerPlaylist managerPlaylist, OnPlaylistCreatedListener listener) {
             if (userId != null && !userId.isEmpty()) {
-                Map<String, Object> playlist = getStringObjectMap(playlistData);
+                Map<String, Object> playlist = getStringObjectMap(managerPlaylist);
 
                 playlistsCollection.add(playlist)
                         .addOnSuccessListener(documentReference -> {
                             String playlistId = documentReference.getId();
-                            playlistData.setPlaylistId(playlistId);
-                            playlistData.setUserId(userId);
+                            managerPlaylist.setPlaylistId(playlistId);
+                            managerPlaylist.setUserId(userId);
                             listener.onPlaylistCreated(playlistId);
                             Map<String, Object> playlistIdMap = new HashMap<>();
                             playlistIdMap.put("playlistId", playlistId);
@@ -149,16 +149,16 @@
         }
 
         @NonNull
-        private static Map<String, Object> getStringObjectMap(PlaylistData playlistData) {
+        private static Map<String, Object> getStringObjectMap(ManagerPlaylist managerPlaylist) {
             Map<String, Object> playlist = new HashMap<>();
-            playlist.put("titulo", playlistData.getTitulo());
-            playlist.put("descricao", playlistData.getDescricao());
-            playlist.put("nomeCanal", playlistData.getNomeCanal());
-            playlist.put("iframe", playlistData.getIframe());
-            playlist.put("urlCanal", playlistData.getUrlCanal());
-            playlist.put("categoria", playlistData.getCategoria());
-            playlist.put("nomeUsuario", playlistData.getNomeUsuario());
-            playlist.put("dataPub", playlistData.getDataPub());
+            playlist.put("titulo", managerPlaylist.getTitulo());
+            playlist.put("descricao", managerPlaylist.getDescricao());
+            playlist.put("nomeCanal", managerPlaylist.getNomeCanal());
+            playlist.put("iframe", managerPlaylist.getIframe());
+            playlist.put("urlCanal", managerPlaylist.getUrlCanal());
+            playlist.put("categoria", managerPlaylist.getCategoria());
+            playlist.put("nomeUsuario", managerPlaylist.getNomeUsuario());
+            playlist.put("dataPub", managerPlaylist.getDataPub());
             return playlist;
         }
 
@@ -188,7 +188,7 @@
 
         public void saveUserComment(String commentText, String playlistId, String userName, OnCommentSavedListener listener) {
             String commentId = db.collection("userComments").document().getId();
-            CommentManager comment = new CommentManager(userName, commentText, playlistId);
+            ManagerComment comment = new ManagerComment(userName, commentText, playlistId);
 
             db.collection("userComments")
                     .document(commentId)
@@ -203,9 +203,9 @@
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            List<CommentManager> comments = new ArrayList<>();
+                            List<ManagerComment> comments = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                CommentManager comment = document.toObject(CommentManager.class);
+                                ManagerComment comment = document.toObject(ManagerComment.class);
                                 comments.add(comment);
                             }
                             listener.onCommentsLoaded(comments);
@@ -215,12 +215,12 @@
                     });
         }
 
-        public void getLinksPlaylists(String playlistId, FireStoreDataListener<PlaylistData> listener) {
+        public void getLinksPlaylists(String playlistId, FireStoreDataListener<ManagerPlaylist> listener) {
             playlistsCollection.document(playlistId).get()
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
-                            PlaylistData playlistData = documentSnapshot.toObject(PlaylistData.class);
-                            listener.onSuccess(playlistData);
+                            ManagerPlaylist managerPlaylist = documentSnapshot.toObject(ManagerPlaylist.class);
+                            listener.onSuccess(managerPlaylist);
                         } else {
                             listener.onFailure("Playlist not found");
                         }
@@ -293,7 +293,7 @@
         }
 
         public interface OnPlaylistsLoadedListener {
-            void onPlaylistsLoaded(List<PlaylistData> playlists);
+            void onPlaylistsLoaded(List<ManagerPlaylist> playlists);
             void onPlaylistsLoadFailed(String errorMessage);
         }
 
@@ -314,7 +314,7 @@
 
         public interface OnCommentsLoadedListener {
             @SuppressLint("NotifyDataSetChanged")
-            void onCommentsLoaded(List<CommentManager> comments);
+            void onCommentsLoaded(List<ManagerComment> comments);
 
             void onCommentsLoadFailed(String errorMessage);
         }

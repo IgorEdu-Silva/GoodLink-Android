@@ -13,7 +13,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-public class NotificationHelper {
+public class HelperNotification {
 
     private static final String CHANNEL_ID = "MY_CHANNEL_ID";
     private static final String CHANNEL_NAME = "My Channel";

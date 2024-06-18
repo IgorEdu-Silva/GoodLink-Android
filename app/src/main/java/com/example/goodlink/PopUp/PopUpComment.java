@@ -12,10 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.goodlink.FireBase.CommentManager;
-import com.example.goodlink.FireBase.FireStoreDataManager;
-import com.example.goodlink.FireBase.MessagingService;
-import com.example.goodlink.Fragments.CommentAdapter;
+import com.example.goodlink.FireBaseManager.ManagerComment;
+import com.example.goodlink.FireBaseManager.FireStoreDataManager;
+import com.example.goodlink.Functions.MessagingService;
+import com.example.goodlink.Adapter.AdapterComment;
 import com.example.goodlink.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,8 +28,8 @@ public class PopUpComment extends AppCompatActivity {
     private EditText commentAdd;
     private ImageButton sendButton;
     private RecyclerView commentsShow;
-    private CommentAdapter commentAdapter;
-    private List<CommentManager> commentsList;
+    private AdapterComment adapterComment;
+    private List<ManagerComment> commentsList;
     private FireStoreDataManager fireStoreDataManager;
     private String playlistId;
     private String userName;
@@ -67,8 +67,8 @@ public class PopUpComment extends AppCompatActivity {
         }
 
         commentsShow.setLayoutManager(new LinearLayoutManager(this));
-        commentAdapter = new CommentAdapter(commentsList, playlistId, userName);
-        commentsShow.setAdapter(commentAdapter);
+        adapterComment = new AdapterComment(commentsList, playlistId, userName);
+        commentsShow.setAdapter(adapterComment);
 
         sendButton.setOnClickListener(v -> {
             String commentText = commentAdd.getText().toString().trim();
@@ -99,13 +99,13 @@ public class PopUpComment extends AppCompatActivity {
         fireStoreDataManager.getCommentsByPlaylistId(playlistId, new FireStoreDataManager.OnCommentsLoadedListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onCommentsLoaded(List<CommentManager> comments) {
+            public void onCommentsLoaded(List<ManagerComment> comments) {
                 if (comments != null && !comments.isEmpty()) {
                     commentsList.clear();
                     commentsList.addAll(comments);
-                    commentAdapter.notifyDataSetChanged();
-                    if (commentAdapter != null) {
-                        commentAdapter.notifyDataSetChanged();
+                    adapterComment.notifyDataSetChanged();
+                    if (adapterComment != null) {
+                        adapterComment.notifyDataSetChanged();
                     }
                 } else {
                     Toast.makeText(PopUpComment.this, "Seja o primeiro a comentário nessa playlist!" + comments, Toast.LENGTH_SHORT).show();

@@ -10,9 +10,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.goodlink.FireBase.MessagingService;
-import com.example.goodlink.Fragments.PagerAdapterFragments;
-import com.example.goodlink.Functions.NotificationHelper;
+import com.example.goodlink.Functions.MessagingService;
+import com.example.goodlink.Adapter.AdapterPagerFragments;
+import com.example.goodlink.Functions.HelperNotification;
 import com.example.goodlink.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -32,7 +32,7 @@ public class Forum extends AppCompatActivity {
             return insets;
         });
 
-        NotificationHelper.requestNotificationPermission(this);
+        HelperNotification.requestNotificationPermission(this);
 
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
@@ -45,7 +45,7 @@ public class Forum extends AppCompatActivity {
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         TabLayout tabLayout = findViewById(R.id.tabLayoutInfo);
 
-        PagerAdapterFragments pagerAdapter = new PagerAdapterFragments(this);
+        AdapterPagerFragments pagerAdapter = new AdapterPagerFragments(this);
         viewPager.setAdapter(pagerAdapter);
 
         sendNotificationToPlaylistOwner();

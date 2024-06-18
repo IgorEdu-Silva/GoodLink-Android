@@ -19,8 +19,9 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.goodlink.FireBase.FireStoreDataManager;
-import com.example.goodlink.FireBase.PlaylistData;
+import com.example.goodlink.Adapter.AdapterPlaylist;
+import com.example.goodlink.FireBaseManager.FireStoreDataManager;
+import com.example.goodlink.FireBaseManager.ManagerPlaylist;
 import com.example.goodlink.R;
 import com.example.goodlink.Utils.KeyboardUtils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,8 +50,8 @@ public class TabFormFragment extends Fragment {
     private final DatabaseReference databaseReference;
     private final Map<String, String> userIdToNameMap;
     private final RecyclerView recyclerView;
-    private List<PlaylistData> playlists;
-    private PlaylistAdapter playlistAdapter;
+    private List<ManagerPlaylist> playlists;
+    private AdapterPlaylist adapterPlaylist;
 
     public TabFormFragment(DatabaseReference databaseReference, Map<String, String> userIdToNameMap, RecyclerView recyclerView) {
         this.databaseReference = databaseReference;
@@ -81,7 +82,7 @@ public class TabFormFragment extends Fragment {
         enviarButton = view.findViewById(R.id.btnSend_Form);
 
         playlists = new ArrayList<>();
-        playlistAdapter = new PlaylistAdapter(playlists, databaseReference, requireContext(), userIdToNameMap);
+        adapterPlaylist = new AdapterPlaylist(playlists, databaseReference, requireContext(), userIdToNameMap);
 
         loadCategories();
 
@@ -122,17 +123,17 @@ public class TabFormFragment extends Fragment {
 
                 if (currentUser != null) {
                     String userID = currentUser.getUid();
-                    PlaylistData playlistData = new PlaylistData(titulo, descricao, nomeCanal, iframe, urlCanal, categoria, userID, dataPub);
-                    PlaylistData playlistDataIDs = new PlaylistData(userID, playlistId);
+                    ManagerPlaylist managerPlaylist = new ManagerPlaylist(titulo, descricao, nomeCanal, iframe, urlCanal, categoria, userID, dataPub);
+                    ManagerPlaylist managerPlaylistIDs = new ManagerPlaylist(userID, playlistId);
                     Log.d(TAG, "PlaylistID = " + playlistId);
-                    playlistData.setPlaylistId(playlistId);
+                    managerPlaylist.setPlaylistId(playlistId);
 
-                    fireStoreDataManager.createPlaylist(userID, playlistData, new FireStoreDataManager.OnPlaylistCreatedListener() {
+                    fireStoreDataManager.createPlaylist(userID, managerPlaylist, new FireStoreDataManager.OnPlaylistCreatedListener() {
                         @SuppressLint("NotifyDataSetChanged")
                         @Override
                         public void onPlaylistCreated(String playlistId) {
-                            playlists.add(playlistData);
-                            playlistAdapter.notifyDataSetChanged();
+                            playlists.add(managerPlaylist);
+                            adapterPlaylist.notifyDataSetChanged();
                             Toast.makeText(getActivity(), "Playlist criada com sucesso!", Toast.LENGTH_SHORT).show();
                         }
 

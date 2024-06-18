@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.goodlink.FireBase.FireBaseAuthenticate;
-import com.example.goodlink.FireBase.FireBaseDataBase;
+import com.example.goodlink.FireBaseManager.FireBaseAuthenticate;
+import com.example.goodlink.FireBaseManager.FireBaseDataBase;
 import com.example.goodlink.R;
 
 public class ResetPass extends AppCompatActivity {

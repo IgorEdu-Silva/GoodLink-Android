@@ -1,11 +1,11 @@
-package com.example.goodlink.FireBase;
+package com.example.goodlink.FireBaseManager;
 
-public class RatingManager {
+public class ManagerRating {
     private String rating;
     private String userRating;
     private String playlistRated;
 
-    public RatingManager(String rating, String userRating, String avaliado) {
+    public ManagerRating(String rating, String userRating, String avaliado) {
         this.rating = rating;
         this.userRating = userRating;
         this.playlistRated = avaliado;

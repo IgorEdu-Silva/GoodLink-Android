@@ -1,15 +1,15 @@
-package com.example.goodlink.FireBase;
+package com.example.goodlink.FireBaseManager;
 
-public class CommentManager {
+public class ManagerComment {
     private String userName;
     private String userComment;
     private String playlistId;
 
-    public CommentManager(){
+    public ManagerComment(){
 
     }
 
-    public CommentManager(String userName, String userComment, String playlistId) {
+    public ManagerComment(String userName, String userComment, String playlistId) {
         this.userName = userName;
         this.userComment = userComment;
         this.playlistId = playlistId;

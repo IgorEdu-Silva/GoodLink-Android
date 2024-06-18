@@ -1,4 +1,4 @@
-package com.example.goodlink.Fragments;
+package com.example.goodlink.Adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,17 +8,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.goodlink.FireBase.CommentManager;
+import com.example.goodlink.FireBaseManager.ManagerComment;
 import com.example.goodlink.R;
 
 import java.util.List;
 
-public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
-    private final List<CommentManager> commentsList;
+public class AdapterComment extends RecyclerView.Adapter<AdapterComment.ViewHolder> {
+    private final List<ManagerComment> commentsList;
     private final String playlistId;
     private final String userName;
 
-    public CommentAdapter(List<CommentManager> commentsList, String playlistId, String userName) {
+    public AdapterComment(List<ManagerComment> commentsList, String playlistId, String userName) {
         this.commentsList = commentsList;
         this.playlistId = playlistId;
         this.userName = userName;
@@ -35,7 +35,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         int reversePosition = getItemCount() - 1 - position;
-        CommentManager comment = commentsList.get(reversePosition);
+        ManagerComment comment = commentsList.get(reversePosition);
         holder.commentTextView.setText(comment.getUserComment());
         holder.nameUserTextView.setText(comment.getUserName());
     }

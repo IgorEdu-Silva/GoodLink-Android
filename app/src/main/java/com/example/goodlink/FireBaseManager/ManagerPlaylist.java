@@ -1,6 +1,6 @@
-package com.example.goodlink.FireBase;
+package com.example.goodlink.FireBaseManager;
 
-public class PlaylistData {
+public class ManagerPlaylist {
     private String titulo;
     private String descricao;
     private String nomeCanal;
@@ -13,11 +13,11 @@ public class PlaylistData {
     private String playlistId;
     private boolean favorited;
 
-    public PlaylistData() {
+    public ManagerPlaylist() {
 
     }
 
-    public PlaylistData(String titulo, String descricao, String nomeCanal, String iframe, String urlCanal, String categoria, String nomeUsuario, String dataPub) {
+    public ManagerPlaylist(String titulo, String descricao, String nomeCanal, String iframe, String urlCanal, String categoria, String nomeUsuario, String dataPub) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.nomeCanal = nomeCanal;
@@ -28,7 +28,7 @@ public class PlaylistData {
         this.dataPub = dataPub;
     }
 
-    public PlaylistData(String userId, String playlistId) {
+    public ManagerPlaylist(String userId, String playlistId) {
         this.userId = userId;
         this.playlistId = playlistId;
     }

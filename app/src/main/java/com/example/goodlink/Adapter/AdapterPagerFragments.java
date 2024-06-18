@@ -1,12 +1,16 @@
-package com.example.goodlink.Fragments;
+package com.example.goodlink.Adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-public class PagerAdapterFragments extends FragmentStateAdapter {
-    public PagerAdapterFragments(FragmentActivity fragmentActivity) {
+import com.example.goodlink.Fragments.TabFormFragment;
+import com.example.goodlink.Fragments.TabPlaylistsFragment;
+import com.example.goodlink.Fragments.TabUsersFragment;
+
+public class AdapterPagerFragments extends FragmentStateAdapter {
+    public AdapterPagerFragments(FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
 

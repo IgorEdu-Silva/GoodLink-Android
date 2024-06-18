@@ -1,4 +1,4 @@
-package com.example.goodlink.FireBase;
+package com.example.goodlink.FireBaseManager;
 
 import android.annotation.SuppressLint;
 import android.util.Log;

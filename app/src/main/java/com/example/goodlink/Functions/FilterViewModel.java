@@ -4,15 +4,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.goodlink.FireBase.PlaylistData;
+import com.example.goodlink.FireBaseManager.ManagerPlaylist;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FilterViewModel extends ViewModel {
     private final MutableLiveData<String> filterText = new MutableLiveData<>();
-    private final List<PlaylistData> filteredPlaylists = new ArrayList<>();
-    private List<PlaylistData> playlists = new ArrayList<>();
+    private final List<ManagerPlaylist> filteredPlaylists = new ArrayList<>();
+    private List<ManagerPlaylist> playlists = new ArrayList<>();
 
     public void setFilterText(String text) {
         filterText.setValue(text);
@@ -25,7 +25,7 @@ public class FilterViewModel extends ViewModel {
         }
         filteredPlaylists.clear();
         String filterTextLower = filterText.getValue() != null ? filterText.getValue().toLowerCase() : "";
-        for (PlaylistData playlist : playlists) {
+        for (ManagerPlaylist playlist : playlists) {
             if (playlist != null && playlist.getTitulo() != null && playlist.getDescricao() != null) {
                 if (playlist.getTitulo().toLowerCase().contains(filterTextLower) ||
                         playlist.getDescricao().toLowerCase().contains(filterTextLower)) {
@@ -39,11 +39,11 @@ public class FilterViewModel extends ViewModel {
         return filterText;
     }
 
-    public List<PlaylistData> getFilteredPlaylists() {
+    public List<ManagerPlaylist> getFilteredPlaylists() {
         return filteredPlaylists;
     }
 
-    public void setPlaylists(List<PlaylistData> playlists) {
+    public void setPlaylists(List<ManagerPlaylist> playlists) {
         this.playlists = playlists;
     }
 }

@@ -23,11 +23,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.goodlink.FireBase.FireBaseDataBase;
-import com.example.goodlink.FireBase.FireStoreDataManager;
-import com.example.goodlink.FireBase.PlaylistData;
+import com.example.goodlink.Adapter.AdapterPlaylist;
+import com.example.goodlink.FireBaseManager.FireBaseDataBase;
+import com.example.goodlink.FireBaseManager.FireStoreDataManager;
+import com.example.goodlink.FireBaseManager.ManagerPlaylist;
 import com.example.goodlink.Functions.FilterViewModel;
-import com.example.goodlink.Functions.PlaylistDescriptionHelper;
+import com.example.goodlink.Functions.HelperPlaylistDescription;
 import com.example.goodlink.R;
 import com.google.firebase.database.DatabaseReference;
 
@@ -39,9 +40,9 @@ import java.util.Map;
 
 public class TabPlaylistsFragment extends Fragment {
     private RecyclerView recyclerView;
-    private PlaylistAdapter adapter;
-    private List<PlaylistData> playlists;
-    private List<PlaylistData> playlistsFull;
+    private AdapterPlaylist adapter;
+    private List<ManagerPlaylist> playlists;
+    private List<ManagerPlaylist> playlistsFull;
     private DatabaseReference playlistsRef;
     private FireStoreDataManager firestoreDataManager;
     private Map<String, String> userIdToNameMap;
@@ -63,13 +64,13 @@ public class TabPlaylistsFragment extends Fragment {
         btnReloadPlaylists = view.findViewById(R.id.ButtonReloadPlaylists);
         ImageButton btnSortBy = view.findViewById(R.id.ButtonSortBy);
         btnSortBy.setOnClickListener(this::showSortMenu);
-        adapter = new PlaylistAdapter(playlists, playlistsRef, getContext(), userIdToNameMap);
+        adapter = new AdapterPlaylist(playlists, playlistsRef, getContext(), userIdToNameMap);
         setupRecyclerView();
 
         firestoreDataManager.getPlaylistsFromFirestore(new FireStoreDataManager.OnPlaylistsLoadedListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onPlaylistsLoaded(List<PlaylistData> loadedPlaylists) {
+            public void onPlaylistsLoaded(List<ManagerPlaylist> loadedPlaylists) {
                 if (userIdToNameMap != null) {
                     playlists.addAll(loadedPlaylists);
                     adapter.notifyDataSetChanged();
@@ -79,8 +80,8 @@ public class TabPlaylistsFragment extends Fragment {
                     firestoreDataManager.getUserIdToNameMap(new FireStoreDataManager.OnUserIdToNameMapListener() {
                         @Override
                         public void onUserIdToNameMapLoaded(Map<String, String> userIdToNameMap) {
-                            for (PlaylistData playlist : loadedPlaylists) {
-                                String fullDescription = PlaylistDescriptionHelper.getDescriptionFromPlaylist(playlist, getContext());
+                            for (ManagerPlaylist playlist : loadedPlaylists) {
+                                String fullDescription = HelperPlaylistDescription.getDescriptionFromPlaylist(playlist, getContext());
                                 playlist.setDescricao(fullDescription);
                             }
 
@@ -182,9 +183,9 @@ public class TabPlaylistsFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     private void sortPlaylistsAlphabetically() {
-        playlists.sort(new Comparator<PlaylistData>() {
+        playlists.sort(new Comparator<ManagerPlaylist>() {
             @Override
-            public int compare(PlaylistData playlist1, PlaylistData playlist2) {
+            public int compare(ManagerPlaylist playlist1, ManagerPlaylist playlist2) {
                 if (playlist1.getTitulo() == null && playlist2.getTitulo() == null) {
                     return 0;
                 } else if (playlist1.getTitulo() == null) {
@@ -201,9 +202,9 @@ public class TabPlaylistsFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     private void sortPlaylistsByDate() {
-        playlists.sort(new Comparator<PlaylistData>() {
+        playlists.sort(new Comparator<ManagerPlaylist>() {
             @Override
-            public int compare(PlaylistData playlist1, PlaylistData playlist2) {
+            public int compare(ManagerPlaylist playlist1, ManagerPlaylist playlist2) {
                 if (playlist1.getDataPub() == null || playlist2.getDataPub() == null) {
                     return 0;
                 }
@@ -258,7 +259,7 @@ public class TabPlaylistsFragment extends Fragment {
         firestoreDataManager.getPlaylistsFromFirestore(new FireStoreDataManager.OnPlaylistsLoadedListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onPlaylistsLoaded(List<PlaylistData> loadedPlaylists) {
+            public void onPlaylistsLoaded(List<ManagerPlaylist> loadedPlaylists) {
                 playlistsFull = new ArrayList<>(loadedPlaylists);
                 playlists.clear();
                 playlists.addAll(loadedPlaylists);
@@ -276,7 +277,7 @@ public class TabPlaylistsFragment extends Fragment {
 
     private List<String> getCategoryList() {
         List<String> categories = new ArrayList<>();
-        for (PlaylistData playlist : playlistsFull) {
+        for (ManagerPlaylist playlist : playlistsFull) {
             String category = playlist.getCategoria();
             if (!categories.contains(category)) {
                 categories.add(category);
@@ -287,8 +288,8 @@ public class TabPlaylistsFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     private void filterPlaylistsByCategory(String category) {
-        List<PlaylistData> filteredPlaylists = new ArrayList<>();
-        for (PlaylistData playlist : playlistsFull) {
+        List<ManagerPlaylist> filteredPlaylists = new ArrayList<>();
+        for (ManagerPlaylist playlist : playlistsFull) {
             if (playlist.getCategoria().equalsIgnoreCase(category)) {
                 filteredPlaylists.add(playlist);
             }
@@ -301,19 +302,19 @@ public class TabPlaylistsFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     private void setupRecyclerView() {
-        adapter = new PlaylistAdapter(playlists, playlistsRef, getContext(), userIdToNameMap);
+        adapter = new AdapterPlaylist(playlists, playlistsRef, getContext(), userIdToNameMap);
         adapter.setOnItemClickListener(this::openWebPage);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.notifyDataSetChanged();
     }
 
-    private List<PlaylistData> filterPlaylists(List<PlaylistData> allPlaylists, String filterText) {
+    private List<ManagerPlaylist> filterPlaylists(List<ManagerPlaylist> allPlaylists, String filterText) {
         if (allPlaylists == null) {
             return Collections.emptyList();
         }
-        List<PlaylistData> filteredPlaylists = new ArrayList<>();
-        for (PlaylistData playlist : allPlaylists) {
+        List<ManagerPlaylist> filteredPlaylists = new ArrayList<>();
+        for (ManagerPlaylist playlist : allPlaylists) {
             String titulo = playlist.getTitulo();
             String categoria = playlist.getCategoria();
             String nomeCanal = playlist.getNomeCanal();

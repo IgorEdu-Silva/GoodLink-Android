@@ -15,13 +15,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.goodlink.FireBase.FireBaseAuthenticate;
-import com.example.goodlink.FireBase.FireBaseDataBase;
-import com.example.goodlink.FireBase.FireStoreDataManager;
+import com.example.goodlink.FireBaseManager.FireBaseAuthenticate;
+import com.example.goodlink.FireBaseManager.FireBaseDataBase;
+import com.example.goodlink.FireBaseManager.FireStoreDataManager;
+import com.example.goodlink.FireBaseManager.ManagerUser;
 import com.example.goodlink.Screens.Login;
 import com.example.goodlink.R;
-import com.example.goodlink.FireBase.SessionManager;
-import com.example.goodlink.FireBase.User;
+import com.example.goodlink.FireBaseManager.ManagerSession;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
@@ -33,18 +33,18 @@ import java.util.Map;
 
 public class TabUsersFragment extends Fragment {
     private FireBaseAuthenticate mAuthenticator;
-    private SessionManager sessionManager;
+    private ManagerSession managerSession;
     private TextView usernameTextView;
     private TextView emailTextView;
     private EditText etOldPassword;
     private EditText etNewPassword;
-    private User loggedInUser;
+    private ManagerUser loggedInManagerUser;
     private Map<String, String> userIdToNameMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionManager = new SessionManager(requireContext());
+        managerSession = new ManagerSession(requireContext());
     }
 
     @Override
@@ -61,12 +61,12 @@ public class TabUsersFragment extends Fragment {
         FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            fireStoreDataManager.getUser(currentUser.getUid(), new FireStoreDataManager.FireStoreDataListener<User>() {
+            fireStoreDataManager.getUser(currentUser.getUid(), new FireStoreDataManager.FireStoreDataListener<ManagerUser>() {
                 @Override
-                public void onSuccess(User userData) {
-                    loggedInUser = userData;
-                    usernameTextView.setText(userData.getNome());
-                    emailTextView.setText(userData.getEmail());
+                public void onSuccess(ManagerUser managerUserData) {
+                    loggedInManagerUser = managerUserData;
+                    usernameTextView.setText(managerUserData.getNome());
+                    emailTextView.setText(managerUserData.getEmail());
                 }
 
                 @Override
@@ -96,7 +96,7 @@ public class TabUsersFragment extends Fragment {
         buttonDeslogar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sessionManager.setLogin(false);
+                managerSession.setLogin(false);
 
                 Intent intent = new Intent(getActivity(), Login.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

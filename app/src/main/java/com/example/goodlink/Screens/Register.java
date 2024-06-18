@@ -24,11 +24,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.goodlink.FireBase.FireBaseAuthenticate;
-import com.example.goodlink.FireBase.FireBaseDataBase;
-import com.example.goodlink.FireBase.MessagingService;
-import com.example.goodlink.FireBase.SessionManager;
-import com.example.goodlink.Functions.NotificationHelper;
+import com.example.goodlink.FireBaseManager.FireBaseAuthenticate;
+import com.example.goodlink.FireBaseManager.FireBaseDataBase;
+import com.example.goodlink.Functions.MessagingService;
+import com.example.goodlink.FireBaseManager.ManagerSession;
+import com.example.goodlink.Functions.HelperNotification;
 import com.example.goodlink.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,7 +38,7 @@ public class Register extends AppCompatActivity {
     private FireBaseAuthenticate mAuthenticator;
     private FireBaseDataBase mDatabase;
     private CheckBox checkBoxServices;
-    private SessionManager sessionManager;
+    private ManagerSession managerSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +53,11 @@ public class Register extends AppCompatActivity {
 
         FireBaseDataBase database = new FireBaseDataBase();
         mAuthenticator = new FireBaseAuthenticate(database);
-        sessionManager = new SessionManager(this);
+        managerSession = new ManagerSession(this);
 
-        NotificationHelper.requestNotificationPermission(this);
+        HelperNotification.requestNotificationPermission(this);
 
-        if (sessionManager.isLoggedIn()) {
+        if (managerSession.isLoggedIn()) {
             goToActivity();
         }
 

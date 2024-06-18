@@ -1,4 +1,4 @@
-package com.example.goodlink.Local;
+package com.example.goodlink.FCM;
 
 import android.content.Context;
 import android.content.SharedPreferences;

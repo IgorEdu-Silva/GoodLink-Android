@@ -17,9 +17,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.goodlink.FireBase.FireBaseAuthenticate;
-import com.example.goodlink.FireBase.FireBaseDataBase;
-import com.example.goodlink.FireBase.SessionManager;
+import com.example.goodlink.FireBaseManager.FireBaseAuthenticate;
+import com.example.goodlink.FireBaseManager.FireBaseDataBase;
+import com.example.goodlink.FireBaseManager.ManagerSession;
 import com.example.goodlink.R;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -27,7 +27,7 @@ public class Login extends AppCompatActivity {
     private FireBaseAuthenticate mAuthenticator;
     private FireBaseDataBase mDatabase;
     private CheckBox checkBoxServices;
-    private SessionManager sessionManager;
+    private ManagerSession managerSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +42,9 @@ public class Login extends AppCompatActivity {
 
         FireBaseDataBase database = new FireBaseDataBase();
         mAuthenticator = new FireBaseAuthenticate(database);
-        sessionManager = new SessionManager(this);
+        managerSession = new ManagerSession(this);
 
-        if (sessionManager.isLoggedIn()) {
+        if (managerSession.isLoggedIn()) {
             goToActivity();
         }
 
@@ -99,7 +99,7 @@ public class Login extends AppCompatActivity {
                     }
                 });
                 if (manterLogado) {
-                    sessionManager.setLogin(true);
+                    managerSession.setLogin(true);
                 }
             }
         });
