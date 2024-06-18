@@ -11,6 +11,7 @@ public class PlaylistData {
     private String dataPub;
     private String userId;
     private String playlistId;
+    private boolean favorited;
 
     public PlaylistData() {
 
@@ -111,4 +112,14 @@ public class PlaylistData {
     public void setDataPub(String dataPub) {
         this.dataPub = dataPub;
     }
+
+    public boolean isFavorited() {
+        return favorited;
+    }
+
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
+    }
+
+
 }

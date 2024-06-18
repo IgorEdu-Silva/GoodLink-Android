@@ -62,4 +62,20 @@
     <string name="ci_ncia">Ciência</string>
     <string name="geografia">Geografia</string>
     <string name="hist_ria">História</string>
+    <string name="menuoptions">menuOptions</string>
+    <string name="adicionar_aos_favoritos">Adicionar aos favoritos</string>
+    <string name="adicionar_playlist">Adicionar Playlist</string>
+    <string name="ver_playlists_do_usu_rio">Ver playlists do usuário</string>
+    <string name="copiar">Copiar</string>
+    <string name="copiar_nome_do_canal">Copiar nome do canal</string>
+    <string name="copiar_nome_da_playlist">Copiar nome da playlist</string>
+    <string name="copiar_link_do_canal">Copiar link do canal</string>
+    <string name="copiar_link_da_playlist">Copiar link da Playlist</string>
+    <string name="copiar_link_do_canal_e_da_playlist">Copiar link do canal e da playlist</string>
+    <string name="op_o_1">Opção 1</string>
+    <string name="remover_dos_favoritos">Remover dos favoritos\n</string>
+    <string name="criar_playlist">Criar playlist</string>
+    <string name="nome_da_playlist">Nome da playlist</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="insira_o_nome_da_playlist">Insira o nome da playlist</string>
 </resources>

@@ -6,15 +6,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
-        android:id="@+id/relativeLayout3"
+        android:id="@+id/relativeLayItemsPlaylist"
         android:layout_width="0dp"
         android:layout_height="140dp"
-        android:background="@drawable/border"
+        android:background="@drawable/border_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.90">
+        app:layout_constraintWidth_percent="0.95">
 
         <TextView
             android:id="@+id/titulo_Playlist"
@@ -26,7 +26,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
-            android:layout_marginEnd="260dp"
+            android:layout_marginEnd="240dp"
             android:layout_marginBottom="90dp"
             android:autoLink="web"
             android:clickable="true"
@@ -44,9 +44,9 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="149dp"
+            android:layout_marginStart="150dp"
             android:layout_marginTop="0dp"
-            android:layout_marginEnd="151dp"
+            android:layout_marginEnd="130dp"
             android:layout_marginBottom="40dp"
             android:gravity="center"
             android:textAlignment="center"
@@ -63,7 +63,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="0dp"
             android:layout_marginTop="50dp"
-            android:layout_marginEnd="260dp"
+            android:layout_marginEnd="240dp"
             android:layout_marginBottom="40dp"
             android:autoLink="web"
             android:clickable="true"
@@ -75,7 +75,7 @@
 
         <TextView
             android:id="@+id/nomeUsuario_Playlist"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="50dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
@@ -83,12 +83,27 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="260dp"
             android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="90dp"
             android:gravity="center"
             android:textAlignment="center"
             android:textSize="12sp"
             tools:ignore="RtlCompat,VisualLintBounds" />
+
+        <ImageView
+            android:id="@+id/menuOptionsPlaylist"
+            android:layout_width="10dp"
+            android:layout_height="50dp"
+            android:layout_alignStart="@+id/nomeUsuario_Playlist"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="120dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="110dp"
+            android:contentDescription="@string/menuoptions"
+            android:src="@drawable/more_vert" />
 
         <TextView
             android:id="@+id/dataPub_Playlist"
@@ -117,7 +132,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="0dp"
             android:layout_marginTop="100dp"
-            android:layout_marginEnd="260dp"
+            android:layout_marginEnd="220dp"
             android:layout_marginBottom="0dp"
             android:gravity="center"
             android:text="@string/coment_rios"
@@ -133,9 +148,9 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="151dp"
+            android:layout_marginStart="170dp"
             android:layout_marginTop="100dp"
-            android:layout_marginEnd="-1dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"
             android:max="5"
             android:progress="0"

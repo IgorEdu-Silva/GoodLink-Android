@@ -47,7 +47,7 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/sync"
             android:importantForAccessibility="no"
-            tools:ignore="ImageContrastCheck" />
+            tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
 
         <ImageButton
             android:id="@+id/ButtonFilter"
@@ -63,7 +63,7 @@
             android:layout_marginBottom="11dp"
             android:background="@android:drawable/ic_menu_more"
             android:importantForAccessibility="no"
-            tools:ignore="ImageContrastCheck" />
+            tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
 
         <ImageButton
             android:id="@+id/ButtonSortBy"
@@ -79,7 +79,7 @@
             android:layout_marginBottom="10dp"
             android:background="@android:drawable/ic_menu_sort_by_size"
             android:importantForAccessibility="no"
-            tools:ignore="ImageContrastCheck" />
+            tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
 
     </RelativeLayout>
 

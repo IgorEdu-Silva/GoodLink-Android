@@ -3,6 +3,8 @@ package com.example.goodlink.Fragments;
 import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,13 +15,18 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -27,8 +34,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goodlink.FireBase.FireStoreDataManager;
 import com.example.goodlink.FireBase.PlaylistData;
-import com.example.goodlink.PopUp.PopUpDescription;
 import com.example.goodlink.PopUp.PopUpComment;
+import com.example.goodlink.PopUp.PopUpCreatePlaylist;
+import com.example.goodlink.PopUp.PopUpDescription;
 import com.example.goodlink.R;
 import com.google.firebase.database.DatabaseReference;
 
@@ -96,7 +104,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
                 String descricao = playlist.getDescricao();
                 if (descricao != null) {
-                    if (descricao.length() > 48) {
+                    if (descricao.length() > 40) {
                         SpannableString spannableString = getSpannableString(descricao);
                         holder.descricaoTextView.setText(spannableString);
                         holder.descricaoTextView.setMovementMethod(LinkMovementMethod.getInstance());
@@ -179,7 +187,151 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
                         showPopUpCommentActivity(playlist.getPlaylistId());
                     }
                 });
+
+                holder.menuIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPopupMenu(holder.menuIcon, playlist);
+                    }
+                });
             }
+        }
+    }
+
+    private void showPopupMenu(View view, PlaylistData playlist) {
+        PopupMenu popupMenu = new PopupMenu(context, view);
+        popupMenu.inflate(R.menu.menu_options_items_playlist);
+
+        if (playlist.isFavorited()) {
+            popupMenu.getMenu().findItem(R.id.favority).setTitle(R.string.remover_dos_favoritos);
+        }
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int itemId = item.getItemId();
+
+                if (itemId == R.id.favority) {
+                    favorityPlaylist(playlist);
+                    return true;
+                } else if (itemId == R.id.copy) {
+                    return true;
+                } else if (itemId == R.id.copyLinkCanal) {
+                    copyLinkCanal(playlist.getPlaylistId());
+                    return true;
+                } else if (itemId == R.id.copyLinkPlaylist) {
+                    copyLinkPlaylist(playlist.getPlaylistId());
+                    return true;
+                } else if (itemId == R.id.copyLinkBoth) {
+                    copyLinkBoth(playlist.getPlaylistId());
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        popupMenu.show();
+    }
+
+    private void copyTextToClipboard(String label, String text) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(label, text);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(context, label + " copiado para a área de transferência.", Toast.LENGTH_SHORT).show();
+    }
+
+    private void copyLinkBoth(String playlistId) {
+        FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+        fireStoreDataManager.getLinksPlaylists(playlistId, new FireStoreDataManager.FireStoreDataListener<PlaylistData>() {
+            @Override
+            public void onSuccess(PlaylistData playlistData) {
+                String linkCanal = playlistData.getUrlCanal();
+                String linkPlaylist = playlistData.getIframe();
+                String textToCopy = "Link do canal: " + linkCanal + "\nLink da playlist: " + linkPlaylist;
+                copyTextToClipboard("Ambos os links", textToCopy);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Log.e(TAG, "Error fetching playlist details: " + errorMessage);
+            }
+        });
+    }
+
+    private void copyLinkPlaylist(String playlistId) {
+        FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+        fireStoreDataManager.getLinksPlaylists(playlistId, new FireStoreDataManager.FireStoreDataListener<PlaylistData>() {
+            @Override
+            public void onSuccess(PlaylistData playlistData) {
+                String linkPlaylist = playlistData.getIframe();
+                copyTextToClipboard("Link da playlist", linkPlaylist);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Log.e(TAG, "Error fetching playlist details: " + errorMessage);
+            }
+        });
+    }
+
+    private void copyLinkCanal(String playlistId) {
+        FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+        fireStoreDataManager.getLinksPlaylists(playlistId, new FireStoreDataManager.FireStoreDataListener<PlaylistData>() {
+            @Override
+            public void onSuccess(PlaylistData playlistData) {
+                String linkCanal = playlistData.getUrlCanal();
+                copyTextToClipboard("Link do canal", linkCanal);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Log.e(TAG, "Error fetching playlist details: " + errorMessage);
+            }
+        });
+    }
+
+//    private void addPlaylist(View anchorView) {
+//        Log.d("MainActivity", "addPlaylist called");
+//        PopUpCreatePlaylist popupCreatePlaylist = new PopUpCreatePlaylist(context);
+//        popupCreatePlaylist.show(anchorView);
+//    }
+
+    private void favorityPlaylist(PlaylistData playlist) {
+        String userId = fireStoreDataManager.getCurrentUserId();
+        String playlistId = playlist.getPlaylistId();
+
+        if (userId != null && playlistId != null) {
+            if (playlist.isFavorited()) {
+                fireStoreDataManager.removePlaylistFromFavorites(userId, playlistId, new FireStoreDataManager.OnPlaylistRemovedFromFavoritesListener() {
+                    @Override
+                    public void onPlaylistRemovedFromFavorites(String removedPlaylistId) {
+                        Log.d(TAG, "Playlist removida dos favoritos: " + removedPlaylistId);
+                        playlist.setFavorited(false);
+                        notifyItemChanged(playlists.indexOf(playlist));
+                    }
+
+                    @Override
+                    public void onPlaylistRemoveFromFavoritesFailed(String errorMessage) {
+                        Log.e(TAG, "Erro ao remover playlist dos favoritos: " + errorMessage);
+                    }
+                });
+            } else {
+                fireStoreDataManager.addPlaylistToFavorites(userId, playlistId, new FireStoreDataManager.OnPlaylistAddedToFavoritesListener() {
+                    @Override
+                    public void onPlaylistAddedToFavorites(String addedPlaylistId) {
+                        Log.d(TAG, "Playlist adicionada aos favoritos: " + addedPlaylistId);
+                        playlist.setFavorited(true);
+                        notifyItemChanged(playlists.indexOf(playlist));
+                    }
+
+                    @Override
+                    public void onPlaylistAddToFavoritesFailed(String errorMessage) {
+                        Log.e(TAG, "Erro ao adicionar playlist aos favoritos: " + errorMessage);
+                    }
+                });
+            }
+        } else {
+            Log.e(TAG, "IDs de usuário ou playlist nulos");
         }
     }
 
@@ -200,7 +352,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
     @NonNull
     private SpannableString getSpannableString(String descricao) {
-        String descricaoResumida = descricao.substring(0, 48) + "... Ver mais";
+        String descricaoResumida = descricao.substring(0, 40) + "... Ver mais";
         SpannableString spannableString = new SpannableString(descricaoResumida);
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
@@ -212,7 +364,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
             public void updateDrawState(@NonNull TextPaint ds) {
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
-                ds.setColor(Color.parseColor("#0078bd"));
+                ds.setColor(Color.parseColor("#0099DD"));
 
             }
         };
@@ -253,6 +405,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         private final TextView dataPubTextView;
         private final Spinner avaliacaoPlaylist;
         private final TextView comentariosPlaylists;
+        private final ImageView menuIcon;
+
 
         public PlaylistViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -263,6 +417,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
             dataPubTextView = itemView.findViewById(R.id.dataPub_Playlist);
             avaliacaoPlaylist = itemView.findViewById(R.id.ratingBar);
             comentariosPlaylists = itemView.findViewById(R.id.comentariosPlaylists);
+            menuIcon = itemView.findViewById(R.id.menuOptionsPlaylist);
+
         }
 
         public void bind(PlaylistData playlistData) {
