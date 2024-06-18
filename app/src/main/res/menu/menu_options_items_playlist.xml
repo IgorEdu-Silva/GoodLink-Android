@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/favority"
+        android:title="@string/adicionar_aos_favoritos" />
+<!--    <item-->
+<!--        android:id="@+id/addPlaylist"-->
+<!--        android:title="@string/adicionar_playlist" >-->
+<!--    </item>-->
+
+    <item
+        android:id="@+id/copy"
+        android:title="@string/copiar" >
+        <menu>
+            <item
+                android:id="@+id/copyLinkCanal"
+                android:title="@string/copiar_link_do_canal" />
+
+            <item
+                android:id="@+id/copyLinkPlaylist"
+                android:title="@string/copiar_link_da_playlist" />
+
+            <item
+                android:id="@+id/copyLinkBoth"
+                android:title="@string/copiar_link_do_canal_e_da_playlist" />
+        </menu>
+    </item>
+</menu>
