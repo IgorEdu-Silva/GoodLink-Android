@@ -15,7 +15,7 @@
 <br>
 
 ## *Introdução* 
-O projeto foi desenvolvido para ampliar a exposição de vídeos, cursos e outros conteúdos educacionais destinados a compartilhar conhecimento. No entanto, não alcançou o alcance esperado.
+O projeto foi desenvolvido para ampliar a exposição de vídeos, cursos e outros conteúdos educacionais destinados a compartilhar conhecimento. No entanto, não alcançaram o esperado.
 
 <br>
 
