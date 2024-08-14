@@ -22,14 +22,14 @@
     public class FireStoreDataManager {
         private final FirebaseFirestore firestore;
         private final CollectionReference usersCollection;
-        private final CollectionReference playlistsCollection;
+        private final CollectionReference repositoryCollection;
         private final FirebaseFirestore db = FirebaseFirestore.getInstance();
         private final FirebaseAuth firebaseAuth;
 
         public FireStoreDataManager() {
             firestore = FirebaseFirestore.getInstance();
             usersCollection = firestore.collection("users");
-            playlistsCollection = firestore.collection("playlists");
+            repositoryCollection = firestore.collection("repository");
             firebaseAuth = FirebaseAuth.getInstance();
         }
 
@@ -37,12 +37,12 @@
             return db.collection("users").document(userId);
         }
 
-        public DocumentReference getPlaylistDocumentReference(String playlistId) {
-            return db.collection("playlists").document(playlistId);
+        public DocumentReference getRepositoryDocumentReference(String repositoryId) {
+            return db.collection("repository").document(repositoryId);
         }
 
-        public Task<DocumentSnapshot> getPlaylistData(String playlistId) {
-            return db.collection("playlists").document(playlistId).get();
+        public Task<DocumentSnapshot> getRepositoryData(String repositoryId) {
+            return db.collection("repository").document(repositoryId).get();
         }
 
         public Task<DocumentSnapshot> getUserData(String userId) {
@@ -84,24 +84,24 @@
             }
         }
 
-        public String generatePlaylistId() {
-            return playlistsCollection.document().getId();
+        public String generateRepositoryId() {
+            return repositoryCollection.document().getId();
         }
 
-        public void getPlaylistsFromFirestore(OnPlaylistsLoadedListener listener) {
-            playlistsCollection.get()
+        public void getRepositoryFromFirestore(OnRepositoryLoadedListener listener) {
+            repositoryCollection.get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
-                        List<ManagerPlaylist> playlists = new ArrayList<>();
+                        List<ManagerRepository> repositories = new ArrayList<>();
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            ManagerPlaylist managerPlaylist = documentSnapshot.toObject(ManagerPlaylist.class);
-                            managerPlaylist.setPlaylistId(documentSnapshot.getId());
-                            playlists.add(managerPlaylist);
+                            ManagerRepository managerRepository = documentSnapshot.toObject(ManagerRepository.class);
+                            managerRepository.setRepositoryId(documentSnapshot.getId());
+                            repositories.add(managerRepository);
                         }
-                        listener.onPlaylistsLoaded(playlists);
+                        listener.onRepositoriesLoaded(repositories);
                     })
                     .addOnFailureListener(e -> {
-                        Log.e(TAG, "Error fetching playlists: ", e);
-                        listener.onPlaylistsLoadFailed(e.getMessage());
+                        Log.e(TAG, "Error fetching repositories: ", e);
+                        listener.onRepositoriesLoadFailed(e.getMessage());
                     });
         }
 
@@ -122,73 +122,73 @@
                     });
         }
 
-        public void createPlaylist(String userId, ManagerPlaylist managerPlaylist, OnPlaylistCreatedListener listener) {
+        public void createRepository(String userId, ManagerRepository managerRepository, OnRepositoryCreatedListener listener) {
             if (userId != null && !userId.isEmpty()) {
-                Map<String, Object> playlist = getStringObjectMap(managerPlaylist);
+                Map<String, Object> repository = getStringObjectMap(managerRepository);
 
-                playlistsCollection.add(playlist)
+                repositoryCollection.add(repository)
                         .addOnSuccessListener(documentReference -> {
-                            String playlistId = documentReference.getId();
-                            managerPlaylist.setPlaylistId(playlistId);
-                            managerPlaylist.setUserId(userId);
-                            listener.onPlaylistCreated(playlistId);
-                            Map<String, Object> playlistIdMap = new HashMap<>();
-                            playlistIdMap.put("playlistId", playlistId);
-                            usersCollection.document(userId).collection("userPlaylists").add(playlistIdMap)
-                                    .addOnSuccessListener(documentReference1 -> Log.d(TAG, "Playlist ID added to user's collection: " + userId))
-                                    .addOnFailureListener(e -> Log.e(TAG, "Error adding playlist ID to user's collection: " + userId, e));
+                            String repositoryId = documentReference.getId();
+                            managerRepository.setRepositoryId(repositoryId);
+                            managerRepository.setUserId(userId);
+                            listener.onRepositoryCreated(repositoryId);
+                            Map<String, Object> repositoryIdMap = new HashMap<>();
+                            repositoryIdMap.put("repositoryId", repositoryId);
+                            usersCollection.document(userId).collection("userRepositories").add(repositoryIdMap)
+                                    .addOnSuccessListener(documentReference1 -> Log.d(TAG, "Repository ID added to user's collection: " + userId))
+                                    .addOnFailureListener(e -> Log.e(TAG, "Error adding repository ID to user's collection: " + userId, e));
                         })
                         .addOnFailureListener(e -> {
-                            Log.e(TAG, "Error creating playlist: ", e);
-                            listener.onPlaylistCreationFailed(e.getMessage());
+                            Log.e(TAG, "Error creating repository: ", e);
+                            listener.onRepositoryCreationFailed(e.getMessage());
                         });
             } else {
-                Log.e(TAG, "Error creating playlist: UserId is null or empty");
-                listener.onPlaylistCreationFailed("UserId is null or empty");
+                Log.e(TAG, "Error creating repository: UserId is null or empty");
+                listener.onRepositoryCreationFailed("UserId is null or empty");
             }
         }
 
         @NonNull
-        private static Map<String, Object> getStringObjectMap(ManagerPlaylist managerPlaylist) {
-            Map<String, Object> playlist = new HashMap<>();
-            playlist.put("titulo", managerPlaylist.getTitulo());
-            playlist.put("descricao", managerPlaylist.getDescricao());
-            playlist.put("nomeCanal", managerPlaylist.getNomeCanal());
-            playlist.put("iframe", managerPlaylist.getIframe());
-            playlist.put("urlCanal", managerPlaylist.getUrlCanal());
-            playlist.put("categoria", managerPlaylist.getCategoria());
-            playlist.put("nomeUsuario", managerPlaylist.getNomeUsuario());
-            playlist.put("dataPub", managerPlaylist.getDataPub());
-            return playlist;
+        private static Map<String, Object> getStringObjectMap(ManagerRepository managerRepository) {
+            Map<String, Object> repository = new HashMap<>();
+            repository.put("titulo", managerRepository.getTitulo());
+            repository.put("descricao", managerRepository.getDescricao());
+            repository.put("nomeCanal", managerRepository.getNomeCanal());
+            repository.put("iframe", managerRepository.getIframe());
+            repository.put("urlCanal", managerRepository.getUrlCanal());
+            repository.put("categoria", managerRepository.getCategoria());
+            repository.put("nomeUsuario", managerRepository.getNomeUsuario());
+            repository.put("dataPub", managerRepository.getDataPub());
+            return repository;
         }
 
-        public void savePlaylistRating(String userId, String playlistId, String rating, OnPlaylistRatingSavedListener listener) {
-            if (userId != null && playlistId != null && rating != null) {
-                DocumentReference userRatingRef = usersCollection.document(userId).collection("userRatings").document(playlistId);
+        public void saveRepositoryRating(String userId, String repositoryId, String rating, OnRepositoryRatingSavedListener listener) {
+            if (userId != null && repositoryId != null && rating != null) {
+                DocumentReference userRatingRef = usersCollection.document(userId).collection("userRatings").document(repositoryId);
 
                 Map<String, Object> newRating = new HashMap<>();
                 newRating.put("rating", rating);
                 newRating.put("userRating", userId);
-                newRating.put("playlistRated", playlistId);
+                newRating.put("repositoryRated", repositoryId);
 
                 userRatingRef.set(newRating)
                         .addOnSuccessListener(aVoid -> {
-                            Log.d(TAG, "Rating saved successfully for playlist: " + playlistId);
-                            listener.onPlaylistRatingSaved(playlistId);
+                            Log.d(TAG, "Rating saved successfully for repository: " + repositoryId);
+                            listener.onRepositoryRatingSaved(repositoryId);
                         })
                         .addOnFailureListener(e -> {
-                            Log.e(TAG, "Error saving rating for playlist: " + playlistId, e);
-                            listener.onPlaylistRatingSaveFailed(e.getMessage());
+                            Log.e(TAG, "Error saving rating for repository: " + repositoryId, e);
+                            listener.onRepositoryRatingSaveFailed(e.getMessage());
                         });
             } else {
                 Log.e(TAG, "One or more required fields are null");
-                listener.onPlaylistRatingSaveFailed("One or more required fields are null");
+                listener.onRepositoryRatingSaveFailed("One or more required fields are null");
             }
         }
 
-        public void saveUserComment(String commentText, String playlistId, String userName, OnCommentSavedListener listener) {
+        public void saveUserComment(String commentText, String repositoryId, String userName, OnCommentSavedListener listener) {
             String commentId = db.collection("userComments").document().getId();
-            ManagerComment comment = new ManagerComment(userName, commentText, playlistId);
+            ManagerComment comment = new ManagerComment(userName, commentText, repositoryId);
 
             db.collection("userComments")
                     .document(commentId)
@@ -197,9 +197,9 @@
                     .addOnFailureListener(e -> listener.onCommentSaveFailed(e.getMessage()));
         }
 
-        public void getCommentsByPlaylistId(String playlistId, OnCommentsLoadedListener listener) {
+        public void getCommentsByRepositoryId(String repositoryId, OnCommentsLoadedListener listener) {
             db.collectionGroup("userComments")
-                    .whereEqualTo("playlistId", playlistId)
+                    .whereEqualTo("repositoryId", repositoryId)
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -215,69 +215,69 @@
                     });
         }
 
-        public void getLinksPlaylists(String playlistId, FireStoreDataListener<ManagerPlaylist> listener) {
-            playlistsCollection.document(playlistId).get()
+        public void getLinksRepositories(String repositoryId, FireStoreDataListener<ManagerRepository> listener) {
+            repositoryCollection.document(repositoryId).get()
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
-                            ManagerPlaylist managerPlaylist = documentSnapshot.toObject(ManagerPlaylist.class);
-                            listener.onSuccess(managerPlaylist);
+                            ManagerRepository managerRepository = documentSnapshot.toObject(ManagerRepository.class);
+                            listener.onSuccess(managerRepository);
                         } else {
-                            listener.onFailure("Playlist not found");
+                            listener.onFailure("Repository not found");
                         }
                     })
                     .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
         }
 
-        public void removePlaylistFromFavorites(String userId, String playlistId, OnPlaylistRemovedFromFavoritesListener listener) {
-            if (userId != null && playlistId != null) {
+        public void removeRepositoryFromFavorites(String userId, String repositoryId, OnRepositoryRemovedFromFavoritesListener listener) {
+            if (userId != null && repositoryId != null) {
                 usersCollection.document(userId)
                         .collection("userFavorites")
-                        .document(playlistId)
+                        .document(repositoryId)
                         .delete()
                         .addOnSuccessListener(aVoid -> {
-                            Log.d(TAG, "Playlist removed from favorites for user: " + userId);
-                            listener.onPlaylistRemovedFromFavorites(playlistId);
+                            Log.d(TAG, "Repository removed from favorites for user: " + userId);
+                            listener.onRepositoryRemovedFromFavorites(repositoryId);
                         })
                         .addOnFailureListener(e -> {
-                            Log.e(TAG, "Error removing playlist from favorites for user: " + userId, e);
-                            listener.onPlaylistRemoveFromFavoritesFailed(e.getMessage());
+                            Log.e(TAG, "Error removing repository from favorites for user: " + userId, e);
+                            listener.onRepositoryRemoveFromFavoritesFailed(e.getMessage());
                         });
 
-                playlistsCollection.document(playlistId)
+                repositoryCollection.document(repositoryId)
                         .update("favorited", false)
-                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Playlist updated as not favorited: " + playlistId))
-                        .addOnFailureListener(e -> Log.e(TAG, "Error updating playlist as not favorited: " + playlistId, e));
+                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Repository updated as not favorited: " + repositoryId))
+                        .addOnFailureListener(e -> Log.e(TAG, "Error updating repository as not favorited: " + repositoryId, e));
             } else {
                 Log.e(TAG, "One or more required fields are null");
-                listener.onPlaylistRemoveFromFavoritesFailed("One or more required fields are null");
+                listener.onRepositoryRemoveFromFavoritesFailed("One or more required fields are null");
             }
         }
 
-        public void addPlaylistToFavorites(String userId, String playlistId, OnPlaylistAddedToFavoritesListener listener) {
-            if (userId != null && playlistId != null) {
-                Map<String, Object> playlistIdMap = new HashMap<>();
-                playlistIdMap.put("playlistId", playlistId);
+        public void addRepositoryToFavorites(String userId, String repositoryId, OnRepositoryAddedToFavoritesListener listener) {
+            if (userId != null && repositoryId != null) {
+                Map<String, Object> repositoryIdMap = new HashMap<>();
+                repositoryIdMap.put("repositoryId", repositoryId);
 
                 usersCollection.document(userId)
                         .collection("userFavorites")
-                        .document(playlistId)
-                        .set(playlistIdMap)
+                        .document(repositoryId)
+                        .set(repositoryIdMap)
                         .addOnSuccessListener(aVoid -> {
-                            Log.d(TAG, "Playlist added to favorites for user: " + userId);
-                            listener.onPlaylistAddedToFavorites(playlistId);
+                            Log.d(TAG, "Repository added to favorites for user: " + userId);
+                            listener.onRepositoryAddedToFavorites(repositoryId);
                         })
                         .addOnFailureListener(e -> {
-                            Log.e(TAG, "Error adding playlist to favorites for user: " + userId, e);
-                            listener.onPlaylistAddToFavoritesFailed(e.getMessage());
+                            Log.e(TAG, "Error adding repository to favorites for user: " + userId, e);
+                            listener.onRepositoryAddToFavoritesFailed(e.getMessage());
                         });
 
-                playlistsCollection.document(playlistId)
+                repositoryCollection.document(repositoryId)
                         .update("favorited", true)
-                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Playlist updated as favorited: " + playlistId))
-                        .addOnFailureListener(e -> Log.e(TAG, "Error updating playlist as favorited: " + playlistId, e));
+                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Repository updated as favorited: " + repositoryId))
+                        .addOnFailureListener(e -> Log.e(TAG, "Error updating repository as favorited: " + repositoryId, e));
             } else {
                 Log.e(TAG, "One or more required fields are null");
-                listener.onPlaylistAddToFavoritesFailed("One or more required fields are null");
+                listener.onRepositoryAddToFavoritesFailed("One or more required fields are null");
             }
         }
 
@@ -292,14 +292,14 @@
             void onUserIdToNameMapLoadFailed(String errorMessage);
         }
 
-        public interface OnPlaylistsLoadedListener {
-            void onPlaylistsLoaded(List<ManagerPlaylist> playlists);
-            void onPlaylistsLoadFailed(String errorMessage);
+        public interface OnRepositoryLoadedListener {
+            void onRepositoriesLoaded(List<ManagerRepository> repositories);
+            void onRepositoriesLoadFailed(String errorMessage);
         }
 
-        public interface OnPlaylistCreatedListener {
-            void onPlaylistCreated(String playlistId);
-            void onPlaylistCreationFailed(String errorMessage);
+        public interface OnRepositoryCreatedListener {
+            void onRepositoryCreated(String repositoryId);
+            void onRepositoryCreationFailed(String errorMessage);
         }
 
         public interface FireStoreDataListener<T> {
@@ -307,9 +307,9 @@
             void onFailure(String errorMessage);
         }
 
-        public interface OnPlaylistRatingSavedListener {
-            void onPlaylistRatingSaved(String playlistId);
-            void onPlaylistRatingSaveFailed(String errorMessage);
+        public interface OnRepositoryRatingSavedListener {
+            void onRepositoryRatingSaved(String repositoryId);
+            void onRepositoryRatingSaveFailed(String errorMessage);
         }
 
         public interface OnCommentsLoadedListener {
@@ -319,15 +319,15 @@
             void onCommentsLoadFailed(String errorMessage);
         }
 
-        public interface OnPlaylistRemovedFromFavoritesListener {
-            void onPlaylistRemovedFromFavorites(String removedPlaylistId);
+        public interface OnRepositoryRemovedFromFavoritesListener {
+            void onRepositoryRemovedFromFavorites(String removedRepositoryId);
 
-            void onPlaylistRemoveFromFavoritesFailed(String errorMessage);
+            void onRepositoryRemoveFromFavoritesFailed(String errorMessage);
         }
 
-        public interface OnPlaylistAddedToFavoritesListener {
-            void onPlaylistAddedToFavorites(String addedPlaylistId);
+        public interface OnRepositoryAddedToFavoritesListener {
+            void onRepositoryAddedToFavorites(String addedRepositoryId);
 
-            void onPlaylistAddToFavoritesFailed(String errorMessage);
+            void onRepositoryAddToFavoritesFailed(String errorMessage);
         }
     }

@@ -15,12 +15,12 @@ import java.util.List;
 
 public class AdapterComment extends RecyclerView.Adapter<AdapterComment.ViewHolder> {
     private final List<ManagerComment> commentsList;
-    private final String playlistId;
+    private final String repositoryId;
     private final String userName;
 
-    public AdapterComment(List<ManagerComment> commentsList, String playlistId, String userName) {
+    public AdapterComment(List<ManagerComment> commentsList, String repositoryId, String userName) {
         this.commentsList = commentsList;
-        this.playlistId = playlistId;
+        this.repositoryId = repositoryId;
         this.userName = userName;
     }
 

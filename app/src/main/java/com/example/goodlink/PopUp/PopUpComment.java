@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,12 +26,12 @@ import java.util.List;
 
 public class PopUpComment extends AppCompatActivity {
     private EditText commentAdd;
-    private ImageButton sendButton;
+    private Button sendButton;
     private RecyclerView commentsShow;
     private AdapterComment adapterComment;
     private List<ManagerComment> commentsList;
     private FireStoreDataManager fireStoreDataManager;
-    private String playlistId;
+    private String repositoryId;
     private String userName;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
@@ -44,13 +44,13 @@ public class PopUpComment extends AppCompatActivity {
 
         commentAdd = findViewById(R.id.commentAdd);
         sendButton = findViewById(R.id.commentBtnSend);
-        commentsShow = findViewById(R.id.commentsShow);
+        commentsShow = findViewById(R.id.commentsView);
         commentsList = new ArrayList<>();
         fireStoreDataManager = new FireStoreDataManager();
 
-        playlistId = getIntent().getStringExtra("playlistId");
-        if (playlistId == null) {
-            Log.e("PopUpComment", "playlistId is null");
+        repositoryId = getIntent().getStringExtra("repositoryId");
+        if (repositoryId == null) {
+            Log.e("PopUpComment", "repository is null");
             return;
         }
 
@@ -67,19 +67,19 @@ public class PopUpComment extends AppCompatActivity {
         }
 
         commentsShow.setLayoutManager(new LinearLayoutManager(this));
-        adapterComment = new AdapterComment(commentsList, playlistId, userName);
+        adapterComment = new AdapterComment(commentsList, repositoryId, userName);
         commentsShow.setAdapter(adapterComment);
 
         sendButton.setOnClickListener(v -> {
             String commentText = commentAdd.getText().toString().trim();
 
             if (currentUser != null && !commentText.isEmpty()) {
-                fireStoreDataManager.saveUserComment(commentText, playlistId, userName, new FireStoreDataManager.OnCommentSavedListener() {
+                fireStoreDataManager.saveUserComment(commentText, repositoryId, userName, new FireStoreDataManager.OnCommentSavedListener() {
                     @Override
                     public void onCommentSaved() {
                         Toast.makeText(PopUpComment.this, "Comentário enviado com sucesso!", Toast.LENGTH_SHORT).show();
                         loadComments();
-                        sendNotificationToPlaylistOwner();
+                        sendNotificationToRepositoryOwner();
                     }
 
                     @Override
@@ -96,7 +96,7 @@ public class PopUpComment extends AppCompatActivity {
     }
 
     private void loadComments() {
-        fireStoreDataManager.getCommentsByPlaylistId(playlistId, new FireStoreDataManager.OnCommentsLoadedListener() {
+        fireStoreDataManager.getCommentsByRepositoryId(repositoryId, new FireStoreDataManager.OnCommentsLoadedListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onCommentsLoaded(List<ManagerComment> comments) {
@@ -108,7 +108,7 @@ public class PopUpComment extends AppCompatActivity {
                         adapterComment.notifyDataSetChanged();
                     }
                 } else {
-                    Toast.makeText(PopUpComment.this, "Seja o primeiro a comentário nessa playlist!" + comments, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PopUpComment.this, "Seja o primeiro a comentário nesse repositório!" + comments, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -120,7 +120,7 @@ public class PopUpComment extends AppCompatActivity {
         });
     }
 
-    private void sendNotificationToPlaylistOwner() {
+    private void sendNotificationToRepositoryOwner() {
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {

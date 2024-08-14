@@ -3,16 +3,16 @@ package com.example.goodlink.FireBaseManager;
 public class ManagerComment {
     private String userName;
     private String userComment;
-    private String playlistId;
+    private String repositoryId;
 
     public ManagerComment(){
 
     }
 
-    public ManagerComment(String userName, String userComment, String playlistId) {
+    public ManagerComment(String userName, String userComment, String repositoryId) {
         this.userName = userName;
         this.userComment = userComment;
-        this.playlistId = playlistId;
+        this.repositoryId = repositoryId;
     }
 
     public String getUserName() {
@@ -31,11 +31,11 @@ public class ManagerComment {
         this.userComment = userComment;
     }
 
-    public String getPlaylistId() {
-        return playlistId;
+    public String getRepositoryId() {
+        return repositoryId;
     }
 
-    public void setPlaylistId(String playlistId) {
-        this.playlistId = playlistId;
+    public void setRepositoryId(String repositoryId) {
+        this.repositoryId = repositoryId;
     }
 }

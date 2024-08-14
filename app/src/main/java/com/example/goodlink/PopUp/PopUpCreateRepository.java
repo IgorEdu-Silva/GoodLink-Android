@@ -19,41 +19,41 @@ import androidx.fragment.app.Fragment;
 
 import com.example.goodlink.R;
 
-public class PopUpCreatePlaylist extends Fragment {
+public class PopUpCreateRepository extends Fragment {
 
     private final Context context;
     private PopupWindow popupWindow;
     private View popupView;
-    private EditText editTextPlaylistName;
+    private EditText editTextRepositoryName;
     private Button buttonSave;
     private Button buttonCancel;
 
-    public PopUpCreatePlaylist(Context context) {
+    public PopUpCreateRepository(Context context) {
         this.context = context;
         initPopup();
     }
 
     private void initPopup() {
         ViewGroup parent = (ViewGroup) ((Activity) context).getWindow().getDecorView().getRootView();
-        popupView = LayoutInflater.from(context).inflate(R.layout.fragment_pop_up_create_playlist, parent, false);
+        popupView = LayoutInflater.from(context).inflate(R.layout.fragment_pop_up_create_repository, parent, false);
         popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         popupWindow.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(true);
 
-        editTextPlaylistName = popupView.findViewById(R.id.inputNamePlaylist);
+        editTextRepositoryName = popupView.findViewById(R.id.inputNameRepository);
         buttonSave = popupView.findViewById(R.id.btnSave);
         buttonCancel = popupView.findViewById(R.id.btnCancel);
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String playlistName = editTextPlaylistName.getText().toString().trim();
-                if (!playlistName.isEmpty()) {
+                String repositoryName = editTextRepositoryName.getText().toString().trim();
+                if (!repositoryName.isEmpty()) {
                     dismiss();
-                    Toast.makeText(context, "Playlist salva: " + playlistName, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Repositório salva: " + repositoryName, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "Digite um nome para a playlist", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Digite um nome para o repositório", Toast.LENGTH_SHORT).show();
                 }
             }
         });

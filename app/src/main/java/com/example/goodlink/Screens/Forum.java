@@ -42,19 +42,19 @@ public class Forum extends AppCompatActivity {
                     }
                 });
 
-        ViewPager2 viewPager = findViewById(R.id.viewPager);
+        ViewPager2 viewPager = findViewById(R.id.RepositoriesView);
         TabLayout tabLayout = findViewById(R.id.tabLayoutInfo);
 
         AdapterPagerFragments pagerAdapter = new AdapterPagerFragments(this);
         viewPager.setAdapter(pagerAdapter);
 
-        sendNotificationToPlaylistOwner();
+        sendNotificationToRepositoryOwner();
 
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> {
                     switch (position) {
                         case 0:
-                            tab.setText("Playlists");
+                            tab.setText("Repositórios");
                             break;
                         case 1:
                             tab.setText("Formulário");
@@ -74,7 +74,7 @@ public class Forum extends AppCompatActivity {
         startService(intent);
     }
 
-    private void sendNotificationToPlaylistOwner() {
+    private void sendNotificationToRepositoryOwner() {
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {

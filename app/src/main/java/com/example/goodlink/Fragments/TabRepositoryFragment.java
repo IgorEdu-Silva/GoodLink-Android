@@ -9,111 +9,133 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.goodlink.Adapter.AdapterPlaylist;
+import com.example.goodlink.Adapter.AdapterRepository;
 import com.example.goodlink.FireBaseManager.FireBaseDataBase;
 import com.example.goodlink.FireBaseManager.FireStoreDataManager;
-import com.example.goodlink.FireBaseManager.ManagerPlaylist;
+import com.example.goodlink.FireBaseManager.ManagerRepository;
 import com.example.goodlink.Functions.FilterViewModel;
-import com.example.goodlink.Functions.HelperPlaylistDescription;
+import com.example.goodlink.Functions.HelperRepositoryDescription;
 import com.example.goodlink.R;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TabPlaylistsFragment extends Fragment {
+public class TabRepositoryFragment extends Fragment {
     private RecyclerView recyclerView;
-    private AdapterPlaylist adapter;
-    private List<ManagerPlaylist> playlists;
-    private List<ManagerPlaylist> playlistsFull;
-    private DatabaseReference playlistsRef;
+    private AdapterRepository adapter;
+    private List<ManagerRepository> Repository;
+    private List<ManagerRepository> repositoryFull;
+    private DatabaseReference repositoryRef;
     private FireStoreDataManager firestoreDataManager;
     private Map<String, String> userIdToNameMap;
     private FilterViewModel filterViewModel;
     private SearchView searchView;
-    ImageButton btnReloadPlaylists;
+    ImageButton btnReloadRepository;
+    private Button buttonMenuOptionsMain;
+    private Map<Integer, Runnable> menuActionMap;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+        menuActionMap = new HashMap<>();
+        menuActionMap.put(R.id.orderByDate, this::sortRepositoriesByDate);
+        menuActionMap.put(R.id.orderByAlphabetically, this::sortRepositoryAlphabetically);
+        menuActionMap.put(R.id.filterByCategory, () -> {
+            View anchorView = getActivity().findViewById(R.id.ButtonMenuOptionsMain);
+            if (anchorView != null) {
+                showCategoryMenu(anchorView);
+            }
+        });
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FireBaseDataBase firebaseDatabase = new FireBaseDataBase();
 //        firebaseDatabase.testConnection();
 
-        View view = inflater.inflate(R.layout.fragment_tab_playlists, container, false);
-        recyclerView = view.findViewById(R.id.viewPlaylists);
-        playlists = new ArrayList<>();
+        View view = inflater.inflate(R.layout.fragment_tab_repository, container, false);
+        recyclerView = view.findViewById(R.id.viewRepository);
+        Repository = new ArrayList<>();
         firestoreDataManager = new FireStoreDataManager();
         searchView = view.findViewById(R.id.searchView);
-        ImageButton btnCategoryFilter = view.findViewById(R.id.ButtonFilter);
-        btnReloadPlaylists = view.findViewById(R.id.ButtonReloadPlaylists);
-        ImageButton btnSortBy = view.findViewById(R.id.ButtonSortBy);
-        btnSortBy.setOnClickListener(this::showSortMenu);
-        adapter = new AdapterPlaylist(playlists, playlistsRef, getContext(), userIdToNameMap);
+        buttonMenuOptionsMain = view.findViewById(R.id.ButtonMenuOptionsMain);
+        btnReloadRepository = view.findViewById(R.id.ButtonReloadRepository);
+
+        adapter = new AdapterRepository(Repository, repositoryRef, getContext(), userIdToNameMap);
         setupRecyclerView();
 
-        firestoreDataManager.getPlaylistsFromFirestore(new FireStoreDataManager.OnPlaylistsLoadedListener() {
+        firestoreDataManager.getRepositoryFromFirestore(new FireStoreDataManager.OnRepositoryLoadedListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onPlaylistsLoaded(List<ManagerPlaylist> loadedPlaylists) {
+            public void onRepositoriesLoaded(List<ManagerRepository> repositories) {
                 if (userIdToNameMap != null) {
-                    playlists.addAll(loadedPlaylists);
+                    Repository.addAll(repositories);
                     adapter.notifyDataSetChanged();
-                    playlistsFull = new ArrayList<>(playlists);
-                    Toast.makeText(getContext(), "Playlists carregadas com sucesso", Toast.LENGTH_SHORT).show();
+                    repositoryFull = new ArrayList<>(Repository);
+                    Toast.makeText(getContext(), "Repositórios carregados com sucesso", Toast.LENGTH_SHORT).show();
                 } else {
                     firestoreDataManager.getUserIdToNameMap(new FireStoreDataManager.OnUserIdToNameMapListener() {
                         @Override
                         public void onUserIdToNameMapLoaded(Map<String, String> userIdToNameMap) {
-                            for (ManagerPlaylist playlist : loadedPlaylists) {
-                                String fullDescription = HelperPlaylistDescription.getDescriptionFromPlaylist(playlist, getContext());
-                                playlist.setDescricao(fullDescription);
+                            for (ManagerRepository repository : repositories) {
+                                String fullDescription = HelperRepositoryDescription.getDescriptionFromRepository(repository, getContext());
+                                repository.setDescricao(fullDescription);
                             }
 
                             setupRecyclerView();
-                            playlistsFull = new ArrayList<>(loadedPlaylists);
-                            Toast.makeText(getContext(), "Playlists carregadas com sucesso", Toast.LENGTH_SHORT).show();
+                            repositoryFull = new ArrayList<>(repositories);
+                            Toast.makeText(getContext(), "Repositórios carregadas com sucesso", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onUserIdToNameMapLoadFailed(String errorMessage) {
-                            Log.e("TabPlaylistsFragment", "Erro ao carregar mapa de ID de usuário para nome de usuário: " + errorMessage);
+                            Log.e("TabRepositoryFragment", "Erro ao carregar mapa de ID de usuário para nome de usuário: " + errorMessage);
                         }
                     });
                 }
             }
 
             @Override
-            public void onPlaylistsLoadFailed(String errorMessage) {
-                Log.e("TabPlaylistsFragment", "Erro ao carregar playlists do Firestore: " + errorMessage);
+            public void onRepositoriesLoadFailed(String errorMessage) {
+                Log.e("TabRepositoryFragment", "Erro ao carregar repositórios do Firestore: " + errorMessage);
             }
         });
 
         firestoreDataManager.getUserIdToNameMap(new FireStoreDataManager.OnUserIdToNameMapListener() {
             @Override
             public void onUserIdToNameMapLoaded(Map<String, String> userIdToNameMap) {
-                TabPlaylistsFragment.this.userIdToNameMap = userIdToNameMap;
+                TabRepositoryFragment.this.userIdToNameMap = userIdToNameMap;
                 setupRecyclerView();
             }
 
             @Override
             public void onUserIdToNameMapLoadFailed(String errorMessage) {
-                Log.e("TabPlaylistsFragment", "Erro ao carregar mapa de ID de usuário para nome de usuário: " + errorMessage);
+                Log.e("TabRepositoryFragment", "Erro ao carregar mapa de ID de usuário para nome de usuário: " + errorMessage);
             }
         });
 
@@ -137,29 +159,64 @@ public class TabPlaylistsFragment extends Fragment {
             @Override
             public void onChanged(String newFilterText) {
                 if (newFilterText.isEmpty()) {
-                    playlists.clear();
-                    if (playlistsFull != null) {
-                        playlists.addAll(playlistsFull);
+                    Repository.clear();
+                    if (repositoryFull != null) {
+                        Repository.addAll(repositoryFull);
                     }
                     adapter.notifyDataSetChanged();
                 } else {
-                    playlists.clear();
-                    playlists.addAll(filterPlaylists(playlistsFull, newFilterText));
+                    Repository.clear();
+                    Repository.addAll(filterRepositories(repositoryFull, newFilterText));
                     adapter.notifyDataSetChanged();
                 }
             }
         });
 
-        btnCategoryFilter.setOnClickListener(this::showCategoryMenu);
-
-        btnReloadPlaylists.setOnClickListener(new View.OnClickListener() {
+        btnReloadRepository.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reloadPlaylists();
+                reloadRepositories();
             }
         });
 
+        buttonMenuOptionsMain.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(requireContext(), v);
+            MenuInflater inflaterMenu = popupMenu.getMenuInflater();
+            inflaterMenu.inflate(R.menu.menu_options_main, popupMenu.getMenu());
+
+            popupMenu.setOnMenuItemClickListener(item -> {
+                Runnable action = menuActionMap.get(item.getItemId());
+                if (action != null) {
+                    action.run();
+                    return true;
+                }
+                return false;
+            });
+
+            popupMenu.show();
+        });
+
+
+        setHasOptionsMenu(true);
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+        Log.e(TAG, "onCreateOptionsMenu: Menu criado");
+        inflater.inflate(R.menu.menu_options_main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected: " + item.getTitle());
+        Runnable action = menuActionMap.get(item.getItemId());
+        if (action != null) {
+            action.run();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void showSortMenu(View view) {
@@ -170,10 +227,10 @@ public class TabPlaylistsFragment extends Fragment {
         popupMenu.setOnMenuItemClickListener(item -> {
             int itemId = item.getItemId();
             if (itemId == 0) {
-                sortPlaylistsAlphabetically();
+                sortRepositoryAlphabetically();
                 return true;
             } else if (itemId == 1) {
-                sortPlaylistsByDate();
+                sortRepositoriesByDate();
                 return true;
             }
             return false;
@@ -182,18 +239,18 @@ public class TabPlaylistsFragment extends Fragment {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void sortPlaylistsAlphabetically() {
-        playlists.sort(new Comparator<ManagerPlaylist>() {
+    private void sortRepositoryAlphabetically() {
+        Repository.sort(new Comparator<ManagerRepository>() {
             @Override
-            public int compare(ManagerPlaylist playlist1, ManagerPlaylist playlist2) {
-                if (playlist1.getTitulo() == null && playlist2.getTitulo() == null) {
+            public int compare(ManagerRepository repository, ManagerRepository repository1) {
+                if (repository.getTitulo() == null && repository1.getTitulo() == null) {
                     return 0;
-                } else if (playlist1.getTitulo() == null) {
+                } else if (repository.getTitulo() == null) {
                     return 1;
-                } else if (playlist2.getTitulo() == null) {
+                } else if (repository1.getTitulo() == null) {
                     return -1;
                 } else {
-                    return playlist1.getTitulo().compareToIgnoreCase(playlist2.getTitulo());
+                    return repository.getTitulo().compareToIgnoreCase(repository1.getTitulo());
                 }
             }
         });
@@ -201,16 +258,16 @@ public class TabPlaylistsFragment extends Fragment {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void sortPlaylistsByDate() {
-        playlists.sort(new Comparator<ManagerPlaylist>() {
+    private void sortRepositoriesByDate() {
+        Repository.sort(new Comparator<ManagerRepository>() {
             @Override
-            public int compare(ManagerPlaylist playlist1, ManagerPlaylist playlist2) {
-                if (playlist1.getDataPub() == null || playlist2.getDataPub() == null) {
+            public int compare(ManagerRepository repository, ManagerRepository repository1) {
+                if (repository.getDataPub() == null || repository1.getDataPub() == null) {
                     return 0;
                 }
 
-                String[] date1 = playlist1.getDataPub().split("/");
-                String[] date2 = playlist2.getDataPub().split("/");
+                String[] date1 = repository.getDataPub().split("/");
+                String[] date2 = repository1.getDataPub().split("/");
 
                 int day1 = Integer.parseInt(date1[0]);
                 int month1 = Integer.parseInt(date1[1]);
@@ -247,7 +304,7 @@ public class TabPlaylistsFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 String category = item.getTitle().toString();
-                filterPlaylistsByCategory(category);
+                filterRepositoriesByCategory(category);
                 return true;
             }
         });
@@ -255,30 +312,30 @@ public class TabPlaylistsFragment extends Fragment {
         popupMenu.show();
     }
 
-    public void reloadPlaylists() {
-        firestoreDataManager.getPlaylistsFromFirestore(new FireStoreDataManager.OnPlaylistsLoadedListener() {
+    public void reloadRepositories() {
+        firestoreDataManager.getRepositoryFromFirestore(new FireStoreDataManager.OnRepositoryLoadedListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onPlaylistsLoaded(List<ManagerPlaylist> loadedPlaylists) {
-                playlistsFull = new ArrayList<>(loadedPlaylists);
-                playlists.clear();
-                playlists.addAll(loadedPlaylists);
+            public void onRepositoriesLoaded(List<ManagerRepository> repositories) {
+                repositoryFull = new ArrayList<>(repositories);
+                Repository.clear();
+                Repository.addAll(repositories);
                 adapter.notifyDataSetChanged();
-                Toast.makeText(getContext(), "Playlists recarregadas com sucesso", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Repositórios recarregadas com sucesso", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onPlaylistsLoadFailed(String errorMessage) {
-                Log.e("TabPlaylistsFragment", "Erro ao carregar playlists do Firestore: " + errorMessage);
-                Toast.makeText(getContext(), "Erro ao recarregar playlists", Toast.LENGTH_SHORT).show();
+            public void onRepositoriesLoadFailed(String errorMessage) {
+                Log.e("TabRepositoryFragment", "Erro ao carregar repositórios do Firestore: " + errorMessage);
+                Toast.makeText(getContext(), "Erro ao recarregar repositórios", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private List<String> getCategoryList() {
         List<String> categories = new ArrayList<>();
-        for (ManagerPlaylist playlist : playlistsFull) {
-            String category = playlist.getCategoria();
+        for (ManagerRepository repository : repositoryFull) {
+            String category = repository.getCategoria();
             if (!categories.contains(category)) {
                 categories.add(category);
             }
@@ -287,47 +344,47 @@ public class TabPlaylistsFragment extends Fragment {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void filterPlaylistsByCategory(String category) {
-        List<ManagerPlaylist> filteredPlaylists = new ArrayList<>();
-        for (ManagerPlaylist playlist : playlistsFull) {
-            if (playlist.getCategoria().equalsIgnoreCase(category)) {
-                filteredPlaylists.add(playlist);
+    private void filterRepositoriesByCategory(String category) {
+        List<ManagerRepository> filteredRepositories = new ArrayList<>();
+        for (ManagerRepository repository : repositoryFull) {
+            if (repository.getCategoria().equalsIgnoreCase(category)) {
+                filteredRepositories.add(repository);
             }
         }
 
-        playlists.clear();
-        playlists.addAll(filteredPlaylists);
+        Repository.clear();
+        Repository.addAll(filteredRepositories);
         adapter.notifyDataSetChanged();
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void setupRecyclerView() {
-        adapter = new AdapterPlaylist(playlists, playlistsRef, getContext(), userIdToNameMap);
+        adapter = new AdapterRepository(Repository, repositoryRef, getContext(), userIdToNameMap);
         adapter.setOnItemClickListener(this::openWebPage);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.notifyDataSetChanged();
     }
 
-    private List<ManagerPlaylist> filterPlaylists(List<ManagerPlaylist> allPlaylists, String filterText) {
-        if (allPlaylists == null) {
+    private List<ManagerRepository> filterRepositories(List<ManagerRepository> allRepositories, String filterText) {
+        if (allRepositories == null) {
             return Collections.emptyList();
         }
-        List<ManagerPlaylist> filteredPlaylists = new ArrayList<>();
-        for (ManagerPlaylist playlist : allPlaylists) {
-            String titulo = playlist.getTitulo();
-            String categoria = playlist.getCategoria();
-            String nomeCanal = playlist.getNomeCanal();
+        List<ManagerRepository> filteredRepositories = new ArrayList<>();
+        for (ManagerRepository repository : allRepositories) {
+            String titulo = repository.getTitulo();
+            String categoria = repository.getCategoria();
+            String nomeCanal = repository.getNomeCanal();
 
             if (titulo != null && categoria != null && nomeCanal != null) {
                 if (titulo.toLowerCase().contains(filterText.toLowerCase()) ||
                         categoria.toLowerCase().contains(filterText.toLowerCase()) ||
                         nomeCanal.toLowerCase().contains(filterText.toLowerCase())) {
-                    filteredPlaylists.add(playlist);
+                    filteredRepositories.add(repository);
                 }
             }
         }
-        return filteredPlaylists;
+        return filteredRepositories;
     }
 
     private void openWebPage(String url) {

@@ -3,10 +3,10 @@
     <item
         android:id="@+id/favority"
         android:title="@string/adicionar_aos_favoritos" />
-<!--    <item-->
-<!--        android:id="@+id/addPlaylist"-->
-<!--        android:title="@string/adicionar_playlist" >-->
-<!--    </item>-->
+    <item
+        android:id="@+id/addRepository"
+        android:title="@string/adicionar_repositorios" >
+    </item>
 
     <item
         android:id="@+id/copy"
@@ -14,15 +14,15 @@
         <menu>
             <item
                 android:id="@+id/copyLinkCanal"
-                android:title="@string/copiar_link_do_canal" />
+                android:title="@string/copiar_link_do_criador" />
 
             <item
-                android:id="@+id/copyLinkPlaylist"
-                android:title="@string/copiar_link_da_playlist" />
+                android:id="@+id/copyLinkRepository"
+                android:title="@string/copiar_link_da_repositorio" />
 
             <item
                 android:id="@+id/copyLinkBoth"
-                android:title="@string/copiar_link_do_canal_e_da_playlist" />
+                android:title="@string/copiar_link_do_canal_e_da_repositorio" />
         </menu>
     </item>
 </menu>

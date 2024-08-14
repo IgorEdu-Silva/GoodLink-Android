@@ -19,9 +19,9 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.goodlink.Adapter.AdapterPlaylist;
+import com.example.goodlink.Adapter.AdapterRepository;
 import com.example.goodlink.FireBaseManager.FireStoreDataManager;
-import com.example.goodlink.FireBaseManager.ManagerPlaylist;
+import com.example.goodlink.FireBaseManager.ManagerRepository;
 import com.example.goodlink.R;
 import com.example.goodlink.Utils.KeyboardUtils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,8 +50,8 @@ public class TabFormFragment extends Fragment {
     private final DatabaseReference databaseReference;
     private final Map<String, String> userIdToNameMap;
     private final RecyclerView recyclerView;
-    private List<ManagerPlaylist> playlists;
-    private AdapterPlaylist adapterPlaylist;
+    private List<ManagerRepository> repository;
+    private AdapterRepository adapterRepository;
 
     public TabFormFragment(DatabaseReference databaseReference, Map<String, String> userIdToNameMap, RecyclerView recyclerView) {
         this.databaseReference = databaseReference;
@@ -73,16 +73,16 @@ public class TabFormFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
-        tituloEditText = view.findViewById(R.id.tituloPlaylist_Form);
-        descricaoEditText = view.findViewById(R.id.descricaoPlaylist_Form);
+        tituloEditText = view.findViewById(R.id.tituloRepository_Form);
+        descricaoEditText = view.findViewById(R.id.descricaoRepository_Form);
         nomeCanalEditText = view.findViewById(R.id.nomeCanal_Form);
         iframeEditText = view.findViewById(R.id.iframe_Form);
         urlCanalEditText = view.findViewById(R.id.urlCanal_Form);
         categoriaSpinner = view.findViewById(R.id.categoria_Form);
         enviarButton = view.findViewById(R.id.btnSend_Form);
 
-        playlists = new ArrayList<>();
-        adapterPlaylist = new AdapterPlaylist(playlists, databaseReference, requireContext(), userIdToNameMap);
+        repository = new ArrayList<>();
+        adapterRepository = new AdapterRepository(repository, databaseReference, requireContext(), userIdToNameMap);
 
         loadCategories();
 
@@ -117,29 +117,29 @@ public class TabFormFragment extends Fragment {
 
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-                CollectionReference playlistsRef = db.collection("playlists");
-                String playlistId = fireStoreDataManager.generatePlaylistId();
-                DocumentReference newPlaylistRef = playlistsRef.document(playlistId);
+                CollectionReference repositoriesRef = db.collection("repositories");
+                String repositoryId = fireStoreDataManager.generateRepositoryId();
+                DocumentReference newRepositoryRef = repositoriesRef.document(repositoryId);
 
                 if (currentUser != null) {
                     String userID = currentUser.getUid();
-                    ManagerPlaylist managerPlaylist = new ManagerPlaylist(titulo, descricao, nomeCanal, iframe, urlCanal, categoria, userID, dataPub);
-                    ManagerPlaylist managerPlaylistIDs = new ManagerPlaylist(userID, playlistId);
-                    Log.d(TAG, "PlaylistID = " + playlistId);
-                    managerPlaylist.setPlaylistId(playlistId);
+                    ManagerRepository managerRepository = new ManagerRepository(titulo, descricao, nomeCanal, iframe, urlCanal, categoria, userID, dataPub);
+                    ManagerRepository managerRepositoryIDs = new ManagerRepository(userID, repositoryId);
+                    Log.d(TAG, "RepositoryID = " + repositoryId);
+                    managerRepository.setRepositoryId(repositoryId);
 
-                    fireStoreDataManager.createPlaylist(userID, managerPlaylist, new FireStoreDataManager.OnPlaylistCreatedListener() {
+                    fireStoreDataManager.createRepository(userID, managerRepository, new FireStoreDataManager.OnRepositoryCreatedListener() {
                         @SuppressLint("NotifyDataSetChanged")
                         @Override
-                        public void onPlaylistCreated(String playlistId) {
-                            playlists.add(managerPlaylist);
-                            adapterPlaylist.notifyDataSetChanged();
-                            Toast.makeText(getActivity(), "Playlist criada com sucesso!", Toast.LENGTH_SHORT).show();
+                        public void onRepositoryCreated(String repositoryId) {
+                            repository.add(managerRepository);
+                            adapterRepository.notifyDataSetChanged();
+                            Toast.makeText(getActivity(), "Repositório criada com sucesso!", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
-                        public void onPlaylistCreationFailed(String errorMessage) {
-                            Toast.makeText(getActivity(), "Erro ao criar a playlist: " + errorMessage, Toast.LENGTH_SHORT).show();
+                        public void onRepositoryCreationFailed(String errorMessage) {
+                            Toast.makeText(getActivity(), "Erro ao criar a repositório: " + errorMessage, Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
@@ -152,7 +152,7 @@ public class TabFormFragment extends Fragment {
         return view;
     }
 
-    private void scrollIfNeeded(View view, int categoriaPlaylistForm) {
+    private void scrollIfNeeded(View view, int categoriaRepositoryForm) {
         View focusedEditText = view.findFocus();
         if (focusedEditText instanceof TextView) {
             int[] location = new int[2];

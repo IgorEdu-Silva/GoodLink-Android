@@ -39,12 +39,13 @@
         app:layout_constraintWidth_percent="0.4"
         tools:ignore="TextContrastCheck,TextSizeCheck,VisualLintButtonSize" />
 
-    <ImageButton
+    <Button
         android:id="@+id/BackToLogin"
-        android:layout_width="0dp"
+        android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="#00FFFFFF"
+        android:background="@drawable/back"
         android:importantForAccessibility="no"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

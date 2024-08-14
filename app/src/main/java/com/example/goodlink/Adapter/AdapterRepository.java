@@ -33,7 +33,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goodlink.FireBaseManager.FireStoreDataManager;
-import com.example.goodlink.FireBaseManager.ManagerPlaylist;
+import com.example.goodlink.FireBaseManager.ManagerRepository;
 import com.example.goodlink.PopUp.PopUpComment;
 import com.example.goodlink.PopUp.PopUpDescription;
 import com.example.goodlink.R;
@@ -44,64 +44,64 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class AdapterPlaylist extends RecyclerView.Adapter<AdapterPlaylist.PlaylistViewHolder> {
-    private final List<ManagerPlaylist> playlists;
-    private final AtomicReference<List<ManagerPlaylist>> playlistsFull = new AtomicReference<>();
+public class AdapterRepository extends RecyclerView.Adapter<AdapterRepository.RepositoryViewHolder> {
+    private final List<ManagerRepository> repositories;
+    private final AtomicReference<List<ManagerRepository>> repositoriesFull = new AtomicReference<>();
     private static DatabaseReference databaseReference;
     private final Context context;
     private final Map<String, String> userIdToNameMap;
     private OnItemClickListener clickListener;
     private final FireStoreDataManager fireStoreDataManager;
 
-    public AdapterPlaylist(List<ManagerPlaylist> playlists, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap) {
-        this(playlists, databaseReference, context, userIdToNameMap, new FireStoreDataManager());
+    public AdapterRepository(List<ManagerRepository> repositories, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap) {
+        this(repositories, databaseReference, context, userIdToNameMap, new FireStoreDataManager());
     }
 
-    public AdapterPlaylist(List<ManagerPlaylist> playlists, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap, FireStoreDataManager fireStoreDataManager) {
+    public AdapterRepository(List<ManagerRepository> repositories, DatabaseReference databaseReference, Context context, Map<String, String> userIdToNameMap, FireStoreDataManager fireStoreDataManager) {
         this.context = context;
-        this.playlistsFull.set(new ArrayList<>(playlists));
-        AdapterPlaylist.databaseReference = databaseReference;
+        this.repositoriesFull.set(new ArrayList<>(repositories));
+        AdapterRepository.databaseReference = databaseReference;
         this.userIdToNameMap = userIdToNameMap;
         this.fireStoreDataManager = fireStoreDataManager != null ? fireStoreDataManager : new FireStoreDataManager();
 
-        if (playlists != null) {
-            this.playlists = playlists;
-            this.playlistsFull.set(new ArrayList<>(this.playlists));
-            for (ManagerPlaylist playlist : playlists) {
-                if (playlist.getUserId() == null) {
-                    Log.d(TAG, "UserID is null for playlist: " + playlist.getUserId());
-                    playlist.setUserId("defaultValue");
+        if (repositories != null) {
+            this.repositories = repositories;
+            this.repositoriesFull.set(new ArrayList<>(this.repositories));
+            for (ManagerRepository repository : repositories) {
+                if (repository.getUserId() == null) {
+                    Log.d(TAG, "UserID is null for repository: " + repository.getUserId());
+                    repository.setUserId("defaultValue");
                 }
-                if (playlist.getPlaylistId() == null) {
-                    Log.d(TAG, "PlaylistID is null for playlist: " + playlist.getTitulo());
-                    playlist.setPlaylistId("defaultValue");
+                if (repository.getRepositoryId() == null) {
+                    Log.d(TAG, "repositoryID is null for repository: " + repository.getTitulo());
+                    repository.setRepositoryId("defaultValue");
                 }
             }
         } else {
-            this.playlists = new ArrayList<>();
-            this.playlistsFull.set(new ArrayList<>());
+            this.repositories = new ArrayList<>();
+            this.repositoriesFull.set(new ArrayList<>());
         }
     }
 
     @NonNull
     @Override
-    public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.items_playlist_fragment, parent, false);
-        return new PlaylistViewHolder(view);
+    public RepositoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.items_repository_fragment, parent, false);
+        return new RepositoryViewHolder(view);
     }
 
     @SuppressLint({"SetTextI18n", "ClickableViewAccessibility", "NotifyDataSetChanged"})
     @Override
-    public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
-        if (position >= 0 && position < playlists.size()) {
-            ManagerPlaylist playlist = playlists.get(position);
+    public void onBindViewHolder(@NonNull RepositoryViewHolder holder, int position) {
+        if (position >= 0 && position < repositories.size()) {
+            ManagerRepository repository = repositories.get(position);
 
-            if (playlist != null) {
-                holder.bind(playlist);
-                holder.tituloTextView.setText(playlist.getTitulo());
-                holder.nomeCanalTextView.setText(playlist.getNomeCanal());
+            if (repository != null) {
+                holder.bind(repository);
+                holder.tituloTextView.setText(repository.getTitulo());
+                holder.nomeCanalTextView.setText(repository.getNomeCanal());
 
-                String descricao = playlist.getDescricao();
+                String descricao = repository.getDescricao();
                 if (descricao != null) {
                     if (descricao.length() > 40) {
                         SpannableString spannableString = getSpannableString(descricao);
@@ -120,7 +120,7 @@ public class AdapterPlaylist extends RecyclerView.Adapter<AdapterPlaylist.Playli
                     @Override
                     public void onClick(View v) {
                         if (clickListener != null) {
-                            clickListener.onItemClick(playlist.getUrlCanal());
+                            clickListener.onItemClick(repository.getUrlCanal());
                         }
                     }
                 });
@@ -129,42 +129,42 @@ public class AdapterPlaylist extends RecyclerView.Adapter<AdapterPlaylist.Playli
                     @Override
                     public void onClick(View v) {
                         if (clickListener != null) {
-                            clickListener.onItemClick(playlist.getIframe());
+                            clickListener.onItemClick(repository.getIframe());
 
                         }
                     }
                 });
 
                 ArrayAdapter<String> ratingAdapter = getStringArrayAdapter();
-                holder.avaliacaoPlaylist.setAdapter(ratingAdapter);
+                holder.avaliacaoRepository.setAdapter(ratingAdapter);
 
-                holder.avaliacaoPlaylist.setOnTouchListener(new View.OnTouchListener() {
+                holder.avaliacaoRepository.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         return false;
                     }
                 });
 
-                holder.avaliacaoPlaylist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                holder.avaliacaoRepository.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (position > 0) {
                             String rating = parent.getItemAtPosition(position).toString();
                             if (rating != null && !rating.isEmpty()) {
                                 String userId = fireStoreDataManager.getCurrentUserId();
-                                String playlistId = playlist.getPlaylistId();
-                                Log.d(TAG, "UserId: " + userId + ", PlaylistId: " + playlistId);
+                                String repositoryId = repository.getRepositoryId();
+                                Log.d(TAG, "UserId: " + userId + ", RepositoryId: " + repositoryId);
 
-                                if (userId != null && playlistId != null) {
-                                     fireStoreDataManager.savePlaylistRating(userId, playlistId, rating, new FireStoreDataManager.OnPlaylistRatingSavedListener() {
+                                if (userId != null && repositoryId != null) {
+                                     fireStoreDataManager.saveRepositoryRating(userId, repositoryId, rating, new FireStoreDataManager.OnRepositoryRatingSavedListener() {
                                         @Override
-                                        public void onPlaylistRatingSaved(String savedPlaylistId) {
-                                            Log.d(TAG, "Rating saved successfully for playlist: " + savedPlaylistId);
+                                        public void onRepositoryRatingSaved(String repositoryId) {
+                                            Log.d(TAG, "Rating saved successfully for repository: " + repositoryId);
                                         }
 
                                         @Override
-                                        public void onPlaylistRatingSaveFailed(String errorMessage) {
-                                            Log.e(TAG, "Error saving rating for playlist: " + playlistId);
+                                        public void onRepositoryRatingSaveFailed(String errorMessage) {
+                                            Log.e(TAG, "Error saving rating for repository: " + repositoryId);
                                         }
                                     });
                                 } else {
@@ -180,28 +180,28 @@ public class AdapterPlaylist extends RecyclerView.Adapter<AdapterPlaylist.Playli
                     public void onNothingSelected(AdapterView<?> parent) {}
                 });
 
-                holder.comentariosPlaylists.setOnClickListener(new View.OnClickListener() {
+                holder.comentariosRepositories.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPopUpCommentActivity(playlist.getPlaylistId());
+                        showPopUpCommentActivity(repository.getRepositoryId());
                     }
                 });
 
                 holder.menuIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showPopupMenu(holder.menuIcon, playlist);
+                        showPopupMenu(holder.menuIcon, repository);
                     }
                 });
             }
         }
     }
 
-    private void showPopupMenu(View view, ManagerPlaylist playlist) {
+    private void showPopupMenu(View view, ManagerRepository repository) {
         PopupMenu popupMenu = new PopupMenu(context, view);
-        popupMenu.inflate(R.menu.menu_options_items_playlist);
+        popupMenu.inflate(R.menu.menu_options_items_repository);
 
-        if (playlist.isFavorited()) {
+        if (repository.isFavorited()) {
             popupMenu.getMenu().findItem(R.id.favority).setTitle(R.string.remover_dos_favoritos);
         }
 
@@ -211,18 +211,18 @@ public class AdapterPlaylist extends RecyclerView.Adapter<AdapterPlaylist.Playli
                 int itemId = item.getItemId();
 
                 if (itemId == R.id.favority) {
-                    favorityPlaylist(playlist);
+                    favorityRepository(repository);
                     return true;
                 } else if (itemId == R.id.copy) {
                     return true;
                 } else if (itemId == R.id.copyLinkCanal) {
-                    copyLinkCanal(playlist.getPlaylistId());
+                    copyLinkCanal(repository.getRepositoryId());
                     return true;
-                } else if (itemId == R.id.copyLinkPlaylist) {
-                    copyLinkPlaylist(playlist.getPlaylistId());
+                } else if (itemId == R.id.copyLinkRepository) {
+                    copyLinkRepository(repository.getRepositoryId());
                     return true;
                 } else if (itemId == R.id.copyLinkBoth) {
-                    copyLinkBoth(playlist.getPlaylistId());
+                    copyLinkBoth(repository.getRepositoryId());
                     return true;
                 }
                 return false;
@@ -239,98 +239,98 @@ public class AdapterPlaylist extends RecyclerView.Adapter<AdapterPlaylist.Playli
         Toast.makeText(context, label + " copiado para a área de transferência.", Toast.LENGTH_SHORT).show();
     }
 
-    private void copyLinkBoth(String playlistId) {
+    private void copyLinkBoth(String repositoryId) {
         FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-        fireStoreDataManager.getLinksPlaylists(playlistId, new FireStoreDataManager.FireStoreDataListener<ManagerPlaylist>() {
+        fireStoreDataManager.getLinksRepositories(repositoryId, new FireStoreDataManager.FireStoreDataListener<ManagerRepository>() {
             @Override
-            public void onSuccess(ManagerPlaylist managerPlaylist) {
-                String linkCanal = managerPlaylist.getUrlCanal();
-                String linkPlaylist = managerPlaylist.getIframe();
-                String textToCopy = "Link do canal: " + linkCanal + "\nLink da playlist: " + linkPlaylist;
+            public void onSuccess(ManagerRepository managerRepository) {
+                String linkCanal = managerRepository.getUrlCanal();
+                String linkRepository = managerRepository.getIframe();
+                String textToCopy = "Link do criador: " + linkCanal + "\nLink do repositório: " + linkRepository;
                 copyTextToClipboard("Ambos os links", textToCopy);
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                Log.e(TAG, "Error fetching playlist details: " + errorMessage);
+                Log.e(TAG, "Error fetching repository details: " + errorMessage);
             }
         });
     }
 
-    private void copyLinkPlaylist(String playlistId) {
+    private void copyLinkRepository(String repositoryId) {
         FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-        fireStoreDataManager.getLinksPlaylists(playlistId, new FireStoreDataManager.FireStoreDataListener<ManagerPlaylist>() {
+        fireStoreDataManager.getLinksRepositories(repositoryId, new FireStoreDataManager.FireStoreDataListener<ManagerRepository>() {
             @Override
-            public void onSuccess(ManagerPlaylist managerPlaylist) {
-                String linkPlaylist = managerPlaylist.getIframe();
-                copyTextToClipboard("Link da playlist", linkPlaylist);
+            public void onSuccess(ManagerRepository managerRepository) {
+                String linkRepository = managerRepository.getIframe();
+                copyTextToClipboard("Link do repositório", linkRepository);
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                Log.e(TAG, "Error fetching playlist details: " + errorMessage);
+                Log.e(TAG, "Error fetching repository details: " + errorMessage);
             }
         });
     }
 
-    private void copyLinkCanal(String playlistId) {
+    private void copyLinkCanal(String repositoryId) {
         FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-        fireStoreDataManager.getLinksPlaylists(playlistId, new FireStoreDataManager.FireStoreDataListener<ManagerPlaylist>() {
+        fireStoreDataManager.getLinksRepositories(repositoryId, new FireStoreDataManager.FireStoreDataListener<ManagerRepository>() {
             @Override
-            public void onSuccess(ManagerPlaylist managerPlaylist) {
-                String linkCanal = managerPlaylist.getUrlCanal();
+            public void onSuccess(ManagerRepository managerRepository) {
+                String linkCanal = managerRepository.getUrlCanal();
                 copyTextToClipboard("Link do canal", linkCanal);
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                Log.e(TAG, "Error fetching playlist details: " + errorMessage);
+                Log.e(TAG, "Error fetching repository details: " + errorMessage);
             }
         });
     }
 
-//    private void addPlaylist(View anchorView) {
-//        Log.d("MainActivity", "addPlaylist called");
-//        PopUpCreatePlaylist popupCreatePlaylist = new PopUpCreatePlaylist(context);
-//        popupCreatePlaylist.show(anchorView);
+//    private void addRepository (View anchorView) {
+//        Log.d("MainActivity", "addRepository called");
+//        PopUpCreateRepository popupCreateRepository = new PopUpCreateRepository(context);
+//        popupCreateRepository.show(anchorView);
 //    }
 
-    private void favorityPlaylist(ManagerPlaylist playlist) {
+    private void favorityRepository(ManagerRepository repository) {
         String userId = fireStoreDataManager.getCurrentUserId();
-        String playlistId = playlist.getPlaylistId();
+        String repositoryId = repository.getRepositoryId();
 
-        if (userId != null && playlistId != null) {
-            if (playlist.isFavorited()) {
-                fireStoreDataManager.removePlaylistFromFavorites(userId, playlistId, new FireStoreDataManager.OnPlaylistRemovedFromFavoritesListener() {
+        if (userId != null && repositoryId != null) {
+            if (repository.isFavorited()) {
+                fireStoreDataManager.removeRepositoryFromFavorites(userId, repositoryId, new FireStoreDataManager.OnRepositoryRemovedFromFavoritesListener() {
                     @Override
-                    public void onPlaylistRemovedFromFavorites(String removedPlaylistId) {
-                        Log.d(TAG, "Playlist removida dos favoritos: " + removedPlaylistId);
-                        playlist.setFavorited(false);
-                        notifyItemChanged(playlists.indexOf(playlist));
+                    public void onRepositoryRemovedFromFavorites(String removedRepositoryId) {
+                        Log.d(TAG, "Repositório removida dos favoritos: " + removedRepositoryId);
+                        repository.setFavorited(false);
+                        notifyItemChanged(repositories.indexOf(repository));
                     }
 
                     @Override
-                    public void onPlaylistRemoveFromFavoritesFailed(String errorMessage) {
-                        Log.e(TAG, "Erro ao remover playlist dos favoritos: " + errorMessage);
+                    public void onRepositoryRemoveFromFavoritesFailed(String errorMessage) {
+                        Log.e(TAG, "Erro ao remover repository dos favoritos: " + errorMessage);
                     }
                 });
             } else {
-                fireStoreDataManager.addPlaylistToFavorites(userId, playlistId, new FireStoreDataManager.OnPlaylistAddedToFavoritesListener() {
+                fireStoreDataManager.addRepositoryToFavorites(userId, repositoryId, new FireStoreDataManager.OnRepositoryAddedToFavoritesListener() {
                     @Override
-                    public void onPlaylistAddedToFavorites(String addedPlaylistId) {
-                        Log.d(TAG, "Playlist adicionada aos favoritos: " + addedPlaylistId);
-                        playlist.setFavorited(true);
-                        notifyItemChanged(playlists.indexOf(playlist));
+                    public void onRepositoryAddedToFavorites(String addedRepositoryId) {
+                        Log.d(TAG, "Repositório adicionado aos favoritos: " + addedRepositoryId);
+                        repository.setFavorited(true);
+                        notifyItemChanged(repositories.indexOf(repository));
                     }
 
                     @Override
-                    public void onPlaylistAddToFavoritesFailed(String errorMessage) {
-                        Log.e(TAG, "Erro ao adicionar playlist aos favoritos: " + errorMessage);
+                    public void onRepositoryAddToFavoritesFailed(String errorMessage) {
+                        Log.e(TAG, "Erro ao adicionar repository aos favoritos: " + errorMessage);
                     }
                 });
             }
         } else {
-            Log.e(TAG, "IDs de usuário ou playlist nulos");
+            Log.e(TAG, "IDs de usuário ou repositório nulos");
         }
     }
 
@@ -377,9 +377,9 @@ public class AdapterPlaylist extends RecyclerView.Adapter<AdapterPlaylist.Playli
         popUpDescription.show(((FragmentActivity) context).getSupportFragmentManager(), "pop_up_verMais");
     }
 
-    private void showPopUpCommentActivity(String playlistId){
+    private void showPopUpCommentActivity(String repositoryId){
         Intent intent = new Intent(context, PopUpComment.class);
-        intent.putExtra("playlistId", playlistId);
+        intent.putExtra("repositoryId", repositoryId);
         context.startActivity(intent);
     }
 
@@ -393,40 +393,40 @@ public class AdapterPlaylist extends RecyclerView.Adapter<AdapterPlaylist.Playli
 
     @Override
     public int getItemCount() {
-        return playlists.size();
+        return repositories.size();
     }
 
-    public class PlaylistViewHolder extends RecyclerView.ViewHolder {
+    public class RepositoryViewHolder extends RecyclerView.ViewHolder {
         private final TextView tituloTextView;
         private final TextView descricaoTextView;
         private final TextView nomeCanalTextView;
         private final TextView nomeUsuarioTextView;
         private final TextView dataPubTextView;
-        private final Spinner avaliacaoPlaylist;
-        private final TextView comentariosPlaylists;
+        private final Spinner avaliacaoRepository;
+        private final TextView comentariosRepositories;
         private final ImageView menuIcon;
 
 
-        public PlaylistViewHolder(@NonNull View itemView) {
+        public RepositoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            tituloTextView = itemView.findViewById(R.id.titulo_Playlist);
-            descricaoTextView = itemView.findViewById(R.id.descricao_Playlist);
-            nomeCanalTextView = itemView.findViewById(R.id.nomeCanal_Playlist);
-            nomeUsuarioTextView = itemView.findViewById(R.id.nomeUsuario_Playlist);
-            dataPubTextView = itemView.findViewById(R.id.dataPub_Playlist);
-            avaliacaoPlaylist = itemView.findViewById(R.id.ratingBar);
-            comentariosPlaylists = itemView.findViewById(R.id.comentariosPlaylists);
-            menuIcon = itemView.findViewById(R.id.menuOptionsPlaylist);
+            tituloTextView = itemView.findViewById(R.id.titulo_Repository);
+            descricaoTextView = itemView.findViewById(R.id.descricao_Repository);
+            nomeCanalTextView = itemView.findViewById(R.id.nomeCanal_Repository);
+            nomeUsuarioTextView = itemView.findViewById(R.id.nomeUsuario_Repository);
+            dataPubTextView = itemView.findViewById(R.id.dataPub_Repository);
+            avaliacaoRepository = itemView.findViewById(R.id.ratingBar);
+            comentariosRepositories = itemView.findViewById(R.id.commentsRepositories);
+            menuIcon = itemView.findViewById(R.id.menuOptionsRepository);
 
         }
 
-        public void bind(ManagerPlaylist managerPlaylist) {
-            if (managerPlaylist != null) {
-                tituloTextView.setText(managerPlaylist.getTitulo());
-                descricaoTextView.setText(managerPlaylist.getDescricao());
-                nomeCanalTextView.setText(managerPlaylist.getNomeCanal());
+        public void bind(ManagerRepository managerRepository) {
+            if (managerRepository != null) {
+                tituloTextView.setText(managerRepository.getTitulo());
+                descricaoTextView.setText(managerRepository.getDescricao());
+                nomeCanalTextView.setText(managerRepository.getNomeCanal());
 
-                String userId = managerPlaylist.getNomeUsuario();
+                String userId = managerRepository.getNomeUsuario();
                 String userName = userIdToNameMap.get(userId);
 
                 if (userName != null) {
@@ -435,7 +435,7 @@ public class AdapterPlaylist extends RecyclerView.Adapter<AdapterPlaylist.Playli
                     nomeUsuarioTextView.setText(userId);
                 }
 
-                dataPubTextView.setText(managerPlaylist.getDataPub());
+                dataPubTextView.setText(managerRepository.getDataPub());
             }
         }
     }

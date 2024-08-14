@@ -33,6 +33,7 @@
             android:id="@+id/scrollViewForm"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scrollbars="none"
             app:layout_constraintBottom_toTopOf="@+id/btnSend_Form"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.60"
@@ -89,12 +90,12 @@
                     tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tituloPlaylist_Form_layout"
+                    android:id="@+id/tituloRepository_Form_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:id="@+id/tituloPlaylist_Form"
+                        android:id="@+id/tituloRepository_Form"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:backgroundTint="@android:color/transparent"
@@ -120,12 +121,12 @@
                     tools:ignore="RtlCompat,TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/descricaoPlaylist_Form_layout"
+                    android:id="@+id/descricaoRepository_Form_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:id="@+id/descricaoPlaylist_Form"
+                        android:id="@+id/descricaoRepository_Form"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         android:backgroundTint="@android:color/transparent"
@@ -144,7 +145,7 @@
                     android:layout_height="40dp"
                     android:layout_marginStart="10dp"
                     android:gravity="center"
-                    android:text="@string/linkdaplaylist"
+                    android:text="@string/linkdorepositorio"
                     android:textAlignment="textStart"
                     android:textColor="@color/light_blue"
                     android:textSize="18sp"

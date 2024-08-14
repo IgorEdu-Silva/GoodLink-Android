@@ -1,6 +1,6 @@
 package com.example.goodlink.FireBaseManager;
 
-public class ManagerPlaylist {
+public class ManagerRepository {
     private String titulo;
     private String descricao;
     private String nomeCanal;
@@ -10,14 +10,14 @@ public class ManagerPlaylist {
     private String nomeUsuario;
     private String dataPub;
     private String userId;
-    private String playlistId;
+    private String repositoryId;
     private boolean favorited;
 
-    public ManagerPlaylist() {
+    public ManagerRepository() {
 
     }
 
-    public ManagerPlaylist(String titulo, String descricao, String nomeCanal, String iframe, String urlCanal, String categoria, String nomeUsuario, String dataPub) {
+    public ManagerRepository(String titulo, String descricao, String nomeCanal, String iframe, String urlCanal, String categoria, String nomeUsuario, String dataPub) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.nomeCanal = nomeCanal;
@@ -28,17 +28,17 @@ public class ManagerPlaylist {
         this.dataPub = dataPub;
     }
 
-    public ManagerPlaylist(String userId, String playlistId) {
+    public ManagerRepository(String userId, String repositoryId) {
         this.userId = userId;
-        this.playlistId = playlistId;
+        this.repositoryId = repositoryId;
     }
 
-    public String getPlaylistId() {
-        return playlistId;
+    public String getRepositoryId() {
+        return repositoryId;
     }
 
-    public void setPlaylistId(String playlistId) {
-        this.playlistId = playlistId;
+    public void setRepositoryId(String repositoryId) {
+        this.repositoryId = repositoryId;
     }
 
     public String getUserId() {

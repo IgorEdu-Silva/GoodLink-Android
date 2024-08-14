@@ -3,66 +3,63 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="150dp">
+    android:layout_height="150dp"
+    android:layout_marginVertical="4dp"
+    android:layout_marginHorizontal="4dp"
+    android:background="@drawable/border_blue">
 
 
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="140dp"
-        android:background="@drawable/border_blue"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        android:id="@+id/UserName"
+        android:layout_width="165dp"
+        android:layout_height="25dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:text=""
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/UserComment"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.065"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.96">
+        app:layout_constraintVertical_bias="0.692"
+        tools:ignore="VisualLintOverlap" />
 
-        <TextView
-            android:id="@+id/UserName"
-            android:layout_width="165dp"
-            android:layout_height="25dp"
-            android:gravity="start"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="240dp"
-            android:layout_marginBottom="105dp"
-            android:text=""
-            android:textSize="16sp"
-            tools:ignore="VisualLintOverlap" />
+    <TextView
+        android:id="@+id/UserComment"
+        android:layout_width="380dp"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="fill_horizontal"
+        android:text=""
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.76" />
 
-        <TextView
-            android:id="@+id/UserComment"
-            android:layout_width="370dp"
-            android:layout_height="100dp"
-            android:gravity="fill_horizontal"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="0dp"
-            android:text=""
-            android:textSize="14sp" />
+    <Button
+        android:id="@+id/btnCommentReport"
+        android:layout_width="32dp"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/report"
+        app:layout_constraintBottom_toTopOf="@+id/UserComment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.967"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="VisualLintButtonSize,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
-        <ImageButton
-            android:id="@+id/ReportAlert"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="370dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="105dp"
-            android:background="@android:drawable/ic_dialog_alert"
-            android:importantForAccessibility="no"
-            tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
-    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

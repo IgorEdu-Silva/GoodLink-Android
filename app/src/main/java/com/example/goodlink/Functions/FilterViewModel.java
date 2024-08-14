@@ -4,32 +4,32 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.goodlink.FireBaseManager.ManagerPlaylist;
+import com.example.goodlink.FireBaseManager.ManagerRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FilterViewModel extends ViewModel {
     private final MutableLiveData<String> filterText = new MutableLiveData<>();
-    private final List<ManagerPlaylist> filteredPlaylists = new ArrayList<>();
-    private List<ManagerPlaylist> playlists = new ArrayList<>();
+    private final List<ManagerRepository> filteredRepository = new ArrayList<>();
+    private List<ManagerRepository> repositories = new ArrayList<>();
 
     public void setFilterText(String text) {
         filterText.setValue(text);
-        filterPlaylists();
+        filterRepositories();
     }
 
-    private void filterPlaylists() {
-        if (playlists == null) {
+    private void filterRepositories() {
+        if (repositories == null) {
             return;
         }
-        filteredPlaylists.clear();
+        filteredRepository.clear();
         String filterTextLower = filterText.getValue() != null ? filterText.getValue().toLowerCase() : "";
-        for (ManagerPlaylist playlist : playlists) {
-            if (playlist != null && playlist.getTitulo() != null && playlist.getDescricao() != null) {
-                if (playlist.getTitulo().toLowerCase().contains(filterTextLower) ||
-                        playlist.getDescricao().toLowerCase().contains(filterTextLower)) {
-                    filteredPlaylists.add(playlist);
+        for (ManagerRepository repository : repositories) {
+            if (repository != null && repository.getTitulo() != null && repository.getDescricao() != null) {
+                if (repository.getTitulo().toLowerCase().contains(filterTextLower) ||
+                        repository.getDescricao().toLowerCase().contains(filterTextLower)) {
+                    filteredRepository.add(repository);
                 }
             }
         }
@@ -39,11 +39,11 @@ public class FilterViewModel extends ViewModel {
         return filterText;
     }
 
-    public List<ManagerPlaylist> getFilteredPlaylists() {
-        return filteredPlaylists;
+    public List<ManagerRepository> getFilteredRepository() {
+        return filteredRepository;
     }
 
-    public void setPlaylists(List<ManagerPlaylist> playlists) {
-        this.playlists = playlists;
+    public void setRepositories(List<ManagerRepository> repositories) {
+        this.repositories = repositories;
     }
 }

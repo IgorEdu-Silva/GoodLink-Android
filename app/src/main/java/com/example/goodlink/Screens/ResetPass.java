@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +27,7 @@ public class ResetPass extends AppCompatActivity {
 
         emailForReset = findViewById(R.id.EmailForReset);
         Button confirmReset = findViewById(R.id.ConfirmReset);
-        ImageButton backToLogin = findViewById(R.id.BackToLogin);
+        Button backToLogin = findViewById(R.id.BackToLogin);
 
         confirmReset.setOnClickListener(new View.OnClickListener() {
             @Override
