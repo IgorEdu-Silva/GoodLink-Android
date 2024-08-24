@@ -25,4 +25,8 @@
                 android:title="@string/copiar_link_do_canal_e_da_repositorio" />
         </menu>
     </item>
+
+    <item
+        android:id="@+id/report"
+        android:title="@string/reportar" />
 </menu>

@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuInflater;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,11 +24,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PopUpComment extends AppCompatActivity {
     private EditText commentAdd;
     private Button sendButton;
+    private Button btnBack;
+    private Button btnOptions;
     private RecyclerView commentsShow;
     private AdapterComment adapterComment;
     private List<ManagerComment> commentsList;
@@ -36,6 +42,7 @@ public class PopUpComment extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private String fcmToken;
+    private Map<Integer, Runnable> menuActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +52,9 @@ public class PopUpComment extends AppCompatActivity {
         commentAdd = findViewById(R.id.commentAdd);
         sendButton = findViewById(R.id.commentBtnSend);
         commentsShow = findViewById(R.id.commentsView);
+        btnBack = findViewById(R.id.btnBackComments);
+        btnOptions = findViewById(R.id.btnOptionsComments);
+
         commentsList = new ArrayList<>();
         fireStoreDataManager = new FireStoreDataManager();
 
@@ -93,6 +103,31 @@ public class PopUpComment extends AppCompatActivity {
         });
 
         loadComments();
+
+        btnBack.setOnClickListener(v -> finish());
+
+        menuActions = new HashMap<>();
+        menuActions.put(R.id.orderByDate, this::orderByDate);
+        menuActions.put(R.id.orderByLike, this::orderByLike);
+        menuActions.put(R.id.orderByDisLike, this::orderByDisLike);
+
+
+        btnOptions.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(PopUpComment.this, v);
+            MenuInflater inflater = popupMenu.getMenuInflater();
+            inflater.inflate(R.menu.menu_options_comments, popupMenu.getMenu());
+
+            popupMenu.setOnMenuItemClickListener(item -> {
+                Runnable action = menuActions.get(item.getItemId());
+                if (action != null) {
+                    action.run();
+                    return true;
+                }
+                return false;
+            });
+
+            popupMenu.show();
+        });
     }
 
     private void loadComments() {
@@ -129,5 +164,17 @@ public class PopUpComment extends AppCompatActivity {
                         MessagingService.sendNotificationToToken(this, token, uniqueNotificationId, "Novo comentário", "Mais comentários são feitos, atualize e veja-os.");
                     }
                 });
+    }
+
+    private void orderByDate() {
+        Toast.makeText(PopUpComment.this, "Ordenar por Data", Toast.LENGTH_SHORT).show();
+    }
+
+    private void orderByLike() {
+        Toast.makeText(PopUpComment.this, "Ordenar por Curtidas", Toast.LENGTH_SHORT).show();
+    }
+
+    private void orderByDisLike() {
+        Toast.makeText(PopUpComment.this, "Ordenar por Descurtidas", Toast.LENGTH_SHORT).show();
     }
 }

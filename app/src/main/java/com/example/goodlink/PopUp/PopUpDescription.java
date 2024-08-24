@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.goodlink.R;
@@ -42,8 +44,32 @@ public class PopUpDescription extends DialogFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pop_up_description, container, false);
 
+        ConstraintLayout popUpDescription = view.findViewById(R.id.popUpDescription);
+
         TextView fullDescriptionTextView = view.findViewById(R.id.fullDescription);
         Button closeButton = view.findViewById(R.id.closeButton);
+
+        int nightModeFlags = getContext().getResources().getConfiguration().uiMode &
+                android.content.res.Configuration.UI_MODE_NIGHT_MASK;
+
+        switch (nightModeFlags) {
+            case android.content.res.Configuration.UI_MODE_NIGHT_YES:
+                fullDescriptionTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                fullDescriptionTextView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.black_background));
+                popUpDescription.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.black_background));
+                break;
+
+            case android.content.res.Configuration.UI_MODE_NIGHT_NO:
+                fullDescriptionTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                fullDescriptionTextView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_background));
+                popUpDescription.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_background));
+                break;
+
+            case android.content.res.Configuration.UI_MODE_NIGHT_UNDEFINED:
+                break;
+        }
+
+        closeButton.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.light_blue));
 
         if (getArguments() != null) {
             fullDescriptionText = getArguments().getString(FULL_DESCRIPTION_KEY);

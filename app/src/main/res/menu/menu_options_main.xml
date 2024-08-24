@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    <item-->
+<!--        android:id="@+id/reload"-->
+<!--        android:title="@string/recarregar_reposit_rios" />-->
+
+    <item
+        android:id="@+id/orderBy"
+        android:title="@string/ordenar" >
+        <menu>
+            <item
+                android:id="@+id/orderByDate"
+                android:title="@string/data_de_publica_o" />
+
+            <item
+                android:id="@+id/orderByAlphabetically"
+                android:title="@string/alfab_tica" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/filterBy"
+        android:title="@string/filtrar" >
+        <menu>
+            <item
+                android:id="@+id/filterByCategory"
+                android:title="@string/filtar_por_categoria" />
+            <item
+                android:id="@+id/filterByFavority"
+                android:title="@string/filtrar_por_favoritos" />
+            <item
+                android:id="@+id/filterByCollection"
+                android:title="@string/filtrar_por_cole_o" />
+        </menu>
+    </item>
+</menu>

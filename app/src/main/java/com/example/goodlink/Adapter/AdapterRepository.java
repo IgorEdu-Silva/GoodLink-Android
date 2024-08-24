@@ -36,6 +36,7 @@ import com.example.goodlink.FireBaseManager.FireStoreDataManager;
 import com.example.goodlink.FireBaseManager.ManagerRepository;
 import com.example.goodlink.PopUp.PopUpComment;
 import com.example.goodlink.PopUp.PopUpDescription;
+import com.example.goodlink.PopUp.PopUpReport;
 import com.example.goodlink.R;
 import com.google.firebase.database.DatabaseReference;
 
@@ -224,12 +225,20 @@ public class AdapterRepository extends RecyclerView.Adapter<AdapterRepository.Re
                 } else if (itemId == R.id.copyLinkBoth) {
                     copyLinkBoth(repository.getRepositoryId());
                     return true;
+                } else if (itemId == R.id.report) {
+                    reportRepository(repository.getRepositoryId());
+                    return true;
                 }
                 return false;
             }
         });
 
         popupMenu.show();
+    }
+
+    private void reportRepository(String repositoryId) {
+        PopUpReport popUpReport = PopUpReport.newInstance(repositoryId);
+        popUpReport.show(((FragmentActivity) context).getSupportFragmentManager(), "pop_up_report");
     }
 
     private void copyTextToClipboard(String label, String text) {

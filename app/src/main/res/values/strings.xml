@@ -64,7 +64,7 @@
     <string name="hist_ria">História</string>
     <string name="menuoptions">menuOptions</string>
     <string name="adicionar_aos_favoritos">Adicionar aos favoritos</string>
-    <string name="adicionar_repositorios">Adicionar repositório</string>
+    <string name="adicionar_repositorios">Adicionar a coleção</string>
     <string name="ver_repositorios_do_usu_rio">Ver repositórios do usuário</string>
     <string name="copiar">Copiar</string>
     <string name="copiar_nome_do_canal">Copiar nome do canal</string>
@@ -87,5 +87,13 @@
     <string name="data_de_publica_o">Data de publicação</string>
     <string name="alfab_tica">Alfabética</string>
     <string name="filtrar">Filtrar</string>
-    <string name="filtar_por_categoria">Filtar por categoria</string>
+    <string name="filtar_por_categoria">Filtrar por categoria</string>
+    <string name="curtido">Curtido</string>
+    <string name="n_o_curtido">Não curtido</string>
+    <string name="reportar">Reportar</string>
+    <string name="filtrar_por_cole_o">Filtrar por coleção</string>
+    <string name="filtrar_por_favoritos">Filtrar por favoritos</string>
+    <string name="title_activity_pop_up_report">PopUpReport</string>
+    <string name="insira_o_motivo_do_reporte">Insira o motivo do reporte</string>
+    <string name="descri_o_completa">Descrição completa</string>
 </resources>

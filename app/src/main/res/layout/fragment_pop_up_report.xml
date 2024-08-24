@@ -2,30 +2,30 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/popUpDescription"
+    android:id="@+id/popUpReport"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".PopUp.PopUpDescription">
+    tools:context=".PopUp.PopUpReport">
 
     <Button
         android:id="@+id/closeButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/close"
-        app:layout_constraintBottom_toBottomOf="@+id/fullDescription"
-        app:layout_constraintEnd_toEndOf="@+id/fullDescription"
+        app:layout_constraintBottom_toBottomOf="@+id/reportTextArea"
+        app:layout_constraintEnd_toEndOf="@+id/reportTextArea"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/fullDescription"
-        app:layout_constraintTop_toTopOf="@+id/fullDescription"
+        app:layout_constraintStart_toStartOf="@+id/reportTextArea"
+        app:layout_constraintTop_toTopOf="@+id/reportTextArea"
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="SpeakableTextPresentCheck,VisualLintOverlap,TouchTargetSizeCheck" />
 
-    <TextView
-        android:id="@+id/fullDescription"
+    <EditText
+        android:id="@+id/reportTextArea"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
+        android:hint="@string/insira_o_motivo_do_reporte"
         android:importantForAutofill="no"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,6 +35,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.493"
         app:layout_constraintWidth_percent="0.9"
-        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck,VisualLintTextFieldSize,DuplicateSpeakableTextCheck" />
+
+    <Button
+        android:id="@+id/sendReport"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/send"
+        app:layout_constraintBottom_toBottomOf="@+id/reportTextArea"
+        app:layout_constraintEnd_toEndOf="@+id/reportTextArea"
+        app:layout_constraintHorizontal_bias="0.882"
+        app:layout_constraintStart_toStartOf="@+id/reportTextArea"
+        app:layout_constraintTop_toTopOf="@+id/reportTextArea"
+        app:layout_constraintVertical_bias="0.902"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

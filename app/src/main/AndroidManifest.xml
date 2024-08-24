@@ -22,39 +22,45 @@
         android:icon="@drawable/ic_goodlink"
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_goodlink"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.GoodLink"
-        tools:targetApi="31"
-        android:screenOrientation="portrait"
-        tools:ignore="DiscouragedApi">
+        tools:ignore="DiscouragedApi"
+        tools:targetApi="31">
+        <activity
+            android:name=".PopUp.PopUpReport"
+            android:exported="false"
+            android:label="@string/title_activity_pop_up_report"
+            tools:ignore="LockedOrientationActivity">
+        </activity>
         <activity
             android:name=".PopUp.PopUpComment"
-            android:screenOrientation="portrait"
             android:exported="false"
+            android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".Screens.ResetPass"
-            android:screenOrientation="portrait"
             android:exported="false"
+            android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".Screens.Termos"
-            android:screenOrientation="fullSensor"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".Screens.Login"
-            android:screenOrientation="portrait"
             android:exported="false"
+            android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".Screens.Forum"
-            android:screenOrientation="portrait"
             android:exported="false"
+            android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".Screens.Register"
-            android:screenOrientation="portrait"
             android:exported="true"
+            android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
