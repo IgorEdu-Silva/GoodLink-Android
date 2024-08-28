@@ -96,4 +96,9 @@
     <string name="title_activity_pop_up_report">PopUpReport</string>
     <string name="insira_o_motivo_do_reporte">Insira o motivo do reporte</string>
     <string name="descri_o_completa">Descrição completa</string>
+    <string name="conte_do_sexual">Conteúdo sexual</string>
+    <string name="conte_do_violento_ou_repulsivo">Conteúdo violento ou repulsivo</string>
+    <string name="conte_do_preconceituoso">Conteúdo preconceituoso</string>
+    <string name="spam_ou_enganoso">Spam ou enganoso</string>
+    <string name="desinforma_o">Desinformação</string>
 </resources>

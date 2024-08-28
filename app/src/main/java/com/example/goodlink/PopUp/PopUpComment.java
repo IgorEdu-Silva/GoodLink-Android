@@ -77,9 +77,8 @@ public class PopUpComment extends AppCompatActivity {
         }
 
         commentsShow.setLayoutManager(new LinearLayoutManager(this));
-        adapterComment = new AdapterComment(commentsList, repositoryId, userName);
+        adapterComment = new AdapterComment(this, commentsList, repositoryId, userName);
         commentsShow.setAdapter(adapterComment);
-
         sendButton.setOnClickListener(v -> {
             String commentText = commentAdd.getText().toString().trim();
 

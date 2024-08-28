@@ -99,10 +99,15 @@ public class PopUpDescription extends DialogFragment {
         int screenWidth = displayMetrics.widthPixels;
         int screenHeight = displayMetrics.heightPixels;
         int dialogWidth = (int) (screenWidth * 0.9);
-        int dialogHeight = (int) (screenHeight * 0.3);
+        int dialogHeight = (int) (screenHeight * 0.4);
+
+        if (screenWidth > 1080 && screenHeight > 2400) {
+            dialogHeight = (int) (screenHeight * 0.25);
+        }
 
         if (getDialog() != null && getDialog().getWindow() != null) {
             getDialog().getWindow().setLayout(dialogWidth, dialogHeight);
+            getDialog().getWindow().getDecorView().requestLayout();
         }
     }
 }

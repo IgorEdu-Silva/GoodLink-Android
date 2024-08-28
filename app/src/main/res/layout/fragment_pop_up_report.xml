@@ -7,25 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".PopUp.PopUpReport">
 
-    <Button
-        android:id="@+id/closeButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/close"
-        app:layout_constraintBottom_toBottomOf="@+id/reportTextArea"
-        app:layout_constraintEnd_toEndOf="@+id/reportTextArea"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/reportTextArea"
-        app:layout_constraintTop_toTopOf="@+id/reportTextArea"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="SpeakableTextPresentCheck,VisualLintOverlap,TouchTargetSizeCheck" />
-
-    <EditText
+    <TextView
         android:id="@+id/reportTextArea"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:hint="@string/insira_o_motivo_do_reporte"
         android:importantForAutofill="no"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,15 +25,90 @@
 
     <Button
         android:id="@+id/sendReport"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@drawable/send"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:text="Confirmar"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        android:background="@color/transparent"
         app:layout_constraintBottom_toBottomOf="@+id/reportTextArea"
         app:layout_constraintEnd_toEndOf="@+id/reportTextArea"
-        app:layout_constraintHorizontal_bias="0.882"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/reportTextArea"
         app:layout_constraintTop_toTopOf="@+id/reportTextArea"
-        app:layout_constraintVertical_bias="0.902"
-        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="HardcodedText,SmallSp,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <Button
+        android:id="@+id/closeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:background="@color/transparent"
+        android:text="Cancelar"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/reportTextArea"
+
+        app:layout_constraintEnd_toStartOf="@+id/sendReport"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/reportTextArea"
+        app:layout_constraintTop_toTopOf="@+id/reportTextArea"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="HardcodedText,SmallSp,SpeakableTextPresentCheck,TouchTargetSizeCheck,VisualLintOverlap" />
+
+    <RadioGroup
+        android:id="@+id/optionsReport"
+        android:layout_width="298dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/closeButton"
+        app:layout_constraintEnd_toEndOf="@+id/reportTextArea"
+        app:layout_constraintStart_toStartOf="@+id/reportTextArea"
+        app:layout_constraintTop_toTopOf="@+id/reportTextArea"
+        app:layout_constraintVertical_bias="0.501"
+        tools:ignore="TextSizeCheck">
+
+        <RadioButton
+            android:id="@+id/firstOption"
+            style="@style/CustomRadioButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/conte_do_sexual"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/secondOption"
+            style="@style/CustomRadioButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/conte_do_violento_ou_repulsivo"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/thirdOption"
+            style="@style/CustomRadioButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/conte_do_preconceituoso"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/forthOption"
+            style="@style/CustomRadioButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/spam_ou_enganoso"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/fifthOption"
+            style="@style/CustomRadioButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/desinforma_o"
+            android:textColor="@color/black"
+            tools:ignore="TouchTargetSizeCheck" />
+
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
