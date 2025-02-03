@@ -298,12 +298,6 @@ public class AdapterRepository extends RecyclerView.Adapter<AdapterRepository.Re
         });
     }
 
-//    private void addRepository (View anchorView) {
-//        Log.d("MainActivity", "addRepository called");
-//        PopUpCreateRepository popupCreateRepository = new PopUpCreateRepository(context);
-//        popupCreateRepository.show(anchorView);
-//    }
-
     private void favorityRepository(ManagerRepository repository) {
         String userId = fireStoreDataManager.getCurrentUserId();
         String repositoryId = repository.getRepositoryId();

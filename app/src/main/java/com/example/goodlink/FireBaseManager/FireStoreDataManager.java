@@ -12,11 +12,15 @@
     import com.google.firebase.firestore.DocumentReference;
     import com.google.firebase.firestore.DocumentSnapshot;
     import com.google.firebase.firestore.FirebaseFirestore;
+    import com.google.firebase.firestore.Query;
     import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+    import java.text.SimpleDateFormat;
     import java.util.ArrayList;
+    import java.util.Date;
     import java.util.HashMap;
     import java.util.List;
+    import java.util.Locale;
     import java.util.Map;
 
     public class FireStoreDataManager {
@@ -186,21 +190,66 @@
             }
         }
 
-        public void saveUserComment(String commentText, String repositoryId, String userName, OnCommentSavedListener listener) {
+        public void saveUserComment(String userComment, String repositoryId, String userName,  OnCommentSavedListener listener) {
             String commentId = db.collection("userComments").document().getId();
-            ManagerComment comment = new ManagerComment(userName, commentText, repositoryId);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            String currentDate = sdf.format(new Date());
+
+            ManagerComment comment = new ManagerComment(userName, userComment, repositoryId, commentId, currentDate);
 
             db.collection("userComments")
                     .document(commentId)
                     .set(comment)
-                    .addOnSuccessListener(aVoid -> listener.onCommentSaved())
+                    .addOnSuccessListener(aVoid -> listener.onCommentSaved(commentId))
                     .addOnFailureListener(e -> listener.onCommentSaveFailed(e.getMessage()));
         }
 
+        public void updateCommentLikesAndDislikes(String commentId, List<String> updatedLikedBy, List<String> updatedDislikedBy, FireStoreDataListener<Void> listener) {
+            DocumentReference commentRef = db.collection("userComments").document(commentId);
+
+            Map<String, Object> updates = new HashMap<>();
+            updates.put("likedBy", updatedLikedBy);
+            updates.put("dislikedBy", updatedDislikedBy);
+
+            commentRef.update(updates)
+                    .addOnSuccessListener(aVoid -> listener.onSuccess(null))
+                    .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
+        }
+
+
         public void getCommentsByRepositoryId(String repositoryId, OnCommentsLoadedListener listener) {
-            db.collectionGroup("userComments")
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("userComments")
                     .whereEqualTo("repositoryId", repositoryId)
                     .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<ManagerComment> comments = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                ManagerComment comment = document.toObject(ManagerComment.class);
+                                comment.setCommentId(document.getId());
+                                comments.add(comment);
+                            }
+                            listener.onCommentsLoaded(comments);
+                        } else {
+                            listener.onCommentsLoadFailed(task.getException().getMessage());
+                        }
+                    });
+        }
+
+        public void orderComments(String repositoryId, String orderBy, OnCommentsLoadedListener listener) {
+            Query query = db.collection("userComments")
+                    .whereEqualTo("repositoryId", repositoryId);
+
+            if ("date".equals(orderBy)) {
+                query = query.orderBy("date", Query.Direction.DESCENDING);
+            } else if ("likes".equals(orderBy)) {
+                query = query.orderBy("likes", Query.Direction.DESCENDING);
+            } else if ("dislikes".equals(orderBy)) {
+                query = query.orderBy("dislikes", Query.Direction.DESCENDING);
+            }
+
+            query.get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             List<ManagerComment> comments = new ArrayList<>();
@@ -214,6 +263,7 @@
                         }
                     });
         }
+
 
         public void getLinksRepositories(String repositoryId, FireStoreDataListener<ManagerRepository> listener) {
             repositoryCollection.document(repositoryId).get()
@@ -283,6 +333,8 @@
 
         public interface OnCommentSavedListener {
             void onCommentSaved();
+
+            void onCommentSaved(String commentId);
             void onCommentSaveFailed(String errorMessage);
         }
 

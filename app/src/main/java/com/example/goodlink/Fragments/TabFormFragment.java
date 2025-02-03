@@ -193,5 +193,6 @@ public class TabFormFragment extends Fragment {
                 android.R.layout.simple_spinner_item, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoriaSpinner.setAdapter(adapter);
+
     }
 }

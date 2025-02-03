@@ -101,4 +101,15 @@
     <string name="conte_do_preconceituoso">Conteúdo preconceituoso</string>
     <string name="spam_ou_enganoso">Spam ou enganoso</string>
     <string name="desinforma_o">Desinformação</string>
+    <string name="adicionar_reposit_rio">Adicionar repositório</string>
+
+
+    <string-array name="categories">
+        <item>Programação</item>
+        <item>Matemática</item>
+        <item>Português</item>
+        <item>Ciência</item>
+        <item>Geografia</item>
+        <item>História</item>
+    </string-array>
 </resources>

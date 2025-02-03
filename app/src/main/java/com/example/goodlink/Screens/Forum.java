@@ -2,31 +2,39 @@ package com.example.goodlink.Screens;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.goodlink.Fragments.DialogFormFragment;
 import com.example.goodlink.Functions.MessagingService;
 import com.example.goodlink.Adapter.AdapterPagerFragments;
 import com.example.goodlink.Functions.HelperNotification;
 import com.example.goodlink.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class Forum extends AppCompatActivity {
     private boolean telaAtiva = true;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_forum);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.forumScreen), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -57,14 +65,14 @@ public class Forum extends AppCompatActivity {
                             tab.setText("Repositórios");
                             break;
                         case 1:
-                            tab.setText("Formulário");
-                            break;
-                        case 2:
                             tab.setText("Usuários");
                             break;
                     }
                 }
         ).attach();
+
+        fab = findViewById(R.id.FloatingBtnPageCentral);
+        fab.setOnClickListener(view -> openFormDialog());
     }
 
     private void sendTokenToMessagingService(String token) {
@@ -85,12 +93,28 @@ public class Forum extends AppCompatActivity {
                 });
     }
 
+    private void openFormDialog() {
+        Log.d("Forum", "Abrindo DialogFormFragment...");
+        DialogFormFragment dialog = new DialogFormFragment();
+        dialog.show(getSupportFragmentManager(), "FormDialog");
+    }
+
+    public static class FormDialogFragment extends DialogFragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_tab_form, container, false);
+        }
+    }
+
     @Override
     public void onBackPressed() {
         if (telaAtiva) {
             return;
         }
         super.onBackPressed();
+        fab.setVisibility(View.VISIBLE);
+
     }
 
     @Override

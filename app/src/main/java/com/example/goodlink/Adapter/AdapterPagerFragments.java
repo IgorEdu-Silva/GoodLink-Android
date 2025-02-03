@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.goodlink.Fragments.TabFormFragment;
 import com.example.goodlink.Fragments.TabRepositoryFragment;
 import com.example.goodlink.Fragments.TabUsersFragment;
 
@@ -21,8 +20,6 @@ public class AdapterPagerFragments extends FragmentStateAdapter {
             case 0:
                 return new TabRepositoryFragment();
             case 1:
-                return new TabFormFragment();
-            case 2:
                 return new TabUsersFragment();
             default:
                 return null;
@@ -31,6 +28,6 @@ public class AdapterPagerFragments extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 2;
     }
 }

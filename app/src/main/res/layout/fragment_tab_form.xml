@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/TabFormFragmentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.TabFormFragment">
@@ -74,6 +75,7 @@
                         android:importantForAutofill="no"
                         android:maxLength="20"
                         android:textSize="12sp"
+                        android:popupTheme="@style/SpinnerPopupTheme"
                         tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -242,6 +244,7 @@
             android:importantForAutofill="no"
             android:text="@string/enviar"
             android:textSize="12sp"
+            android:background="@color/light_blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"

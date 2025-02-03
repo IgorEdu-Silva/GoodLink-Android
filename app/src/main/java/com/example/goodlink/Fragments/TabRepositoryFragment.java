@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
@@ -33,6 +34,7 @@ import com.example.goodlink.FireBaseManager.ManagerRepository;
 import com.example.goodlink.Functions.FilterViewModel;
 import com.example.goodlink.Functions.HelperRepositoryDescription;
 import com.example.goodlink.R;
+import com.example.goodlink.Utils.ThemeUtil;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
@@ -52,6 +54,7 @@ public class TabRepositoryFragment extends Fragment {
     private Map<String, String> userIdToNameMap;
     private FilterViewModel filterViewModel;
     private SearchView searchView;
+    private EditText searchEditText;
     ImageButton btnReloadRepository;
     private Button buttonMenuOptionsMain;
     private Map<Integer, Runnable> menuActionMap;
@@ -83,11 +86,14 @@ public class TabRepositoryFragment extends Fragment {
         Repository = new ArrayList<>();
         firestoreDataManager = new FireStoreDataManager();
         searchView = view.findViewById(R.id.searchView);
+        searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         buttonMenuOptionsMain = view.findViewById(R.id.ButtonMenuOptionsMain);
         btnReloadRepository = view.findViewById(R.id.ButtonReloadRepository);
 
         adapter = new AdapterRepository(Repository, repositoryRef, getContext(), userIdToNameMap);
         setupRecyclerView();
+
+        ThemeUtil.applyThemeToTextView(searchEditText, requireContext());
 
         firestoreDataManager.getRepositoryFromFirestore(new FireStoreDataManager.OnRepositoryLoadedListener() {
             @SuppressLint("NotifyDataSetChanged")
@@ -109,7 +115,13 @@ public class TabRepositoryFragment extends Fragment {
 
                             setupRecyclerView();
                             repositoryFull = new ArrayList<>(repositories);
-                            Toast.makeText(getContext(), "Repositórios carregadas com sucesso", Toast.LENGTH_SHORT).show();
+                            if (isAdded()) {
+                                try {
+                                    Toast.makeText(requireContext(), "Repositórios carregados com sucesso", Toast.LENGTH_SHORT).show();
+                                } catch (IllegalStateException e) {
+                                    Log.e("TabRepositoryFragment", "Contexto não disponível", e);
+                                }
+                            }
                         }
 
                         @Override
@@ -359,7 +371,11 @@ public class TabRepositoryFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     private void setupRecyclerView() {
-        adapter = new AdapterRepository(Repository, repositoryRef, getContext(), userIdToNameMap);
+        if (userIdToNameMap != null) {
+            adapter = new AdapterRepository(Repository, repositoryRef, getContext(), userIdToNameMap);
+        } else {
+            adapter = new AdapterRepository(Repository, repositoryRef, getContext(), new HashMap<>());
+        }
         adapter.setOnItemClickListener(this::openWebPage);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

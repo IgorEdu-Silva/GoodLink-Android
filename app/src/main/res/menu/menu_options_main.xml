@@ -28,9 +28,6 @@
             <item
                 android:id="@+id/filterByFavority"
                 android:title="@string/filtrar_por_favoritos" />
-            <item
-                android:id="@+id/filterByCollection"
-                android:title="@string/filtrar_por_cole_o" />
         </menu>
     </item>
 </menu>

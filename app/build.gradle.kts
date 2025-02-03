@@ -10,6 +10,7 @@ android {
     defaultConfig {
         applicationId = "com.example.goodlink"
         minSdk = 28
+        //noinspection OldTargetApi
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -45,15 +46,16 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    //noinspection UseTomlInstead
-    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
-    //noinspection UseTomlInstead
-    implementation("com.google.firebase:firebase-analytics")
-    //noinspection UseTomlInstead
-    implementation("com.google.firebase:firebase-firestore:25.0.0")
-    //noinspection UseTomlInstead
-    implementation("com.google.firebase:firebase-messaging:24.0.0")
-
-
+    implementation(platform(libs.google.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.messaging)
+    implementation(libs.play.services.auth)
+    implementation(libs.appcompat)
+    implementation(libs.play.services.base)
+    implementation(libs.emoji2)
+    implementation(libs.androidx.emoji2.bundled)
+    implementation(libs.play.services.base)
+    implementation(libs.androidx.core.ktx)
 
 }

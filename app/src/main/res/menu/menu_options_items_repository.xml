@@ -3,10 +3,6 @@
     <item
         android:id="@+id/favority"
         android:title="@string/adicionar_aos_favoritos" />
-    <item
-        android:id="@+id/addRepository"
-        android:title="@string/adicionar_repositorios" >
-    </item>
 
     <item
         android:id="@+id/copy"

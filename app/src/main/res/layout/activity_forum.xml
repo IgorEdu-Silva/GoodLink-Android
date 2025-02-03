@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/forumScreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Screens.Forum">
@@ -31,16 +31,6 @@
             tools:layout_editor_absoluteY="5dp" />
 
         <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabForm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/formul_rio"
-            android:text="@string/formul_rio"
-            tools:ignore="SpeakableTextPresentCheck"
-            tools:layout_editor_absoluteX="133dp"
-            tools:layout_editor_absoluteY="90dp" />
-
-        <com.google.android.material.tabs.TabItem
             android:id="@+id/tabUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,6 +48,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+    </androidx.viewpager2.widget.ViewPager2>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/FloatingBtnPageCentral"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:importantForAccessibility="no"
+        android:src="@drawable/air_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.877" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
