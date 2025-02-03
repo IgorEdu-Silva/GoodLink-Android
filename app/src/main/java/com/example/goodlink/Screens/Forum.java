@@ -1,8 +1,9 @@
 package com.example.goodlink.Screens;
 
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.service.notification.StatusBarNotification;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,18 +84,33 @@ public class Forum extends AppCompatActivity {
     }
 
     private void sendNotificationToRepositoryOwner() {
+        if (isNotificationAlreadyActive()) {
+            return;
+        }
+
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
                         String token = task.getResult();
-                        int uniqueNotificationId = MessagingService.generateUniqueNotificationId();
-                        MessagingService.sendNotificationToToken(this, token, uniqueNotificationId, "Gostou do que viu?", "Ajude mais pessoas da comunidade e compartilhe um pouco do seu conhecimento!");
+                        MessagingService.sendNotificationToToken(this, token, "Gostou do que viu?", "Ajude mais pessoas da comunidade e compartilhe um pouco do seu conhecimento!");
                     }
                 });
     }
 
+    private boolean isNotificationAlreadyActive() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
+            for (StatusBarNotification notification : notifications) {
+                if (notification.getId() == MessagingService.NOTIFICATION_ID) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private void openFormDialog() {
-        Log.d("Forum", "Abrindo DialogFormFragment...");
         DialogFormFragment dialog = new DialogFormFragment();
         dialog.show(getSupportFragmentManager(), "FormDialog");
     }
