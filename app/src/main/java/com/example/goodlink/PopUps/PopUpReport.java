@@ -1,4 +1,4 @@
-package com.example.goodlink.PopUp;
+package com.example.goodlink.PopUps;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;

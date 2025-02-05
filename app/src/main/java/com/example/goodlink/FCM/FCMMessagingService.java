@@ -1,4 +1,4 @@
-package com.example.goodlink.Functions;
+package com.example.goodlink.FCM;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
@@ -12,12 +12,12 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
-import com.example.goodlink.PopUp.PopUpComment;
+import com.example.goodlink.PopUps.PopUpComment;
 import com.example.goodlink.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-public class MessagingService extends FirebaseMessagingService {
+public class FCMMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMessaging";
     public static final String ACTION_TOKEN_RECEIVED = "com.example.goodlink.ACTION_TOKEN_RECEIVED";
     public static final String EXTRA_TOKEN = "com.example.goodlink.EXTRA_TOKEN";

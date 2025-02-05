@@ -8,8 +8,8 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 
-public class FCMHelper extends FirebaseMessagingService {
-    private static final String TAG = "FCMHelper";
+public class FCMTokens extends FirebaseMessagingService {
+    private static final String TAG = "FCMTokens";
     public static final String FCM_PREFS = "FCM_PREFS";
     public static final String FCM_TOKEN_KEY = "FCM_TOKEN";
 

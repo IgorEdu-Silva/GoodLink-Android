@@ -41,13 +41,14 @@
         android:gravity="center"
         android:textAlignment="center"
         android:textSize="12sp"
+        android:paddingStart="10dp"
         app:layout_constraintBottom_toTopOf="@+id/commentsRepositories"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titulo_Repository"
         app:layout_constraintVertical_bias="1.0"
-        tools:ignore="RtlCompat,VisualLintOverlap" />
+        tools:ignore="RtlCompat,RtlSymmetry,VisualLintOverlap" />
 
     <TextView
         android:id="@+id/nomeUsuario_Repository"

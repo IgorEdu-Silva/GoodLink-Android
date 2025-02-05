@@ -17,7 +17,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.goodlink.Fragments.DialogFormFragment;
-import com.example.goodlink.Functions.MessagingService;
+import com.example.goodlink.FCM.FCMMessagingService;
 import com.example.goodlink.Adapter.AdapterPagerFragments;
 import com.example.goodlink.Functions.HelperNotification;
 import com.example.goodlink.R;
@@ -77,9 +77,9 @@ public class Forum extends AppCompatActivity {
     }
 
     private void sendTokenToMessagingService(String token) {
-        Intent intent = new Intent(this, MessagingService.class);
-        intent.setAction(MessagingService.ACTION_TOKEN_RECEIVED);
-        intent.putExtra(MessagingService.EXTRA_TOKEN, token);
+        Intent intent = new Intent(this, FCMMessagingService.class);
+        intent.setAction(FCMMessagingService.ACTION_TOKEN_RECEIVED);
+        intent.putExtra(FCMMessagingService.EXTRA_TOKEN, token);
         startService(intent);
     }
 
@@ -92,7 +92,7 @@ public class Forum extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
                         String token = task.getResult();
-                        MessagingService.sendNotificationToToken(this, token, "Gostou do que viu?", "Ajude mais pessoas da comunidade e compartilhe um pouco do seu conhecimento!");
+                        FCMMessagingService.sendNotificationToToken(this, token, "Gostou do que viu?", "Ajude mais pessoas da comunidade e compartilhe um pouco do seu conhecimento!");
                     }
                 });
     }
@@ -102,7 +102,7 @@ public class Forum extends AppCompatActivity {
         if (notificationManager != null) {
             StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
             for (StatusBarNotification notification : notifications) {
-                if (notification.getId() == MessagingService.NOTIFICATION_ID) {
+                if (notification.getId() == FCMMessagingService.NOTIFICATION_ID) {
                     return true;
                 }
             }

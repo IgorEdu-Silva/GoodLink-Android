@@ -26,7 +26,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.goodlink.FireBaseManager.FireBaseAuthenticate;
 import com.example.goodlink.FireBaseManager.FireBaseDataBase;
-import com.example.goodlink.Functions.MessagingService;
+import com.example.goodlink.FCM.FCMMessagingService;
 import com.example.goodlink.FireBaseManager.ManagerSession;
 import com.example.goodlink.Functions.HelperNotification;
 import com.example.goodlink.R;
@@ -113,8 +113,8 @@ public class Register extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<String> task) {
                                     if (task.isSuccessful() && task.getResult() != null) {
                                         String token = task.getResult();
-                                        MessagingService messagingService = new MessagingService();
-                                        messagingService.saveTokenToPrefs(token);
+                                        FCMMessagingService FCMMessagingService = new FCMMessagingService();
+                                        FCMMessagingService.saveTokenToPrefs(token);
                                     } else {
                                         Log.e(TAG, "Erro ao obter o token FCM: " + task.getException());
                                     }

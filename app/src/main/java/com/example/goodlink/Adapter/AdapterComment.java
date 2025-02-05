@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goodlink.FireBaseManager.ManagerComment;
-import com.example.goodlink.PopUp.PopUpReport;
+import com.example.goodlink.PopUps.PopUpReport;
 import com.example.goodlink.R;
 
 import java.util.List;

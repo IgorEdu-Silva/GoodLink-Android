@@ -34,9 +34,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goodlink.FireBaseManager.FireStoreDataManager;
 import com.example.goodlink.FireBaseManager.ManagerRepository;
-import com.example.goodlink.PopUp.PopUpComment;
-import com.example.goodlink.PopUp.PopUpDescription;
-import com.example.goodlink.PopUp.PopUpReport;
+import com.example.goodlink.PopUps.PopUpComment;
+import com.example.goodlink.PopUps.PopUpDescription;
+import com.example.goodlink.PopUps.PopUpReport;
 import com.example.goodlink.R;
 import com.google.firebase.database.DatabaseReference;
 

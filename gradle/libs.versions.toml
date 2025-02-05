@@ -11,6 +11,7 @@ junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.6.1"
+lifecycleViewmodelKtx = "2.6.2"
 material = "1.11.0"
 activity = "1.8.2"
 constraintlayout = "2.1.4"
@@ -24,6 +25,8 @@ firebaseDatabase = "20.3.1"
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 androidx-emoji2-bundled = { module = "androidx.emoji2:emoji2-bundled", version.ref = "emoji2Bundled" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleViewmodelKtx" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 emoji2 = { module = "androidx.emoji2:emoji2", version.ref = "emoji2" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }

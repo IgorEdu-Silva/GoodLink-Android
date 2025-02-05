@@ -57,5 +57,9 @@ dependencies {
     implementation(libs.androidx.emoji2.bundled)
     implementation(libs.play.services.base)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
+
 
 }

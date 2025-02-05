@@ -15,12 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -31,7 +31,7 @@ import com.example.goodlink.Adapter.AdapterRepository;
 import com.example.goodlink.FireBaseManager.FireBaseDataBase;
 import com.example.goodlink.FireBaseManager.FireStoreDataManager;
 import com.example.goodlink.FireBaseManager.ManagerRepository;
-import com.example.goodlink.Functions.FilterViewModel;
+import com.example.goodlink.ViewModels.FilterViewModel;
 import com.example.goodlink.Functions.HelperRepositoryDescription;
 import com.example.goodlink.R;
 import com.example.goodlink.Utils.ThemeUtil;
@@ -55,7 +55,6 @@ public class TabRepositoryFragment extends Fragment {
     private FilterViewModel filterViewModel;
     private SearchView searchView;
     private EditText searchEditText;
-    ImageButton btnReloadRepository;
     private Button buttonMenuOptionsMain;
     private Map<Integer, Runnable> menuActionMap;
 
@@ -88,7 +87,6 @@ public class TabRepositoryFragment extends Fragment {
         searchView = view.findViewById(R.id.searchView);
         searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         buttonMenuOptionsMain = view.findViewById(R.id.ButtonMenuOptionsMain);
-        btnReloadRepository = view.findViewById(R.id.ButtonReloadRepository);
 
         adapter = new AdapterRepository(Repository, repositoryRef, getContext(), userIdToNameMap);
         setupRecyclerView();
@@ -184,13 +182,6 @@ public class TabRepositoryFragment extends Fragment {
             }
         });
 
-        btnReloadRepository.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reloadRepositories();
-            }
-        });
-
         buttonMenuOptionsMain.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(requireContext(), v);
             MenuInflater inflaterMenu = popupMenu.getMenuInflater();
@@ -211,6 +202,26 @@ public class TabRepositoryFragment extends Fragment {
 
         setHasOptionsMenu(true);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        firestoreDataManager.getRepositoryFromFirestore(new FireStoreDataManager.OnRepositoryLoadedListener(){
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onRepositoriesLoaded(List<ManagerRepository> repositories){
+                Repository.clear();
+                Repository.addAll(repositories);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onRepositoriesLoadFailed(String errorMessage) {
+                Log.e("TabRepositoryFragment", "Erro ao carregar repositórios: " + errorMessage);
+            }
+        });
     }
 
     @Override

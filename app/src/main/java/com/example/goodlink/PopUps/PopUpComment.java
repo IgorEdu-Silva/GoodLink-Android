@@ -1,4 +1,4 @@
-package com.example.goodlink.PopUp;
+package com.example.goodlink.PopUps;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
