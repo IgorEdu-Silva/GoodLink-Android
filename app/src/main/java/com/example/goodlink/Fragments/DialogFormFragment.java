@@ -13,6 +13,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -24,6 +25,8 @@ import androidx.fragment.app.DialogFragment;
 import com.example.goodlink.R;
 
 public class DialogFormFragment extends DialogFragment {
+    private ImageButton btnBackForm;
+
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialog);
@@ -33,14 +36,14 @@ public class DialogFormFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        btnBackForm = view.findViewById(R.id.btnBackForm);
         Button btnSend = view.findViewById(R.id.btnSend_Form);
         int colorBtn = ContextCompat.getColor(requireContext(), R.color.light_blue);
         int textColorBtn = ContextCompat.getColor(requireContext(), isDarkMode() ? R.color.white : R.color.black);
         btnSend.setTextColor(textColorBtn);
         btnSend.setBackgroundTintList(ColorStateList.valueOf(colorBtn));
 
-        Spinner spinner = view.findViewById(R.id.categoria_Form);
+        Spinner spinner = view.findViewById(R.id.categories);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 requireContext(),
@@ -80,6 +83,7 @@ public class DialogFormFragment extends DialogFragment {
 
         view.post(() -> updateSpinnerOnThemeChange(spinner));
 
+        btnBackForm.setOnClickListener(v -> dismiss());
     }
 
     private void updateSpinnerOnThemeChange(Spinner spinner) {
@@ -148,7 +152,7 @@ public class DialogFormFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Spinner spinner = getView().findViewById(R.id.categoria_Form);
+        Spinner spinner = getView().findViewById(R.id.categories);
         setSpinnerTextColor(spinner);
     }
 

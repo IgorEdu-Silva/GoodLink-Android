@@ -7,6 +7,7 @@ import android.service.notification.StatusBarNotification;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +30,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class Forum extends AppCompatActivity {
     private boolean telaAtiva = true;
     private FloatingActionButton fab;
+    private ImageButton btnBackForm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,17 @@ public class Forum extends AppCompatActivity {
 
         fab = findViewById(R.id.FloatingBtnPageCentral);
         fab.setOnClickListener(view -> openFormDialog());
+
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            public void onPageSelected(int position){
+                super.onPageSelected(position);
+                if (position == 1) {
+                    fab.setVisibility(View.GONE);
+                } else {
+                    fab.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void sendTokenToMessagingService(String token) {

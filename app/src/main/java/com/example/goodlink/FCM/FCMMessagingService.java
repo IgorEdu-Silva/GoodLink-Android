@@ -12,8 +12,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
-import com.example.goodlink.PopUps.PopUpComment;
 import com.example.goodlink.R;
+import com.example.goodlink.Screens.Forum;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -59,7 +59,7 @@ public class FCMMessagingService extends FirebaseMessagingService {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null && !isNotificationAlreadyActive(notificationManager, uniqueKey)) {
-            Intent intent = new Intent(this, PopUpComment.class);
+            Intent intent = new Intent(this, Forum.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -92,7 +92,7 @@ public class FCMMessagingService extends FirebaseMessagingService {
 
     @SuppressLint("ObsoleteSdkInt")
     public static void sendNotificationToToken(Context context, String token, String title, String messageBody) {
-        Intent intent = new Intent(context, PopUpComment.class);
+        Intent intent = new Intent(context, Forum.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -110,6 +110,7 @@ public class FCMMessagingService extends FirebaseMessagingService {
                 notificationManager.createNotificationChannel(channel);
             }
             notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
+
         }
     }
 

@@ -15,15 +15,15 @@
     <string name="Politica_de_privacidade_e_termos_de_uso_juntos">Nós, da GoodLink, estamos comprometidos em garantir a privacidade e segurança das informações fornecidas por nossos usuários. Ao utilizar nosso aplicativo, você concorda com nossas políticas de privacidade e termos de uso. Coleta de Informações: Coletamos informações pessoais, como nome e e-mail, e dados de navegação para melhorar sua experiência em nosso aplicativo. Essas informações são utilizadas internamente e não são compartilhadas com terceiros sem seu consentimento. Aceitação dos Termos: Ao acessar nosso aplicativo, você concorda com nossa política de privacidade e termos de uso. Caso discorde de alguma cláusula, recomendamos que não prossiga utilizando nossos serviços. Essas políticas estão sujeitas a alterações, por isso, recomendamos revisar periodicamente esta página para se manter informado sobre nossas práticas. Para obter informações detalhadas sobre nossa política de privacidade e termos de uso, consulte nossa página específica sobre o assunto. A Política de Site é um conjunto de regras e diretrizes que regem a interação dos usuários com a plataforma. Ao utilizar este site, você concorda com os termos descritos nesta política. O site se reserva o direito de coletar informações pessoais dos usuários, incluindo, mas não se limitando a: nome, e-mail e informações de acesso. Esses dados podem ser utilizados para melhorar a experiência do usuário e oferecer conteúdo personalizado. O uso deste site implica na aceitação e concordância com a política de cookies, que pode ser utilizada para rastrear suas atividades e melhorar a funcionalidade do site. Qualquer conteúdo gerado pelos usuários deve estar de acordo com as diretrizes da comunidade. Conteúdo inapropriado, discriminatório ou ilegal não será tolerado e pode resultar na remoção do usuário e de seu conteúdo.</string>
     <string name="li_e_aceito_os_termos_e_politica">Li e aceito os termos e politica</string>
     <string name="categoria">Categoria</string>
-    <string name="descri_o">Descrição</string>
-    <string name="linkdorepositorio">Link do repositório</string>
-    <string name="nome_do_canal">Nome do criador</string>
-    <string name="linkdocanal">Link do criador</string>
+    <string name="descri_o">Descrição do conteúdo</string>
+    <string name="linkContent">Link do conteúdo</string>
+    <string name="nameOfCreator">Nome do criador</string>
+    <string name="urlFromCreator">Créditos ao criador</string>
     <string name="textview">TextView</string>
     <string name="t_tulo">Título</string>
     <string name="goodlink">GoodLink</string>
     <string name="este_aplicativo_foi_criado_para_fins_estudantis">Este aplicativo foi criado para fins estudantis.</string>
-    <string name="titulo">Titulo</string>
+    <string name="titulo">Título</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="repositorios">repositórios</string>
@@ -42,7 +42,7 @@
     <string name="esqueceu_a_senha">Esqueceu a senha?</string>
     <string name="voltar">voltar\n</string>
     <string name="confirmar">Confirmar</string>
-    <string name="tenha_consci_ncia_ao_preencher_o_formul_rio_links_suspeitos_ser_o_retirados_e_sua_conta_ser_banida_permanentemente">Tenha consciência ao preencher o formulário, links suspeitos serão retirados e sua conta será banida permanentemente.</string>
+    <string name="Aviso_para_postagem_de_formulários"><b>Repudiamos conteúdos de caráter sexual em nossa plataforma, e qualquer violação será denunciada formalmente às autoridades competentes.</b></string>
     <string name="ver_mais">ver mais</string>
     <string name="regular">Regular</string>
     <string name="ruim">Ruim</string>

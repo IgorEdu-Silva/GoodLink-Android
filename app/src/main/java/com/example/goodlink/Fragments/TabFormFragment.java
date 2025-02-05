@@ -73,12 +73,12 @@ public class TabFormFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
-        tituloEditText = view.findViewById(R.id.tituloRepository_Form);
-        descricaoEditText = view.findViewById(R.id.descricaoRepository_Form);
-        nomeCanalEditText = view.findViewById(R.id.nomeCanal_Form);
-        iframeEditText = view.findViewById(R.id.iframe_Form);
-        urlCanalEditText = view.findViewById(R.id.urlCanal_Form);
-        categoriaSpinner = view.findViewById(R.id.categoria_Form);
+        tituloEditText = view.findViewById(R.id.titleOfLink);
+        descricaoEditText = view.findViewById(R.id.descriptionContent);
+        nomeCanalEditText = view.findViewById(R.id.nameOfCreator);
+        iframeEditText = view.findViewById(R.id.urlFromContent);
+        urlCanalEditText = view.findViewById(R.id.urlFromCreator);
+        categoriaSpinner = view.findViewById(R.id.categories);
         enviarButton = view.findViewById(R.id.btnSend_Form);
 
         repository = new ArrayList<>();
@@ -90,7 +90,7 @@ public class TabFormFragment extends Fragment {
             @Override
             public void onKeyboardVisibilityChanged(boolean isVisible, int keyboardHeight) {
                 if (isVisible) {
-                    scrollIfNeeded(view, R.id.categoria_Form);
+                    scrollIfNeeded(view, R.id.categories);
                 } else {
                     resetScroll(view);
                 }
