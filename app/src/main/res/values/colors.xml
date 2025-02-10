@@ -15,8 +15,5 @@
     <color name="light_blue">#0099DD</color>
     <color name="light_blue_holo">#0078bd</color>
     <color name="transparent">#00FFFFFF</color>
-    <color name="red">#00FF0000</color>
-    <color name="colorSurface">#FFFFFF</color>
-    <color name="colorOnSurface">#000000</color>
-
+    <color name="red">#AEFF0000</color>
 </resources>

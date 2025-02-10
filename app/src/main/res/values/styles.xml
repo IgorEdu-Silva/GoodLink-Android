@@ -33,7 +33,8 @@
     </style>
 
     <style name="CustomSearchView" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorControlNormal">@color/light_blue</item>
+        <item name="android:textColorPrimary">?attr/colorOnSurface</item>
+        <item name="android:textColorSecondary">@color/light_blue</item>
     </style>
 
     <style name="CustomRadioButtonStyle">

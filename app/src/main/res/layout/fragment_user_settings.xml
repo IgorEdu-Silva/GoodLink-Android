@@ -7,23 +7,42 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.UserSettingsFragment">
 
+    <TextView
+        android:id="@+id/textConfigName"
+        android:layout_width="180dp"
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:text="@string/configura_es"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.014"
+        tools:ignore="TextSizeCheck" />
+
     <SearchView
         android:id="@+id/searchConfig"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:gravity="start|center"
+        android:textAlignment="center"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.088"
-        app:layout_constraintWidth_percent="0.98" />
+        app:layout_constraintVertical_bias="0.065"
+        app:layout_constraintWidth_percent="0.98"
+        app:theme="@style/CustomSearchView" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
+        android:paddingTop="10dp"
         app:layout_constraintBottom_toTopOf="@+id/btnLogoutConfig"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -159,9 +178,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="start|center"
-                android:textSize="20sp"
                 android:paddingStart="10dp"
                 android:text="Acessibilidade"
+                android:textSize="20sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
         </LinearLayout>
 
@@ -234,7 +253,6 @@
                 tools:ignore="HardcodedText,RtlSymmetry" />
         </LinearLayout>
 
-
     </LinearLayout>
 
     <Button
@@ -252,30 +270,4 @@
         app:layout_constraintWidth_percent="0.98"
         tools:ignore="TextContrastCheck,VisualLintButtonSize" />
 
-    <Button
-        android:id="@+id/btnBackConfig"
-        android:layout_width="40dp"
-        android:layout_height="35dp"
-        android:background="@drawable/back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.01"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023"
-        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-    <TextView
-        android:id="@+id/textConfigName"
-        android:layout_width="180dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="@string/configura_es"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023"
-        tools:ignore="TextSizeCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

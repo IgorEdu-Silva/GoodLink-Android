@@ -102,6 +102,8 @@
     <string name="spam_ou_enganoso">Spam ou enganoso</string>
     <string name="desinforma_o">Desinformação</string>
     <string name="adicionar_reposit_rio">Adicionar repositório</string>
+    <string name="nome_de_usu_rio">Nome de usuário</string>
+    <string name="deletar_conta">Deletar conta</string>
 
 
     <string-array name="categories">

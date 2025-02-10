@@ -65,10 +65,10 @@ public class Forum extends AppCompatActivity {
                 (tab, position) -> {
                     switch (position) {
                         case 0:
-                            tab.setText("Repositórios");
+                            tab.setIcon(R.drawable.btn_home);
                             break;
                         case 1:
-                            tab.setText("Usuários");
+                            tab.setIcon(R.drawable.btn_settings);
                             break;
                     }
                 }

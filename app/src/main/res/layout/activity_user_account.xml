@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    tools:context=".Screens.UserAccount">
+
+    <LinearLayout
+        android:id="@+id/layoutAccountInfo"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:background="@drawable/border_blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.104">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/usernameUserSettings"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:text="@string/nome_de_usu_rio" />
+
+            <TextView
+                android:id="@+id/usernameUserSettingsHint"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:paddingEnd="30dp"
+                android:text="@string/nome_de_usu_rio"
+                android:textAlignment="textEnd"
+                tools:ignore="RtlCompat,RtlSymmetry" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/emailUserSettings"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:text="@string/email" />
+
+            <TextView
+                android:id="@+id/emailUserSettingsHint"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:paddingEnd="30dp"
+                android:text="@string/email"
+                android:textAlignment="textEnd"
+                tools:ignore="RtlCompat,RtlSymmetry" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/passwordUserSettings"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:text="@string/senha"
+            android:padding="8dp"/>
+
+        <TextView
+            android:id="@+id/deleteAccountUserSettings"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:text="@string/deletar_conta"
+            android:textColor="@color/red"
+            android:padding="8dp"/>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

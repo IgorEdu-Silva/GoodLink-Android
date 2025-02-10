@@ -34,7 +34,6 @@ import com.example.goodlink.FireBaseManager.ManagerRepository;
 import com.example.goodlink.ViewModels.FilterViewModel;
 import com.example.goodlink.Functions.HelperRepositoryDescription;
 import com.example.goodlink.R;
-import com.example.goodlink.Utils.ThemeUtil;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
@@ -84,14 +83,11 @@ public class TabRepositoryFragment extends Fragment {
         recyclerView = view.findViewById(R.id.viewRepository);
         Repository = new ArrayList<>();
         firestoreDataManager = new FireStoreDataManager();
-        searchView = view.findViewById(R.id.searchView);
-        searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        searchView = view.findViewById(R.id.searchRepository);
         buttonMenuOptionsMain = view.findViewById(R.id.ButtonMenuOptionsMain);
 
         adapter = new AdapterRepository(Repository, repositoryRef, getContext(), userIdToNameMap);
         setupRecyclerView();
-
-        ThemeUtil.applyThemeToTextView(searchEditText, requireContext());
 
         firestoreDataManager.getRepositoryFromFirestore(new FireStoreDataManager.OnRepositoryLoadedListener() {
             @SuppressLint("NotifyDataSetChanged")
@@ -150,6 +146,10 @@ public class TabRepositoryFragment extends Fragment {
         });
 
         filterViewModel = new ViewModelProvider(requireActivity()).get(FilterViewModel.class);
+
+        searchView.setFocusable(true);
+        searchView.setFocusableInTouchMode(true);
+        searchView.setIconifiedByDefault(false);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

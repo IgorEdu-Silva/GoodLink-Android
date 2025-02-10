@@ -256,7 +256,7 @@
             android:id="@+id/btnBackForm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btnback"
+            android:src="@drawable/btn_back"
             android:background="@color/transparent"
             app:layout_constraintBottom_toTopOf="@+id/FormInfo"
             app:layout_constraintEnd_toEndOf="parent"

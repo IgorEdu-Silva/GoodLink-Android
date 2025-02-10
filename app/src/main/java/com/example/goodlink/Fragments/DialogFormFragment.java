@@ -56,7 +56,7 @@ public class DialogFormFragment extends DialogFragment {
 
         setSpinnerTextColor(spinner);
 
-        int textColor = ContextCompat.getColor(requireContext(), R.color.colorOnSurface);
+        int textColor = ContextCompat.getColor(requireContext(), R.color.black);
 
         if (view instanceof TextView) {
             ((TextView) spinner.getSelectedView()).setTextColor(textColor);
@@ -65,7 +65,7 @@ public class DialogFormFragment extends DialogFragment {
         spinner.post(() -> {
            View selectedView = spinner.getSelectedView();
            if (selectedView instanceof TextView) {
-                ((TextView) spinner.getSelectedView()).setTextColor(getResources().getColor(R.color.colorOnSurface));
+                ((TextView) spinner.getSelectedView()).setTextColor(getResources().getColor(R.color.black));
            }
         });
 
@@ -115,9 +115,9 @@ public class DialogFormFragment extends DialogFragment {
 
     private int getSpinnerTextColor() {
         if (isDarkMode()) {
-            return R.color.colorSurface;
+            return R.color.white;
         } else {
-            return R.color.colorOnSurface;
+            return R.color.black;
         }
     }
 
