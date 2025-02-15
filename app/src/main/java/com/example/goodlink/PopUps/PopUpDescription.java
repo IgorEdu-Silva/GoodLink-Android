@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.goodlink.R;
+import com.example.goodlink.Utils.FontSizeUtils;
 
 public class PopUpDescription extends DialogFragment {
     private String fullDescriptionText;
@@ -87,6 +88,8 @@ public class PopUpDescription extends DialogFragment {
                 dismiss();
             }
         });
+
+        FontSizeUtils.applySpecificFontSize(fullDescriptionTextView, FontSizeUtils.getFontSize(getContext()));
 
         return view;
     }

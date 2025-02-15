@@ -21,6 +21,7 @@ import com.example.goodlink.FireBaseManager.FireBaseAuthenticate;
 import com.example.goodlink.FireBaseManager.FireBaseDataBase;
 import com.example.goodlink.FireBaseManager.ManagerSession;
 import com.example.goodlink.R;
+import com.example.goodlink.Utils.FontSizeUtils;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity {
@@ -44,11 +45,16 @@ public class Login extends AppCompatActivity {
         mAuthenticator = new FireBaseAuthenticate(database);
         managerSession = new ManagerSession(this);
 
+        EditText editTextEmail = findViewById(R.id.editTextEmail);
+        EditText editTextPassword = findViewById(R.id.editTextPassword);
+        TextView connectEmail = findViewById(R.id.connectEmailPageLogin);
+        CheckBox checkBoxLog = findViewById(R.id.checkBoxLog);
+
         if (managerSession.isLoggedIn()) {
             goToActivity();
         }
 
-        Button buttonRegisterPager = findViewById(R.id.buttonRegisterPager);
+        TextView buttonRegisterPager = findViewById(R.id.btnRegisterPage);
         buttonRegisterPager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,24 +63,11 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        Button buttonLoginPager = findViewById(R.id.buttonLoginPager);
-        buttonLoginPager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!Login.this.getClass().equals(Login.class)) {
-                    Intent intent = new Intent(Login.this, Login.class);
-                    startActivity(intent);
-                }
-            }
-        });
 
         Button btnLogin = findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText editTextEmail = findViewById(R.id.editTextEmail);
-                EditText editTextPassword = findViewById(R.id.editTextPassword);
-
                 String email = editTextEmail.getText().toString();
                 String senha = editTextPassword.getText().toString();
 
@@ -83,7 +76,6 @@ public class Login extends AppCompatActivity {
                     return;
                 }
 
-                CheckBox checkBoxLog = findViewById(R.id.checkBoxLog);
                 boolean manterLogado = checkBoxLog.isChecked();
                 mAuthenticator.loginUser(email, senha, new AuthenticationListener() {
                     @Override
@@ -104,14 +96,23 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        TextView textViewForgotPass = findViewById(R.id.forgotePass);
-        textViewForgotPass.setOnClickListener(new View.OnClickListener() {
+        TextView ForgotPass = findViewById(R.id.forgotePass);
+        ForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Login.this, ResetPass.class);
                 startActivity(intent);
             }
         });
+
+        FontSizeUtils.applySpecificFontSize(connectEmail, FontSizeUtils.getFontSize(this));
+        FontSizeUtils.applySpecificFontSize(btnLogin, FontSizeUtils.getFontSize(this));
+        FontSizeUtils.applySpecificFontSize(editTextEmail, FontSizeUtils.getFontSize(this));
+        FontSizeUtils.applySpecificFontSize(editTextPassword, FontSizeUtils.getFontSize(this));
+        FontSizeUtils.applySpecificFontSize(buttonRegisterPager, FontSizeUtils.getFontSize(this));
+        FontSizeUtils.applySpecificFontSize(checkBoxLog, FontSizeUtils.getFontSize(this));
+        FontSizeUtils.applySpecificFontSize(ForgotPass, FontSizeUtils.getFontSize(this));
+
     }
 
     private void goToActivity() {

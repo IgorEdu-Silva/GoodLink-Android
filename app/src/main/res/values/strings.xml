@@ -104,6 +104,14 @@
     <string name="adicionar_reposit_rio">Adicionar repositório</string>
     <string name="nome_de_usu_rio">Nome de usuário</string>
     <string name="deletar_conta">Deletar conta</string>
+    <string name="IntroductionText">Bem vindo ao GoodLink, o seu aplicativo para compartilhar preciosos links. Fiz o projeto com a intenção de poder ajudar as pessoas que não possuem um computador e mesmo assim gostariam de compartilhar algo com a comunidade. Espero que curtam a experiencia e lembrem-se que eu não quero ser preso, então tomem cuidado com o que compartilham. \nAgradeço desde já por estar utilizando meu aplicativo!</string>
+    <string name="fontSizeChoice">Escolha o tamanho da fonte para o aplicativo</string>
+    <string name="escolha_o_tema_do_aplicativo">Escolha o tema do aplicativo</string>
+    <string name="modo_escuro">Modo Escuro</string>
+    <string name="modo_claro">Modo Claro</string>
+    <string name="n_o_tem_uma_conta_registre_se">Não tem uma conta? Registre-se</string>
+    <string name="j_possui_uma_conta_entrar">Já possui uma conta? Entrar</string>
+    <string name="pular">Pular</string>
 
 
     <string-array name="categories">

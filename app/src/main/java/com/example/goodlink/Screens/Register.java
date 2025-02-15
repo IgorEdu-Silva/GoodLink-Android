@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -30,6 +31,7 @@ import com.example.goodlink.FCM.FCMMessagingService;
 import com.example.goodlink.FireBaseManager.ManagerSession;
 import com.example.goodlink.Functions.HelperNotification;
 import com.example.goodlink.R;
+import com.example.goodlink.Utils.FontSizeUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -57,11 +59,15 @@ public class Register extends AppCompatActivity {
 
         HelperNotification.requestNotificationPermission(this);
 
+        EditText editTextName = findViewById(R.id.editTextName);
+        EditText editTextEmail = findViewById(R.id.editTextEmail);
+        EditText editTextPassword = findViewById(R.id.editTextPassword);
+
         if (managerSession.isLoggedIn()) {
             goToActivity();
         }
 
-        Button buttonLoginPager = findViewById(R.id.buttonLoginPager);
+        TextView buttonLoginPager = findViewById(R.id.btnLoginPage);
         buttonLoginPager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,25 +76,11 @@ public class Register extends AppCompatActivity {
             }
         });
 
-        Button buttonRegisterPager = findViewById(R.id.buttonRegisterPager);
-        buttonRegisterPager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!Register.this.getClass().equals(Register.class)) {
-                    Intent intent = new Intent(Register.this, Register.class);
-                    startActivity(intent);
-                }
-            }
-        });
 
         Button btnRegister = findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText editTextName = findViewById(R.id.editTextName);
-                EditText editTextEmail = findViewById(R.id.editTextEmail);
-                EditText editTextPassword = findViewById(R.id.editTextPassword);
-
                 String nome = editTextName.getText().toString();
                 String email = editTextEmail.getText().toString();
                 String senha = editTextPassword.getText().toString();
@@ -140,6 +132,13 @@ public class Register extends AppCompatActivity {
         SpannableString spannableStringTermos = getSpannableStringTermos(checkBoxText);
         checkBoxServices.setText(spannableStringTermos);
         checkBoxServices.setMovementMethod(LinkMovementMethod.getInstance());
+
+        FontSizeUtils.applySpecificFontSize(editTextEmail, FontSizeUtils.getFontSize(this));
+        FontSizeUtils.applySpecificFontSize(editTextName, FontSizeUtils.getFontSize(this));
+        FontSizeUtils.applySpecificFontSize(editTextPassword, FontSizeUtils.getFontSize(this));
+        FontSizeUtils.applySpecificFontSize(buttonLoginPager, FontSizeUtils.getFontSize(this));
+        FontSizeUtils.applySpecificFontSize(btnRegister, FontSizeUtils.getFontSize(this));
+        FontSizeUtils.applySpecificFontSize(checkBoxServices, FontSizeUtils.getFontSize(this));
     }
 
     @NonNull

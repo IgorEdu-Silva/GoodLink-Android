@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.goodlink.R;
+import com.example.goodlink.Utils.FontSizeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -130,6 +131,14 @@ public class PopUpReport extends DialogFragment {
                 sendReport();
             }
         });
+
+        FontSizeUtils.applySpecificFontSize(closeButton, FontSizeUtils.getFontSize(getContext()));
+        FontSizeUtils.applySpecificFontSize(sendReport, FontSizeUtils.getFontSize(getContext()));
+        FontSizeUtils.applySpecificFontSize(firstOption, FontSizeUtils.getFontSize(getContext()));
+        FontSizeUtils.applySpecificFontSize(secondOption, FontSizeUtils.getFontSize(getContext()));
+        FontSizeUtils.applySpecificFontSize(thirdOption, FontSizeUtils.getFontSize(getContext()));
+        FontSizeUtils.applySpecificFontSize(forthOption, FontSizeUtils.getFontSize(getContext()));
+        FontSizeUtils.applySpecificFontSize(fifthOption, FontSizeUtils.getFontSize(getContext()));
 
         return view;
     }

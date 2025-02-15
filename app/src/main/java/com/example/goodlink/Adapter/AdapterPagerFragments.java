@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.goodlink.Fragments.TabRepositoryFragment;
-import com.example.goodlink.Fragments.UserSettingsFragment;
+import com.example.goodlink.Fragments.FragmentPageRepository;
+import com.example.goodlink.Fragments.FragmentPageUserSettings;
 
 public class AdapterPagerFragments extends FragmentStateAdapter {
     public AdapterPagerFragments(FragmentActivity fragmentActivity) {
@@ -18,9 +18,9 @@ public class AdapterPagerFragments extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new TabRepositoryFragment();
+                return new FragmentPageRepository();
             case 1:
-                return new UserSettingsFragment();
+                return new FragmentPageUserSettings();
             default:
                 return null;
         }

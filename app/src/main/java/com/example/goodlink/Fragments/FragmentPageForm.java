@@ -37,7 +37,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class TabFormFragment extends Fragment {
+public class FragmentPageForm extends Fragment {
     private EditText tituloEditText;
     private EditText descricaoEditText;
     private EditText nomeCanalEditText;
@@ -53,12 +53,12 @@ public class TabFormFragment extends Fragment {
     private List<ManagerRepository> repository;
     private AdapterRepository adapterRepository;
 
-    public TabFormFragment(DatabaseReference databaseReference, Map<String, String> userIdToNameMap, RecyclerView recyclerView) {
+    public FragmentPageForm(DatabaseReference databaseReference, Map<String, String> userIdToNameMap, RecyclerView recyclerView) {
         this.databaseReference = databaseReference;
         this.userIdToNameMap = userIdToNameMap;
         this.recyclerView = recyclerView;
     }
-    public TabFormFragment() {
+    public FragmentPageForm() {
         this.databaseReference = null;
         this.userIdToNameMap = null;
         this.recyclerView = null;
@@ -68,7 +68,7 @@ public class TabFormFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_tab_form, container, false);
+        View view = inflater.inflate(R.layout.fragment_page_form, container, false);
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();

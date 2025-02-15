@@ -38,6 +38,7 @@ import com.example.goodlink.PopUps.PopUpComment;
 import com.example.goodlink.PopUps.PopUpDescription;
 import com.example.goodlink.PopUps.PopUpReport;
 import com.example.goodlink.R;
+import com.example.goodlink.Utils.FontSizeUtils;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
@@ -96,6 +97,9 @@ public class AdapterRepository extends RecyclerView.Adapter<AdapterRepository.Re
     public void onBindViewHolder(@NonNull RepositoryViewHolder holder, int position) {
         if (position >= 0 && position < repositories.size()) {
             ManagerRepository repository = repositories.get(position);
+
+
+
 
             if (repository != null) {
                 holder.bind(repository);
@@ -439,6 +443,15 @@ public class AdapterRepository extends RecyclerView.Adapter<AdapterRepository.Re
                 }
 
                 dataPubTextView.setText(managerRepository.getDataPub());
+
+                float fontSize = FontSizeUtils.getFontSize(itemView.getContext());
+                FontSizeUtils.applySpecificFontSize(tituloTextView, fontSize);
+                FontSizeUtils.applySpecificFontSize(descricaoTextView, fontSize);
+                FontSizeUtils.applySpecificFontSize(nomeCanalTextView, fontSize);
+                FontSizeUtils.applySpecificFontSize(nomeUsuarioTextView, fontSize);
+                FontSizeUtils.applySpecificFontSize(dataPubTextView, fontSize);
+                FontSizeUtils.applySpecificFontSize(avaliacaoRepository, fontSize);
+                FontSizeUtils.applySpecificFontSize(comentariosRepositories, fontSize);
             }
         }
     }

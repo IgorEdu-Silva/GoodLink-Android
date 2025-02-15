@@ -31,7 +31,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Map;
 
-public class TabUsersFragment extends Fragment {
+public class FragmentPageUsers extends Fragment {
     private FireBaseAuthenticate mAuthenticator;
     private ManagerSession managerSession;
     private TextView usernameTextView;
@@ -50,7 +50,7 @@ public class TabUsersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tab_users, container, false);
+        View view = inflater.inflate(R.layout.fragment_page_users, container, false);
 
         mAuthenticator = new FireBaseAuthenticate(new FireBaseDataBase());
 
@@ -87,7 +87,7 @@ public class TabUsersFragment extends Fragment {
 
                 @Override
                 public void onUserIdToNameMapLoadFailed(String errorMessage) {
-                    Log.e("TabUsersFragment", "Erro ao carregar mapa de ID de usuário para nome de usuário: " + errorMessage);
+                    Log.e("FragmentPageUsers", "Erro ao carregar mapa de ID de usuário para nome de usuário: " + errorMessage);
                 }
             });
         }

@@ -43,7 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TabRepositoryFragment extends Fragment {
+public class FragmentPageRepository extends Fragment {
     private RecyclerView recyclerView;
     private AdapterRepository adapter;
     private List<ManagerRepository> Repository;
@@ -79,7 +79,7 @@ public class TabRepositoryFragment extends Fragment {
         FireBaseDataBase firebaseDatabase = new FireBaseDataBase();
 //        firebaseDatabase.testConnection();
 
-        View view = inflater.inflate(R.layout.fragment_tab_repository, container, false);
+        View view = inflater.inflate(R.layout.fragment_page_repository, container, false);
         recyclerView = view.findViewById(R.id.viewRepository);
         Repository = new ArrayList<>();
         firestoreDataManager = new FireStoreDataManager();
@@ -113,14 +113,14 @@ public class TabRepositoryFragment extends Fragment {
                                 try {
                                     Toast.makeText(requireContext(), "Repositórios carregados com sucesso", Toast.LENGTH_SHORT).show();
                                 } catch (IllegalStateException e) {
-                                    Log.e("TabRepositoryFragment", "Contexto não disponível", e);
+                                    Log.e("FragmentPageRepository", "Contexto não disponível", e);
                                 }
                             }
                         }
 
                         @Override
                         public void onUserIdToNameMapLoadFailed(String errorMessage) {
-                            Log.e("TabRepositoryFragment", "Erro ao carregar mapa de ID de usuário para nome de usuário: " + errorMessage);
+                            Log.e("FragmentPageRepository", "Erro ao carregar mapa de ID de usuário para nome de usuário: " + errorMessage);
                         }
                     });
                 }
@@ -128,20 +128,20 @@ public class TabRepositoryFragment extends Fragment {
 
             @Override
             public void onRepositoriesLoadFailed(String errorMessage) {
-                Log.e("TabRepositoryFragment", "Erro ao carregar repositórios do Firestore: " + errorMessage);
+                Log.e("FragmentPageRepository", "Erro ao carregar repositórios do Firestore: " + errorMessage);
             }
         });
 
         firestoreDataManager.getUserIdToNameMap(new FireStoreDataManager.OnUserIdToNameMapListener() {
             @Override
             public void onUserIdToNameMapLoaded(Map<String, String> userIdToNameMap) {
-                TabRepositoryFragment.this.userIdToNameMap = userIdToNameMap;
+                FragmentPageRepository.this.userIdToNameMap = userIdToNameMap;
                 setupRecyclerView();
             }
 
             @Override
             public void onUserIdToNameMapLoadFailed(String errorMessage) {
-                Log.e("TabRepositoryFragment", "Erro ao carregar mapa de ID de usuário para nome de usuário: " + errorMessage);
+                Log.e("FragmentPageRepository", "Erro ao carregar mapa de ID de usuário para nome de usuário: " + errorMessage);
             }
         });
 
@@ -219,7 +219,7 @@ public class TabRepositoryFragment extends Fragment {
 
             @Override
             public void onRepositoriesLoadFailed(String errorMessage) {
-                Log.e("TabRepositoryFragment", "Erro ao carregar repositórios: " + errorMessage);
+                Log.e("FragmentPageRepository", "Erro ao carregar repositórios: " + errorMessage);
             }
         });
     }
@@ -349,7 +349,7 @@ public class TabRepositoryFragment extends Fragment {
 
             @Override
             public void onRepositoriesLoadFailed(String errorMessage) {
-                Log.e("TabRepositoryFragment", "Erro ao carregar repositórios do Firestore: " + errorMessage);
+                Log.e("FragmentPageRepository", "Erro ao carregar repositórios do Firestore: " + errorMessage);
                 Toast.makeText(getContext(), "Erro ao recarregar repositórios", Toast.LENGTH_SHORT).show();
             }
         });

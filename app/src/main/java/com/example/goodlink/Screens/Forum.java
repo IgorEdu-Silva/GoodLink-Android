@@ -17,7 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.goodlink.Fragments.DialogFormFragment;
+import com.example.goodlink.Fragments.FragmentDialogForm;
 import com.example.goodlink.FCM.FCMMessagingService;
 import com.example.goodlink.Adapter.AdapterPagerFragments;
 import com.example.goodlink.Functions.HelperNotification;
@@ -124,7 +124,7 @@ public class Forum extends AppCompatActivity {
     }
 
     private void openFormDialog() {
-        DialogFormFragment dialog = new DialogFormFragment();
+        FragmentDialogForm dialog = new FragmentDialogForm();
         dialog.show(getSupportFragmentManager(), "FormDialog");
     }
 
@@ -132,7 +132,7 @@ public class Forum extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_tab_form, container, false);
+            return inflater.inflate(R.layout.fragment_page_form, container, false);
         }
     }
 

@@ -7,47 +7,34 @@
     android:layout_height="match_parent"
     tools:context=".Screens.Register">
 
-    <Button
-        android:id="@+id/buttonLoginPager"
+    <TextView
+        android:id="@+id/btnLoginPage"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:text="@string/entrar"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/emailLogin"
+        android:layout_height="20dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/j_possui_uma_conta_entrar"
+        android:textSize="14sp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.222"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:layout_constraintWidth_percent="0.35"
+        app:layout_constraintTop_toBottomOf="@+id/layoutAccountsBtn"
+        app:layout_constraintVertical_bias="0.022"
+        app:layout_constraintWidth_percent="0.65"
         tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck,VisualLintButtonSize" />
 
-    <Button
-        android:id="@+id/buttonRegisterPager"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:text="@string/registrar"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/emailLogin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.795"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:layout_constraintWidth_percent="0.35"
-        tools:ignore="TextContrastCheck,VisualLintButtonSize" />
-
     <TextView
-        android:id="@+id/emailLogin"
+        android:id="@+id/connectEmailPageRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cadastrar_se_com_email"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/buttonRegisterPager"
-        app:layout_constraintHorizontal_bias="0.48"
-        app:layout_constraintStart_toStartOf="@+id/buttonLoginPager"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.353" />
+        app:layout_constraintVertical_bias="0.260" />
 
     <EditText
         android:id="@+id/editTextName"
@@ -61,10 +48,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.06"
-        app:layout_constraintHorizontal_bias="0.519"
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.393"
+        app:layout_constraintVertical_bias="0.334"
         app:layout_constraintWidth_percent="0.7"
         tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize" />
 
@@ -135,5 +122,50 @@
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintWidth_percent="0.7"
         tools:ignore="TouchTargetSizeCheck,VisualLintButtonSize" />
+
+    <ImageView
+        android:id="@+id/separatorLine"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:background="@color/light_blue"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxServices"
+        app:layout_constraintVertical_bias="0.042"
+        app:layout_constraintWidth_percent="0.65"
+        tools:ignore="ImageContrastCheck" />
+
+    <LinearLayout
+        android:id="@+id/layoutAccountsBtn"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/separatorLine"
+        app:layout_constraintVertical_bias="0.093"
+        app:layout_constraintWidth_percent="0.40">
+
+        <ImageButton
+            android:id="@+id/btnGoogle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:background="@mipmap/ic_google"
+            android:importantForAccessibility="no"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <ImageButton
+            android:id="@+id/btnGitHub"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@mipmap/ic_github"
+            android:importantForAccessibility="no"
+            tools:ignore="TouchTargetSizeCheck" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

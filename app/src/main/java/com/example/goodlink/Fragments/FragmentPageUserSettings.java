@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.example.goodlink.R;
 
-public class UserSettingsFragment extends Fragment {
+public class FragmentPageUserSettings extends Fragment {
     private SearchView searchConfig;
     private ImageView ico_config_account;
     private TextView text_config_account;
@@ -33,7 +33,7 @@ public class UserSettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_user_settings, container, false);
+        View view = inflater.inflate(R.layout.fragment_page_user_settings, container, false);
 
         searchConfig = view.findViewById(R.id.searchConfig);
         searchConfig.setFocusable(true);

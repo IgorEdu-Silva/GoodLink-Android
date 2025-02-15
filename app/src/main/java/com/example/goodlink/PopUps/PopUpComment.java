@@ -18,6 +18,7 @@ import com.example.goodlink.FireBaseManager.ManagerComment;
 import com.example.goodlink.FireBaseManager.FireStoreDataManager;
 import com.example.goodlink.Adapter.AdapterComment;
 import com.example.goodlink.R;
+import com.example.goodlink.Utils.FontSizeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -102,6 +103,9 @@ public class PopUpComment extends AppCompatActivity {
             syncCommentsWithDatabase();
             finish();
         });
+
+        EditText commentAdd = findViewById(R.id.commentAdd);
+        FontSizeUtils.applySpecificFontSize(commentAdd, FontSizeUtils.getFontSize(this));
 
         initializeMenu();
     }
