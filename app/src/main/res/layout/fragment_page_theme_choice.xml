@@ -25,6 +25,7 @@
         android:id="@+id/btnChoiceTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/transparent"
         android:textOff="@string/modo_escuro"
         android:textOn="@string/modo_claro"
         android:checked="false"

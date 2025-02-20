@@ -24,11 +24,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 
 import com.example.goodlink.FireBaseManager.FireBaseAuthenticate;
 import com.example.goodlink.FireBaseManager.FireBaseDataBase;
 import com.example.goodlink.FCM.FCMMessagingService;
 import com.example.goodlink.FireBaseManager.ManagerSession;
+import com.example.goodlink.Fragments.FragmentPageContainerIntroduction;
 import com.example.goodlink.Functions.HelperNotification;
 import com.example.goodlink.R;
 import com.example.goodlink.Utils.FontSizeUtils;
@@ -65,6 +67,8 @@ public class Register extends AppCompatActivity {
 
         if (managerSession.isLoggedIn()) {
             goToActivity();
+        } else {
+            goToFragment();
         }
 
         TextView buttonLoginPager = findViewById(R.id.btnLoginPage);
@@ -90,8 +94,8 @@ public class Register extends AppCompatActivity {
 
                 if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
                     Toast.makeText(Register.this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show();
-                } else if (senha.length() < 8) {
-                    Toast.makeText(Register.this, "A senha deve ter no mínimo " + 8 + " caracteres", Toast.LENGTH_SHORT).show();
+                } else if (senha.length() < 12) {
+                    Toast.makeText(Register.this, "A senha deve ter no mínimo " + 12 + " caracteres", Toast.LENGTH_SHORT).show();
                 } else if (!aceitouTermos) {
                     Toast.makeText(Register.this, "Por favor, aceite os termos e condições", Toast.LENGTH_SHORT).show();
                 } else {
@@ -175,5 +179,14 @@ public class Register extends AppCompatActivity {
         Intent intent = new Intent(this, Forum.class);
         startActivity(intent);
         finish();
+    }
+
+    private void goToFragment() {
+        if (getSupportFragmentManager().findFragmentById(R.id.ViewPagerIntroduction) == null){
+            Fragment fragment = new FragmentPageContainerIntroduction();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frameLayoutScreenRegister, fragment)
+                    .commit();
+        }
     }
 }

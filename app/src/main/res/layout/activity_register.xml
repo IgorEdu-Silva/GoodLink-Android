@@ -7,14 +7,23 @@
     android:layout_height="match_parent"
     tools:context=".Screens.Register">
 
+    <FrameLayout
+        android:id="@+id/frameLayoutScreenRegister"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/btnLoginPage"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginTop="12dp"
+        android:gravity="center"
         android:text="@string/j_possui_uma_conta_entrar"
         android:textSize="14sp"
-        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
@@ -22,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/layoutAccountsBtn"
         app:layout_constraintVertical_bias="0.022"
         app:layout_constraintWidth_percent="0.65"
-        tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck,VisualLintButtonSize" />
+        tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck,VisualLintButtonSize,TextSizeCheck" />
 
     <TextView
         android:id="@+id/connectEmailPageRegister"
