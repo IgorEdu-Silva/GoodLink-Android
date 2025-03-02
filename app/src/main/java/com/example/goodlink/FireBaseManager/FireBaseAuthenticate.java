@@ -44,61 +44,67 @@ public class FireBaseAuthenticate {
                 });
     }
 
-    public void registerUser(String nome, String email, String password, final Context context) {
+    public void registerUser(String nome, String email, String password, final Context context, final RegistrationCallback callback) {
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             Toast.makeText(context, "Registre-se para poder entrar.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                if (user != null) {
-                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                            .setDisplayName(nome)
-                                            .build();
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(nome)
+                                        .build();
 
-                                    user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-                                                fireStoreDataManager.addUser(user.getUid(), nome, email);
+                                user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+                                            fireStoreDataManager.addUser(user.getUid(), nome, email);
 
-                                                user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            Toast.makeText(context, "E-mail de verificação enviado.", Toast.LENGTH_SHORT).show();
-                                                            FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-                                                            fireStoreDataManager.addUser(user.getUid(), nome, email);
+                                            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(context, "E-mail de verificação enviado.", Toast.LENGTH_SHORT).show();
 
-                                                            if (callback != null) {
-                                                                callback.onRegistrationSuccess();
-                                                            }
-                                                        } else {
-                                                            Toast.makeText(context, "Falha ao enviar e-mail de verificação.", Toast.LENGTH_SHORT).show();
+                                                        if (callback != null) {
+                                                            callback.onRegistrationSuccess();
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(context, "Falha ao enviar e-mail de verificação.", Toast.LENGTH_SHORT).show();
+
+                                                        if (callback != null) {
+                                                            callback.onRegistrationFailure("Falha ao enviar e-mail de verificação.");
                                                         }
                                                     }
-                                                });
-                                            } else {
-                                                Toast.makeText(context, "Falha ao atualizar o nome de usuário.", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        } else {
+                                            Toast.makeText(context, "Falha ao atualizar o nome de usuário.", Toast.LENGTH_SHORT).show();
+
+                                            if (callback != null) {
+                                                callback.onRegistrationFailure("Falha ao atualizar o nome de usuário.");
                                             }
                                         }
-                                    });
-                                }
-                            } else {
-                                Toast.makeText(context, "Registro falhou.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        } else {
+                            Toast.makeText(context, "Registro falhou.", Toast.LENGTH_SHORT).show();
 
-                                if (callback != null) {
-                                    callback.onRegistrationFailure("Registro falhou.");
-                                }
+                            if (callback != null) {
+                                callback.onRegistrationFailure("Registro falhou.");
                             }
                         }
-                    });
+                    }
+                });
     }
 
     public void resetPassword(String email, ResetPasswordListener context) {

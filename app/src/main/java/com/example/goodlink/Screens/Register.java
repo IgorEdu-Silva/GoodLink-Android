@@ -24,118 +24,50 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 
 import com.example.goodlink.FireBaseManager.FireBaseAuthenticate;
 import com.example.goodlink.FireBaseManager.FireBaseDataBase;
 import com.example.goodlink.FCM.FCMMessagingService;
 import com.example.goodlink.FireBaseManager.ManagerSession;
-import com.example.goodlink.Fragments.FragmentPageContainerIntroduction;
 import com.example.goodlink.Functions.HelperNotification;
 import com.example.goodlink.R;
 import com.example.goodlink.Utils.FontSizeUtils;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Register extends AppCompatActivity {
+
     private FireBaseAuthenticate mAuthenticator;
-    private FireBaseDataBase mDatabase;
-    private CheckBox checkBoxServices;
     private ManagerSession managerSession;
+    private EditText editTextName, editTextEmail, editTextPassword;
+    private CheckBox checkBoxServices;
+    private Button btnRegister;
+    private TextView buttonLoginPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.forumScreen), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
-        FireBaseDataBase database = new FireBaseDataBase();
-        mAuthenticator = new FireBaseAuthenticate(database);
-        managerSession = new ManagerSession(this);
-
-        HelperNotification.requestNotificationPermission(this);
-
-        EditText editTextName = findViewById(R.id.editTextName);
-        EditText editTextEmail = findViewById(R.id.editTextEmail);
-        EditText editTextPassword = findViewById(R.id.editTextPassword);
+        initUI();
+        setupInsets();
+        setupFirebase();
 
         if (managerSession.isLoggedIn()) {
-            goToActivity();
-        } else {
-            goToFragment();
+            goToActivity(Forum.class);
         }
+    }
 
-        TextView buttonLoginPager = findViewById(R.id.btnLoginPage);
-        buttonLoginPager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    Intent intent = new Intent(Register.this, Login.class);
-                    startActivity(intent);
-            }
-        });
-
-
-        Button btnRegister = findViewById(R.id.btnRegister);
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String nome = editTextName.getText().toString();
-                String email = editTextEmail.getText().toString();
-                String senha = editTextPassword.getText().toString();
-
-                CheckBox checkBoxServices = findViewById(R.id.checkBoxServices);
-                boolean aceitouTermos = checkBoxServices.isChecked();
-
-                if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
-                    Toast.makeText(Register.this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show();
-                } else if (senha.length() < 12) {
-                    Toast.makeText(Register.this, "A senha deve ter no mínimo " + 12 + " caracteres", Toast.LENGTH_SHORT).show();
-                } else if (!aceitouTermos) {
-                    Toast.makeText(Register.this, "Por favor, aceite os termos e condições", Toast.LENGTH_SHORT).show();
-                } else {
-                    mAuthenticator.registerUser(nome, email, senha, Register.this);
-
-                    FireBaseAuthenticate.RegistrationCallback registrationCallback = new FireBaseAuthenticate.RegistrationCallback() {
-                        @Override
-                        public void onRegistrationSuccess() {
-                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                                @Override
-                                public void onComplete(@NonNull Task<String> task) {
-                                    if (task.isSuccessful() && task.getResult() != null) {
-                                        String token = task.getResult();
-                                        FCMMessagingService FCMMessagingService = new FCMMessagingService();
-                                        FCMMessagingService.saveTokenToPrefs(token);
-                                    } else {
-                                        Log.e(TAG, "Erro ao obter o token FCM: " + task.getException());
-                                    }
-                                }
-                            });
-
-                            Intent intent = new Intent(Register.this, Login.class);
-                            startActivity(intent);
-                            finish();
-                        }
-
-                        @Override
-                        public void onRegistrationFailure(String errorMessage) {
-                        }
-                    };
-
-                }
-            }
-        });
-
-        CheckBox checkBoxServices = findViewById(R.id.checkBoxServices);
-        String checkBoxText = checkBoxServices.getText().toString();
-        SpannableString spannableStringTermos = getSpannableStringTermos(checkBoxText);
-        checkBoxServices.setText(spannableStringTermos);
-        checkBoxServices.setMovementMethod(LinkMovementMethod.getInstance());
+    private void initUI() {
+        editTextName = findViewById(R.id.editTextName);
+        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        checkBoxServices = findViewById(R.id.checkBoxServices);
+        btnRegister = findViewById(R.id.btnRegister);
+        buttonLoginPager = findViewById(R.id.btnLoginPage);
 
         FontSizeUtils.applySpecificFontSize(editTextEmail, FontSizeUtils.getFontSize(this));
         FontSizeUtils.applySpecificFontSize(editTextName, FontSizeUtils.getFontSize(this));
@@ -143,50 +75,139 @@ public class Register extends AppCompatActivity {
         FontSizeUtils.applySpecificFontSize(buttonLoginPager, FontSizeUtils.getFontSize(this));
         FontSizeUtils.applySpecificFontSize(btnRegister, FontSizeUtils.getFontSize(this));
         FontSizeUtils.applySpecificFontSize(checkBoxServices, FontSizeUtils.getFontSize(this));
+
+        SpannableString spannableStringTermos = getSpannableStringText(checkBoxServices.getText().toString(), checkBoxServices);
+        checkBoxServices.setText(spannableStringTermos);
+        checkBoxServices.setMovementMethod(LinkMovementMethod.getInstance());
+
+        SpannableString spannableStringLogin = getSpannableStringText(buttonLoginPager.getText().toString(), buttonLoginPager);
+        buttonLoginPager.setText(spannableStringLogin);
+        buttonLoginPager.setMovementMethod(LinkMovementMethod.getInstance());
+
+        buttonLoginPager.setText(getSpannableStringText(buttonLoginPager.getText().toString(), buttonLoginPager));
+        buttonLoginPager.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    @NonNull
-    private SpannableString getSpannableStringTermos(String checkBoxText) {
-        int startIndex = checkBoxText.indexOf("termos e politica");
-        int endIndex = startIndex + "termos e politica".length();
+    private void setupInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.forumScreen), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
 
+    private void setupFirebase() {
+        FireBaseDataBase database = new FireBaseDataBase();
+        mAuthenticator = new FireBaseAuthenticate(database);
+        managerSession = new ManagerSession(this);
+        HelperNotification.requestNotificationPermission(this);
+    }
+
+    private void registerUser() {
+        String nome = editTextName.getText().toString().trim();
+        String email = editTextEmail.getText().toString().trim();
+        String senha = editTextPassword.getText().toString().trim();
+        boolean aceitouTermos = checkBoxServices.isChecked();
+
+        if (!validateInputs(nome, email, senha, aceitouTermos)) return;
+
+        mAuthenticator.registerUser(nome, email, senha, Register.this, new FireBaseAuthenticate.RegistrationCallback() {
+            @Override
+            public void onRegistrationSuccess() {
+                retrieveFCMToken();
+                goToActivity(Login.class);
+                Toast.makeText(Register.this, "Usuário registrado com sucesso!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRegistrationFailure(String errorMessage) {
+                Toast.makeText(Register.this, "Erro ao registrar: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private boolean validateInputs(String nome, String email, String senha, boolean aceitouTermos) {
+        if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
+            showToast("Por favor, preencha todos os campos");
+            return false;
+        }
+        if (senha.length() < 12) {
+            showToast("A senha deve ter no mínimo 12 caracteres");
+            return false;
+        }
+        if (!aceitouTermos) {
+            showToast("Por favor, aceite os termos e condições");
+            return false;
+        }
+        return true;
+    }
+
+    private void retrieveFCMToken() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                new FCMMessagingService().saveTokenToPrefs(task.getResult());
+            } else {
+                Log.e(TAG, "Erro ao obter o token FCM: ", task.getException());
+            }
+        });
+    }
+
+    private SpannableString getSpannableStringText(String checkBoxText, TextView textView) {
         SpannableString spannableString = new SpannableString(checkBoxText);
-        ForegroundColorSpan colorSpan = new ForegroundColorSpan(0xFF0099DD);
-        spannableString.setSpan(colorSpan, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(@NonNull View view) {
-                openPageTermos();
-            }
+        applyClickableAndColoredSpan(spannableString, "termos", 0xFF0099DD,this::openPageTermos);
+        applyClickableAndColoredSpan(spannableString, "politica", 0xFF0099DD, this::openPagePolicy);
 
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                ds.setUnderlineText(false);
-            }
-        };
+        if (textView.getId() == R.id.btnLoginPage) {
+            applyClickableAndColoredSpan(spannableString, "Entrar", 0xFF0099DD, this::openPageLogin);
+        }
 
-        spannableString.setSpan(clickableSpan, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;
     }
 
-    public void openPageTermos() {
-        Intent intent = new Intent(this, Termos.class);
-        startActivity(intent);
+    private void applyClickableAndColoredSpan(SpannableString spannable, String regex, int color, Runnable onClick) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(spannable.toString());
+
+        if (matcher.find()) {
+            int start = matcher.start();
+            int end = matcher.end();
+
+            spannable.setSpan(new ForegroundColorSpan(color), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ClickableSpan() {
+                @Override
+                public void onClick(@NonNull View widget) {
+                    onClick.run();
+                }
+
+                @Override
+                public void updateDrawState(@NonNull TextPaint ds) {
+                    ds.setColor(color);
+                    ds.setUnderlineText(false);
+                }
+            }, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
     }
 
-    private void goToActivity() {
-        Intent intent = new Intent(this, Forum.class);
+    private void openPageLogin() {
+        goToActivity(Login.class);
+    }
+
+    private void openPageTermos() {
+        goToActivity(Termos.class);
+    }
+
+    private void openPagePolicy() {
+        goToActivity(Policy.class);
+    }
+
+    private void goToActivity(Class<?> activityClass) {
+        Intent intent = new Intent(this, activityClass);
         startActivity(intent);
         finish();
     }
 
-    private void goToFragment() {
-        if (getSupportFragmentManager().findFragmentById(R.id.ViewPagerIntroduction) == null){
-            Fragment fragment = new FragmentPageContainerIntroduction();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frameLayoutScreenRegister, fragment)
-                    .commit();
-        }
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
