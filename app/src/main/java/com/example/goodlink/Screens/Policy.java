@@ -12,22 +12,22 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.goodlink.R;
 
-public class Termos extends AppCompatActivity {
-    private ImageButton btnBackTerms;
+public class Policy extends AppCompatActivity {
+    private ImageButton btnBackPrivacy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_termos);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.forumScreen), (v, insets) -> {
+        setContentView(R.layout.activity_policy);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        btnBackTerms = findViewById(R.id.btnBackTerms);
-        btnBackTerms.setOnClickListener(v -> backToRegister());
+        btnBackPrivacy = findViewById(R.id.btnBackPrivacy);
+        btnBackPrivacy.setOnClickListener(v -> backToRegister());
     }
 
     private void backToRegister() {

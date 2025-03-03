@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/forumScreen"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Screens.Termos">
+    tools:context=".Screens.Policy">
 
     <ImageButton
-        android:id="@+id/btnBackTerms"
+        android:id="@+id/btnBackPrivacy"
         android:layout_width="37dp"
         android:layout_height="35dp"
         android:background="@color/transparent"
@@ -23,7 +23,7 @@
         tools:ignore="TouchTargetSizeCheck" />
 
     <TextView
-        android:id="@+id/termsTitle"
+        android:id="@+id/privacyTitle"
         android:layout_width="0dp"
         android:layout_height="35dp"
         android:layout_gravity="center_horizontal"
@@ -31,7 +31,7 @@
         android:gravity="center|start"
         android:lineSpacingExtra="6dp"
         android:lineSpacingMultiplier="0.6"
-        android:text="@string/terms"
+        android:text="@string/privacy"
         android:textAlignment="center"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,7 +43,7 @@
         tools:ignore="RtlCompat,TextSizeCheck" />
 
     <ScrollView
-        android:id="@+id/scrollContainerTerms"
+        android:id="@+id/scrollContainerPrivacy"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scrollbars="none"
@@ -52,12 +52,12 @@
         app:layout_constraintHeight_percent="0.80"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/termsTitle"
+        app:layout_constraintTop_toBottomOf="@+id/privacyTitle"
         app:layout_constraintVertical_bias="0.644"
         app:layout_constraintWidth_percent="0.90">
 
         <LinearLayout
-            android:id="@+id/containerTerms"
+            android:id="@+id/privacyContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -70,7 +70,7 @@
                 android:gravity="fill_horizontal"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/_1_aceita_o_dos_termos"
+                android:text="@string/_1_dados_coletados"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 tools:ignore="RtlCompat"
@@ -89,26 +89,11 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/ao_utilizar_o_aplicativo_goodlink_voc_concorda_integralmente_com_estes_termos_de_uso_caso_n_o_concorde_com_algum_dos_termos_aqui_estabelecidos_recomendamos_que_n_o_utilize_nossos_servi_os"
+                android:text="@string/nosso_aplicativo_coleta_apenas_os_dados_essenciais_para_sua_opera_o_que_incluem"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="605dp"
                 tools:ignore="VisualLintLongText" />
-
-            <TextView
-                android:id="@+id/secondTitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="sans-serif"
-                android:gravity="fill_horizontal"
-                android:lineSpacingExtra="16dp"
-                android:lineSpacingMultiplier="0.6"
-                android:text="@string/_2_descri_o_do_servi_o"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:ignore="RtlCompat"
-                tools:layout_editor_absoluteX="41dp"
-                tools:layout_editor_absoluteY="23dp" />
 
             <TextView
                 android:id="@+id/secondParagraph"
@@ -122,26 +107,11 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/o_goodlink_um_aplicativo_m_vel_que_permite_aos_usu_rios_armazenar_e_organizar_links_de_forma_centralizada_nossa_plataforma_n_o_gerencia_monitora_ou_controla_os_tipos_de_links_compartilhados_pelos_usu_rios_exceto_nos_casos_expressamente_proibidos_por_estes_termos"
+                android:text="@string/_1_1_dados_de_erros_informa_es_sobre_falhas_e_problemas_t_cnicos_coletadas_automaticamente_pelo_firebase_crashlytics_para_melhoria_do_aplicativo"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="605dp"
                 tools:ignore="VisualLintLongText" />
-
-            <TextView
-                android:id="@+id/thirdTitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="sans-serif"
-                android:gravity="fill_horizontal"
-                android:lineSpacingExtra="16dp"
-                android:lineSpacingMultiplier="0.6"
-                android:text="@string/_3_responsabilidades_do_usu_rio"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:ignore="RtlCompat"
-                tools:layout_editor_absoluteX="41dp"
-                tools:layout_editor_absoluteY="23dp" />
 
             <TextView
                 android:id="@+id/thirdParagraph"
@@ -155,13 +125,29 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/ao_utilizar_o_goodlink_voc_se_compromete_a"
+                android:text="@string/_1_2_dados_de_navega_o_informa_es_m_nimas_sobre_a_intera_o_com_o_aplicativo_para_fins_de_usabilidade_e_desempenho"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
-                tools:layout_editor_absoluteY="605dp" />
+                tools:layout_editor_absoluteY="605dp"
+                tools:ignore="VisualLintLongText" />
 
             <TextView
-                android:id="@+id/forthParagraph"
+                android:id="@+id/secondTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif"
+                android:gravity="fill_horizontal"
+                android:lineSpacingExtra="16dp"
+                android:lineSpacingMultiplier="0.6"
+                android:text="@string/_2_finalidade_do_tratamento_de_dados"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:ignore="RtlCompat"
+                tools:layout_editor_absoluteX="41dp"
+                tools:layout_editor_absoluteY="23dp" />
+
+            <TextView
+                android:id="@+id/fourthParagraph"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:autoSizeMaxTextSize="18sp"
@@ -172,12 +158,11 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/_3_1_n_o_armazenar_ou_compartilhar_links_que_contenham_material_relacionado_pornografia_infantil_essa_pr_tica_expressamente_proibida_e_resultar_em_medidas_legais_imediatas_incluindo_a_comunica_o_s_autoridades_competentes"
+                android:text="@string/os_dados_coletados_s_o_utilizados_exclusivamente_para"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="605dp"
                 tools:ignore="VisualLintLongText" />
-
 
             <TextView
                 android:id="@+id/fifthParagraph"
@@ -191,10 +176,11 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/_3_2_n_o_armazenar_ou_compartilhar_links_que_violem_leis_e_regulamenta_es_aplic_veis_em_sua_jurisdi_o"
+                android:text="@string/_2_1_permitir_o_acesso_seguro_plataforma"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
-                tools:layout_editor_absoluteY="605dp" />
+                tools:layout_editor_absoluteY="605dp"
+                tools:ignore="VisualLintLongText" />
 
             <TextView
                 android:id="@+id/sixthParagraph"
@@ -208,7 +194,7 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/_3_3_n_o_infringir_direitos_de_terceiros_incluindo_direitos_autorais_marcas_registradas_ou_outros_direitos_de_propriedade_intelectual"
+                android:text="@string/_2_2_melhorar_o_desempenho_do_aplicativo_identificando_e_corrigindo_falhas"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="605dp"
@@ -226,25 +212,11 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/_3_4_n_o_armazenar_ou_compartilhar_conte_do_difamat_rio_ofensivo_ou_que_incite_viol_ncia_ou_discrimina_o"
+                android:text="@string/_2_3_garantir_uma_experi_ncia_otimizada_para_o_usu_rio"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
-                tools:layout_editor_absoluteY="605dp" />
-
-            <TextView
-                android:id="@+id/forthTitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="sans-serif"
-                android:gravity="fill_horizontal"
-                android:lineSpacingExtra="16dp"
-                android:lineSpacingMultiplier="0.6"
-                android:text="@string/_4_coleta_e_uso_de_dados"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:ignore="RtlCompat"
-                tools:layout_editor_absoluteX="41dp"
-                tools:layout_editor_absoluteY="23dp" />
+                tools:layout_editor_absoluteY="605dp"
+                tools:ignore="VisualLintLongText" />
 
             <TextView
                 android:id="@+id/eigthParagraph"
@@ -258,11 +230,26 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/_4_1_dados_de_login_coletamos_apenas_informa_es_necess_rias_para_a_autentica_o_no_aplicativo_como_nome_de_usu_rio_e_senha_esses_dados_s_o_utilizados_exclusivamente_para_permitir_o_acesso_seguro_plataforma_e_n_o_s_o_compartilhados_com_terceiros"
+                android:text="@string/nenhum_dado_utilizado_para_fins_publicit_rios_ou_compartilhado_com_terceiros_exceto_em_casos_exigidos_por_lei_como_em_investiga_es_judiciais_que_demandem_o_fornecimento_de_informa_es"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="605dp"
                 tools:ignore="VisualLintLongText" />
+
+            <TextView
+                android:id="@+id/thirdTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif"
+                android:gravity="fill_horizontal"
+                android:lineSpacingExtra="16dp"
+                android:lineSpacingMultiplier="0.6"
+                android:text="@string/_3_seguran_a_e_limita_es"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:ignore="RtlCompat"
+                tools:layout_editor_absoluteX="41dp"
+                tools:layout_editor_absoluteY="23dp" />
 
             <TextView
                 android:id="@+id/ninethParagraph"
@@ -276,26 +263,11 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/_4_2_dados_de_uso_e_erros_registramos_informa_es_relacionadas_ao_uso_do_aplicativo_e_eventuais_falhas_com_o_objetivo_de_aprimorar_a_performance_e_corrigir_bugs_esses_dados_s_o_analisados_internamente_e_podem_ser_acessados_pelos_usu_rios_para_transpar_ncia"
+                android:text="@string/o_firebase_servi_o_utilizado_para_armazenamento_e_autentica_o_oferece_as_seguintes_camadas_de_seguran_a_dentro_do_plano_gratuito"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="605dp"
                 tools:ignore="VisualLintLongText" />
-
-            <TextView
-                android:id="@+id/fifthTitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="sans-serif"
-                android:gravity="fill_horizontal"
-                android:lineSpacingExtra="16dp"
-                android:lineSpacingMultiplier="0.6"
-                android:text="@string/_5_compartilhamento_de_dados_com_terceiros"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:ignore="RtlCompat"
-                tools:layout_editor_absoluteX="41dp"
-                tools:layout_editor_absoluteY="23dp" />
 
             <TextView
                 android:id="@+id/tenthParagraph"
@@ -309,26 +281,11 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/a_goodlink_n_o_compartilha_dados_pessoais_dos_usu_rios_com_terceiros_exceto_em_cumprimento_a_obriga_es_legais_ou_regulat_rias_especialmente_em_casos_de_viola_o_destes_termos_de_uso_que_exijam_medidas_legais"
+                android:text="@string/_3_1_criptografia_de_dados_prote_o_de_dados_em_tr_nsito_e_em_repouso_conforme_padr_es_de_seguran_a_do_firebase"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="605dp"
                 tools:ignore="VisualLintLongText" />
-
-            <TextView
-                android:id="@+id/sixthTitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="sans-serif"
-                android:gravity="fill_horizontal"
-                android:lineSpacingExtra="16dp"
-                android:lineSpacingMultiplier="0.6"
-                android:text="@string/_6_limita_o_de_responsabilidade"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:ignore="RtlCompat"
-                tools:layout_editor_absoluteX="41dp"
-                tools:layout_editor_absoluteY="23dp" />
 
             <TextView
                 android:id="@+id/eleventhParagraph"
@@ -342,14 +299,14 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/a_goodlink_n_o_se_responsabiliza_por"
+                android:text="@string/_3_2_regras_de_seguran_a_no_banco_de_dados_configura_o_para_restringir_acessos_n_o_autorizados"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
-                tools:layout_editor_absoluteY="605dp"/>
-
+                tools:layout_editor_absoluteY="605dp"
+                tools:ignore="VisualLintLongText" />
 
             <TextView
-                android:id="@+id/thirteenthParagraph"
+                android:id="@+id/twelfthParagraph"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:autoSizeMaxTextSize="18sp"
@@ -360,10 +317,62 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/_6_1_conte_dos_armazenados_ou_compartilhados_pelos_usu_rios"
+                android:text="@string/_3_3_autentica_o_segura_uso_de_firebase_authentication_para_evitar_acessos_indevidos"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
-                tools:layout_editor_absoluteY="605dp" />
+                tools:layout_editor_absoluteY="605dp"
+                tools:ignore="VisualLintLongText" />
+
+            <TextView
+                android:id="@+id/thirdteenthParagraph"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoSizeMaxTextSize="18sp"
+                android:autoSizeMinTextSize="14sp"
+                android:autoSizeStepGranularity="4sp"
+                android:autoSizeTextType="uniform"
+                android:breakStrategy="simple"
+                android:hyphenationFrequency="none"
+                android:lineSpacingExtra="16dp"
+                android:lineSpacingMultiplier="0.6"
+                android:text="@string/_3_4_monitoramento_de_erros_firebase_crashlytics_para_detec_o_de_falhas_e_vulnerabilidades"
+                android:textStyle="normal"
+                tools:layout_editor_absoluteX="288dp"
+                tools:layout_editor_absoluteY="605dp"
+                tools:ignore="VisualLintLongText" />
+
+            <TextView
+                android:id="@+id/fourteenthParagraph"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoSizeMaxTextSize="18sp"
+                android:autoSizeMinTextSize="14sp"
+                android:autoSizeStepGranularity="4sp"
+                android:autoSizeTextType="uniform"
+                android:breakStrategy="simple"
+                android:hyphenationFrequency="none"
+                android:lineSpacingExtra="16dp"
+                android:lineSpacingMultiplier="0.6"
+                android:text="@string/por_ser_um_projeto_comunit_rio_sem_investimento_financeiro_adotamos_todas_as_medidas_dispon_veis_dentro_do_plano_gratuito_para_proteger_os_dados_dos_usu_rios_no_entanto_recomendamos_que_os_usu_rios_tomem_precau_es_adicionais_como_o_uso_de_e_mails_alias_endere_os_de_e_mail_alternativos_para_maior_privacidade_e_seguran_a"
+                android:textStyle="normal"
+                tools:layout_editor_absoluteX="288dp"
+                tools:layout_editor_absoluteY="605dp"
+                tools:ignore="VisualLintLongText" />
+
+            <TextView
+                android:id="@+id/fourthTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif"
+                android:gravity="fill_horizontal"
+                android:lineSpacingExtra="16dp"
+                android:lineSpacingMultiplier="0.6"
+                android:text="@string/_4_armazenamento_e_compartilhamento_de_dados"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:ignore="RtlCompat"
+                tools:layout_editor_absoluteX="41dp"
+                tools:layout_editor_absoluteY="23dp" />
 
             <TextView
                 android:id="@+id/fifteenthParagraph"
@@ -377,10 +386,26 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/_6_2_danos_diretos_ou_indiretos_resultantes_do_uso_ou_da_incapacidade_de_usar_o_aplicativo"
+                android:text="@string/os_dados_s_o_armazenados_nos_servidores_do_firebase_localizados_em_diferentes_regi_es_do_mundo_nosso_aplicativo_n_o_compartilha_dados_com_terceiros_exceto_quando_exigido_por_for_a_de_lei"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
-                tools:layout_editor_absoluteY="605dp"/>
+                tools:layout_editor_absoluteY="605dp"
+                tools:ignore="VisualLintLongText" />
+
+            <TextView
+                android:id="@+id/fifthTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif"
+                android:gravity="fill_horizontal"
+                android:lineSpacingExtra="16dp"
+                android:lineSpacingMultiplier="0.6"
+                android:text="@string/_4_armazenamento_e_compartilhamento_de_dados"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:ignore="RtlCompat"
+                tools:layout_editor_absoluteX="41dp"
+                tools:layout_editor_absoluteY="23dp" />
 
             <TextView
                 android:id="@+id/sixteenthParagraph"
@@ -394,26 +419,11 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/_6_3_links_de_terceiros_acessados_atrav_s_do_aplicativo_n_o_endossando_ou_assumindo_responsabilidade_pelo_conte_do_desses_links"
+                android:text="@string/em_conformidade_com_a_lgpd_e_outras_regulamenta_es_internacionais_os_usu_rios_t_m_direito_a"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="605dp"
                 tools:ignore="VisualLintLongText" />
-
-            <TextView
-                android:id="@+id/eigthTitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="sans-serif"
-                android:gravity="fill_horizontal"
-                android:lineSpacingExtra="16dp"
-                android:lineSpacingMultiplier="0.6"
-                android:text="@string/_7_modifica_es_nos_termos_de_uso"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:ignore="RtlCompat"
-                tools:layout_editor_absoluteX="41dp"
-                tools:layout_editor_absoluteY="23dp" />
 
             <TextView
                 android:id="@+id/seventeenthParagraph"
@@ -427,26 +437,11 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/reservamo_nos_o_direito_de_modificar_estes_termos_de_uso_a_qualquer_momento_recomendamos_que_voc_revise_periodicamente_esta_p_gina_para_se_manter_informado_sobre_nossas_pr_ticas_o_uso_cont_nuo_do_aplicativo_ap_s_quaisquer_modifica_es_constitui_sua_aceita_o_dos_novos_termos"
+                android:text="@string/_5_1_acessar_os_dados_armazenados_sobre_sua_conta"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="605dp"
                 tools:ignore="VisualLintLongText" />
-
-            <TextView
-                android:id="@+id/ninethTitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="sans-serif"
-                android:gravity="fill_horizontal"
-                android:lineSpacingExtra="16dp"
-                android:lineSpacingMultiplier="0.6"
-                android:text="@string/_8_lei_aplic_vel"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:ignore="RtlCompat"
-                tools:layout_editor_absoluteX="41dp"
-                tools:layout_editor_absoluteY="23dp" />
 
             <TextView
                 android:id="@+id/eighteenthParagraph"
@@ -460,26 +455,11 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/estes_termos_de_uso_s_o_regidos_pelas_leis_aplic_veis_em_sua_jurisdi_o_respeitando_os_princ_pios_de_conflitos_de_leis"
+                android:text="@string/_5_2_solicitar_a_exclus_o_da_conta_e_seus_dados"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="605dp"
                 tools:ignore="VisualLintLongText" />
-
-            <TextView
-                android:id="@+id/tenthTitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="sans-serif"
-                android:gravity="fill_horizontal"
-                android:lineSpacingExtra="16dp"
-                android:lineSpacingMultiplier="0.6"
-                android:text="@string/_9_contato"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:ignore="RtlCompat"
-                tools:layout_editor_absoluteX="41dp"
-                tools:layout_editor_absoluteY="23dp" />
 
             <TextView
                 android:id="@+id/nineteenthParagraph"
@@ -493,21 +473,39 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/em_caso_de_d_vidas_ou_preocupa_es_sobre_estes_termos_de_uso_entre_em_contato_conosco_atrav_s_dos_canais_disponibilizados_em_nosso_aplicativo"
+                android:text="@string/_5_3_retirar_o_consentimento_para_o_tratamento_de_dados_a_qualquer_momento"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="605dp"
                 tools:ignore="VisualLintLongText" />
 
             <TextView
-                android:id="@+id/twenteenthTitle"
+                android:id="@+id/twentyParagraph"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoSizeMaxTextSize="18sp"
+                android:autoSizeMinTextSize="14sp"
+                android:autoSizeStepGranularity="4sp"
+                android:autoSizeTextType="uniform"
+                android:breakStrategy="simple"
+                android:hyphenationFrequency="none"
+                android:lineSpacingExtra="16dp"
+                android:lineSpacingMultiplier="0.6"
+                android:text="@string/para_exercer_esses_direitos_entre_em_contato_pelo_e_mail_de_suporte_dispon_vel_no_aplicativo"
+                android:textStyle="normal"
+                tools:layout_editor_absoluteX="288dp"
+                tools:layout_editor_absoluteY="605dp"
+                tools:ignore="VisualLintLongText" />
+
+            <TextView
+                android:id="@+id/seventhTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="sans-serif"
                 android:gravity="fill_horizontal"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/_10_disposi_es_gerais"
+                android:text="@string/_6_altera_es_na_pol_tica_de_privacidade"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 tools:ignore="RtlCompat"
@@ -515,7 +513,7 @@
                 tools:layout_editor_absoluteY="23dp" />
 
             <TextView
-                android:id="@+id/twentiethParagraph"
+                android:id="@+id/twentieFirstParagraph"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:autoSizeMaxTextSize="18sp"
@@ -526,14 +524,29 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/_10_1_a_omiss_o_da_goodlink_em_exigir_qualquer_direito_ou_disposi_o_destes_termos_de_uso_n_o_constituir_ren_ncia_a_tal_direito_ou_disposi_o"
+                android:text="@string/esta_pol_tica_pode_ser_atualizada_conforme_novas_funcionalidades_forem_adicionadas_ao_aplicativo_ou_devido_a_mudan_as_nas_regulamenta_es_de_privacidade_recomendamos_que_os_usu_rios_revisem_este_documento_periodicamente"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="605dp"
                 tools:ignore="VisualLintLongText" />
 
             <TextView
-                android:id="@+id/twentyFirstParagraph"
+                android:id="@+id/eigthTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif"
+                android:gravity="fill_horizontal"
+                android:lineSpacingExtra="16dp"
+                android:lineSpacingMultiplier="0.6"
+                android:text="@string/_7_contato"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:ignore="RtlCompat"
+                tools:layout_editor_absoluteX="41dp"
+                tools:layout_editor_absoluteY="23dp" />
+
+            <TextView
+                android:id="@+id/twentieSecondParagraph"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:autoSizeMaxTextSize="18sp"
@@ -544,14 +557,14 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/_10_2_se_qualquer_disposi_o_destes_termos_for_considerada_inv_lida_ou_inexequ_vel_as_demais_disposi_es_permanecer_o_em_pleno_vigor_e_efeito"
+                android:text="@string/caso_tenha_d_vidas_sobre_esta_pol_tica_de_privacidade_entre_em_contato_pelo_e_mail_de_suporte_dispon_vel_no_aplicativo"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="605dp"
                 tools:ignore="VisualLintLongText" />
 
             <TextView
-                android:id="@+id/twentySecondParagraph"
+                android:id="@+id/twentieThirdParagraph"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:autoSizeMaxTextSize="18sp"
@@ -562,10 +575,11 @@
                 android:hyphenationFrequency="none"
                 android:lineSpacingExtra="16dp"
                 android:lineSpacingMultiplier="0.6"
-                android:text="@string/ao_utilizar_o_goodlink_voc_reconhece_que_leu_entendeu_e_concorda_em_cumprir_estes_termos_de_uso"
+                android:text="@string/estamos_empenhados_em_oferecer_a_melhor_experi_ncia_poss_vel_dentro_das_limita_es_do_servi_o_gratuito_utilizado_agradecemos_sua_compreens_o_e_colabora_o_para_manter_um_ambiente_seguro_para_todos_os_usu_rios"
                 android:textStyle="normal"
                 tools:layout_editor_absoluteX="288dp"
-                tools:layout_editor_absoluteY="605dp" />
+                tools:layout_editor_absoluteY="605dp"
+                tools:ignore="VisualLintLongText" />
 
         </LinearLayout>
 
