@@ -2,6 +2,7 @@ package com.example.goodlink.Screens;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,11 @@ import com.example.goodlink.FireBaseManager.ManagerSession;
 import com.example.goodlink.Functions.HelperNotification;
 import com.example.goodlink.R;
 import com.example.goodlink.Utils.FontSizeUtils;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.regex.Matcher;
@@ -45,6 +52,8 @@ public class Register extends AppCompatActivity {
     private CheckBox checkBoxServices;
     private Button btnRegister;
     private TextView buttonLoginPager;
+    private ImageButton btnGoogle, btnGitHub;
+    private static final int RC_SIGN_IN = 9001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +62,7 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         initUI();
+        setupListener();
         setupInsets();
         setupFirebase();
 
@@ -68,6 +78,8 @@ public class Register extends AppCompatActivity {
         checkBoxServices = findViewById(R.id.checkBoxServices);
         btnRegister = findViewById(R.id.btnRegister);
         buttonLoginPager = findViewById(R.id.btnLoginPage);
+        btnGoogle = findViewById(R.id.btnGoogle);
+        btnGitHub = findViewById(R.id.btnGitHub);
 
         FontSizeUtils.applySpecificFontSize(editTextEmail, FontSizeUtils.getFontSize(this));
         FontSizeUtils.applySpecificFontSize(editTextName, FontSizeUtils.getFontSize(this));
@@ -88,6 +100,11 @@ public class Register extends AppCompatActivity {
         buttonLoginPager.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
+    private void setupListener() {
+        btnRegister.setOnClickListener(v -> registerUser());
+        btnGoogle.setOnClickListener(v -> signInWithGoogle(this, RC_SIGN_IN));
+    }
+
     private void setupInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.forumScreen), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -98,7 +115,7 @@ public class Register extends AppCompatActivity {
 
     private void setupFirebase() {
         FireBaseDataBase database = new FireBaseDataBase();
-        mAuthenticator = new FireBaseAuthenticate(database);
+        mAuthenticator = new FireBaseAuthenticate(database, this);
         managerSession = new ManagerSession(this);
         HelperNotification.requestNotificationPermission(this);
     }
@@ -114,14 +131,23 @@ public class Register extends AppCompatActivity {
         mAuthenticator.registerUser(nome, email, senha, Register.this, new FireBaseAuthenticate.RegistrationCallback() {
             @Override
             public void onRegistrationSuccess() {
-                retrieveFCMToken();
-                goToActivity(Login.class);
-                Toast.makeText(Register.this, "Usuário registrado com sucesso!", Toast.LENGTH_SHORT).show();
+                retrieveFCMToken(new FCMTokenCallBack() {
+                    @Override
+                    public void onSuccess(String token) {
+                        goToActivity(Login.class);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        showToast("Reinicie o aplicativo");
+                        Log.e(TAG, "Erro ao obter o token FCM: ", e);
+                    }
+                });
             }
 
             @Override
             public void onRegistrationFailure(String errorMessage) {
-                Toast.makeText(Register.this, "Erro ao registrar: " + errorMessage, Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Erro ao registrar: " + errorMessage);
             }
         });
     }
@@ -142,11 +168,62 @@ public class Register extends AppCompatActivity {
         return true;
     }
 
-    private void retrieveFCMToken() {
+    private void signInWithGoogle(Activity activity, int requestCode) {
+        if (mAuthenticator.getGoogleSignInClient() != null) {
+            Intent signInIntent = mAuthenticator.getGoogleSignInClient().getSignInIntent();
+            startActivityForResult(signInIntent, requestCode);
+        } else {
+            Log.e(TAG, "Erro ao configurar Google Sign-In.");
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                if (account != null) {
+                    String idToken = account.getIdToken();
+                    mAuthenticator.signUpWithGoogle(idToken, new FireBaseAuthenticate.GoogleSignInCallback() {
+                        @Override
+                        public void onSuccess(FirebaseUser user) {
+                            retrieveFCMToken(new FCMTokenCallBack() {
+                                @Override
+                                public void onSuccess(String token) {
+                                    goToActivity(Forum.class);
+                                }
+
+                                @Override
+                                public void onFailure(Exception e) {
+                                    showToast("Reinicie o aplicativo");
+                                    Log.e(TAG, "Erro ao obter o token FCM: ", e);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailure(String errorMessage) {
+                            Log.e(TAG, "Erro ao autenticar com Google: " + errorMessage);
+                        }
+                    });
+                }
+            } catch (ApiException e) {
+                Log.e(TAG, "Erro na autenticação com Google: " + e.getStatusCode());
+                showToast("Erro ao se registrar com Google Sign-In.");
+            }
+        }
+    }
+
+    private void retrieveFCMToken(FCMTokenCallBack callBack) {
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
                 new FCMMessagingService().saveTokenToPrefs(task.getResult());
+                callBack.onSuccess(task.getResult());
             } else {
+                callBack.onFailure(task.getException());
                 Log.e(TAG, "Erro ao obter o token FCM: ", task.getException());
             }
         });
@@ -205,6 +282,11 @@ public class Register extends AppCompatActivity {
         Intent intent = new Intent(this, activityClass);
         startActivity(intent);
         finish();
+    }
+
+    public interface FCMTokenCallBack {
+        void onSuccess(String token);
+        void onFailure(Exception e);
     }
 
     private void showToast(String message) {

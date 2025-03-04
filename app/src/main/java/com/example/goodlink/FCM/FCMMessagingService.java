@@ -50,7 +50,10 @@ public class FCMMessagingService extends FirebaseMessagingService {
     }
 
     public void saveTokenToPrefs(String token) {
-        getSharedPreferences("_", MODE_PRIVATE).edit().putString("fcm_token", token).apply();
+        getApplicationContext().getSharedPreferences("_", MODE_PRIVATE)
+                .edit()
+                .putString("fcm_token", token)
+                .apply();
     }
 
     @SuppressLint("ObsoleteSdkInt")

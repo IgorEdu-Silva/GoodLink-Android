@@ -7,22 +7,40 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.goodlink.R;
 import com.example.goodlink.Screens.Login;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class FireBaseAuthenticate {
     private final FirebaseAuth mAuth;
     private final FireBaseDataBase mDatabase;
-    private RegistrationCallback callback;
+    private GoogleSignInClient mGoogleSignInClient;
+    private Context context;
 
     public FireBaseAuthenticate(FireBaseDataBase database) {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = database;
+    }
+
+    public FireBaseAuthenticate(FireBaseDataBase database, Context context) {
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = database;
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(context.getString(R.string.default_notification_channel_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
     }
 
     public void loginUser(String email, String password, final Login.AuthenticationListener listener) {
@@ -131,6 +149,35 @@ public class FireBaseAuthenticate {
                 }
             }
         });
+    }
+
+    public GoogleSignInClient getGoogleSignInClient() {
+        return mGoogleSignInClient;
+    }
+
+    public void signUpWithGoogle(String idToken, final GoogleSignInCallback callback) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+
+
+                            FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+                            fireStoreDataManager.addUser(user.getUid(), user.getDisplayName(), user.getEmail());
+
+                            callback.onSuccess(user);
+                        }
+                    } else {
+                        callback.onFailure("Autenticação com Google falhou.");
+                    }
+                });
+    }
+
+    public interface GoogleSignInCallback {
+        void onSuccess(FirebaseUser user);
+        void onFailure(String errorMessage);
     }
 
     public interface ResetPasswordListener {
