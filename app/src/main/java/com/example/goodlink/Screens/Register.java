@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -53,7 +54,9 @@ public class Register extends AppCompatActivity {
     private Button btnRegister;
     private TextView buttonLoginPager;
     private ImageButton btnGoogle, btnGitHub;
-    private static final int RC_SIGN_IN = 9001;
+    private static final int RC_SIGN_IN_GOOGLE = 9001;
+    private static final int RC_SIGN_IN_GITHUB = 123;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +105,8 @@ public class Register extends AppCompatActivity {
 
     private void setupListener() {
         btnRegister.setOnClickListener(v -> registerUser());
-        btnGoogle.setOnClickListener(v -> signInWithGoogle(this, RC_SIGN_IN));
+        btnGoogle.setOnClickListener(v -> signInWithGoogle(this, RC_SIGN_IN_GOOGLE));
+        btnGitHub.setOnClickListener(v -> signInWithGitHub(this, RC_SIGN_IN_GITHUB));
     }
 
     private void setupInsets() {
@@ -177,17 +181,24 @@ public class Register extends AppCompatActivity {
         }
     }
 
+    public void signInWithGitHub(Activity activity, int requestCode) {
+        String githubUrl = "https://github.com/login/oauth/authorize?client_id=v23lixrIADTRCGhhQLc&scope=user:email";
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(githubUrl));
+        startActivityForResult(intent, requestCode);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN_GOOGLE) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 if (account != null) {
                     String idToken = account.getIdToken();
-                    mAuthenticator.signUpWithGoogle(idToken, new FireBaseAuthenticate.GoogleSignInCallback() {
+                    mAuthenticator.signInWithGoogle(idToken, new FireBaseAuthenticate.GoogleSignInCallback() {
                         @Override
                         public void onSuccess(FirebaseUser user) {
                             retrieveFCMToken(new FCMTokenCallBack() {
@@ -213,6 +224,37 @@ public class Register extends AppCompatActivity {
             } catch (ApiException e) {
                 Log.e(TAG, "Erro na autenticação com Google: " + e.getStatusCode());
                 showToast("Erro ao se registrar com Google Sign-In.");
+            }
+        }
+
+        if (requestCode == RC_SIGN_IN_GITHUB) {
+            Uri githubUri = data.getData();
+            if (githubUri != null) {
+                String idToken = githubUri.getQueryParameter("idToken");
+                if (idToken != null) {
+                    mAuthenticator.signInWithGitHub(idToken, new FireBaseAuthenticate.GitHubSignInCallback() {
+                        @Override
+                        public void onSuccess(FirebaseUser user) {
+                            retrieveFCMToken(new FCMTokenCallBack() {
+                                @Override
+                                public void onSuccess(String token) {
+                                    goToActivity(Forum.class);
+                                }
+
+                                @Override
+                                public void onFailure(Exception e) {
+                                    showToast("Reinicie o aplicativo");
+                                    Log.e(TAG, "Erro ao obter o token FCM: ", e);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailure(String errorMessage) {
+                            Log.e(TAG, "Erro ao autenticar com GitHub: " + errorMessage);
+                        }
+                    });
+                }
             }
         }
     }

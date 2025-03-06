@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.messaging)
+    implementation(libs.firebase.ui.auth)
     implementation(libs.play.services.auth)
     implementation(libs.appcompat)
     implementation(libs.play.services.base)
@@ -59,7 +60,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-
-
+    implementation(libs.okhttp.v4120)
 
 }

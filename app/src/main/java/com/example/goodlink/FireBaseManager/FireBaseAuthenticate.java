@@ -20,12 +20,23 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.auth.GithubAuthProvider;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
 
 public class FireBaseAuthenticate {
     private final FirebaseAuth mAuth;
     private final FireBaseDataBase mDatabase;
     private GoogleSignInClient mGoogleSignInClient;
-    private Context context;
 
     public FireBaseAuthenticate(FireBaseDataBase database) {
         mAuth = FirebaseAuth.getInstance();
@@ -155,15 +166,13 @@ public class FireBaseAuthenticate {
         return mGoogleSignInClient;
     }
 
-    public void signUpWithGoogle(String idToken, final GoogleSignInCallback callback) {
+    public void signInWithGoogle(String idToken, final GoogleSignInCallback callback) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
-
-
                             FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
                             fireStoreDataManager.addUser(user.getUid(), user.getDisplayName(), user.getEmail());
 
@@ -173,6 +182,67 @@ public class FireBaseAuthenticate {
                         callback.onFailure("Autenticação com Google falhou.");
                     }
                 });
+    }
+
+    public void signInWithGitHub(String idToken, final GitHubSignInCallback callback){
+        String tokenUrl = "https://github.com/login/oauth/access_token?client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET&code=" + idToken;
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(tokenUrl)
+                .header("Accept", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    JSONObject jsonResponse;
+                    try {
+                        jsonResponse = new JSONObject(response.body().string());
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    String accessToken;
+                    try {
+                        accessToken = jsonResponse.getString("access_token");
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    if (accessToken != null) {
+                        AuthCredential credential = GithubAuthProvider.getCredential(accessToken);
+                        mAuth.signInWithCredential(credential)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        if (user != null) {
+                                            FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+                                            fireStoreDataManager.addUser(user.getUid(), user.getDisplayName(), user.getEmail());
+
+                                            callback.onSuccess(user);
+                                        }
+                                    } else {
+                                        callback.onFailure("Erro ao autenticar com GitHub");
+                                    }
+                                });
+                    } else {
+                        callback.onFailure("Erro ao recuperar o token");
+                    }
+                } else {
+                    callback.onFailure("Erro ao chamar API do GitHub");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callback.onFailure("Erro ao conectar com o servidor GitHub");
+            }
+        });
+    }
+
+    public interface GitHubSignInCallback {
+        void onSuccess(FirebaseUser user);
+        void onFailure(String errorMessage);
     }
 
     public interface GoogleSignInCallback {

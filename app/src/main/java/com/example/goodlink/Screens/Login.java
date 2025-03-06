@@ -155,7 +155,7 @@ public class Login extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 if (account != null) {
                     String idToken = account.getIdToken();
-                    mAuthenticator.signUpWithGoogle(idToken, new FireBaseAuthenticate.GoogleSignInCallback() {
+                    mAuthenticator.signInWithGoogle(idToken, new FireBaseAuthenticate.GoogleSignInCallback() {
                         @Override
                         public void onSuccess(FirebaseUser user) {
                             retrieveFCMToken(new Register.FCMTokenCallBack() {
