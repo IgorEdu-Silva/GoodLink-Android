@@ -108,6 +108,7 @@ public class Login extends AppCompatActivity {
 
     private void setupListener() {
         btnLogin.setOnClickListener(view -> loginEmailVerification());
+        btnGoogle.setOnClickListener(view -> signInWithGoogle(this, RC_SIGN_IN_GOOGLE));
         btnGitHub.setOnClickListener(v -> signInWithGitHub(this));
         forgotPass.setOnClickListener(v -> startActivity(new Intent(Login.this, ResetPass.class)));
     }
@@ -155,51 +156,8 @@ public class Login extends AppCompatActivity {
                 .addOnSuccessListener(authResult -> {
                     FirebaseUser user = authResult.getUser();
                     Log.d(TAG, "Usuário autenticado: " + (user != null ? user.getDisplayName() : "Usuário desconhecido"));
-
-                    if (user != null) {
-                        user.getIdToken(false).addOnSuccessListener(result -> {
-                            String idToken = result.getToken();
-                            Log.d(TAG, "chegou aqui - 1");
-                            if (idToken != null) {
-                                Log.d(TAG, "chegou aqui - 2");
-                                Log.d(TAG, idToken);
-                                mAuthenticator.signInWithGitHub(idToken, new FireBaseAuthenticate.GitHubSignInCallback() {
-                                    @Override
-                                    public void onSuccess(FirebaseUser user) {
-                                        Log.d(TAG, "chegou aqui - 3");
-
-                                        retrieveFCMToken(new Register.FCMTokenCallBack() {
-                                            @Override
-                                            public void onSuccess(String token) {
-                                                Log.d(TAG, "chegou aqui - 4");
-                                                managerSession.setLogin(true);
-                                                goToActivity(Forum.class);
-                                            }
-
-                                            @Override
-                                            public void onFailure(Exception e) {
-                                                Log.d(TAG, "chegou aqui - 5");
-                                                showToast("Reinicie o aplicativo");
-                                                logErrorException("Method signInWithGitHub on Login.class", "Erro ao obter o token FCM: ", e);
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(String errorMessage) {
-                                        Log.d(TAG, "chegou aqui - 6");
-                                        logError("Method signInWithGitHub on Login.class", "Erro ao enviar UID para a FireBaseAuthenticate.class");
-                                        showToast("Falha ao autenticar com GitHub.");
-                                    }
-                                });
-                            } else {
-                                Log.d(TAG, "ID Token é nulo ou inválido.");
-                                logError("Method signInWithGitHub on Login.class", "Erro ao obter idToken do usuário.");
-                            }
-                        }).addOnFailureListener(e -> logErrorException("Method signInWithGitHub on Login.class", "Erro ao obter idToken: ", e));
-                    } else {
-                        Log.d(TAG, "Usuário não encontrado.");
-                    }
+                    managerSession.setLogin(true);
+                    goToActivity(Forum.class);
                 })
                 .addOnFailureListener(e -> logErrorException("Method signInWithGitHub on Login.class", "Erro ao autenticar com GitHub: ", e));
     }

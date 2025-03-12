@@ -149,7 +149,7 @@
             android:id="@+id/btnAnonymous"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@mipmap/ic_anonymous"
+            android:background="@mipmap/ic_anonymous_foreground"
             android:importantForAccessibility="no"
             tools:ignore="TouchTargetSizeCheck" />
 
@@ -159,7 +159,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@mipmap/ic_google"
+            android:background="@mipmap/ic_google_foreground"
             android:importantForAccessibility="no"
             tools:ignore="TouchTargetSizeCheck" />
 
@@ -167,7 +167,7 @@
             android:id="@+id/btnGitHub"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@mipmap/ic_github"
+            android:background="@mipmap/ic_github_foreground"
             android:importantForAccessibility="no"
             tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>

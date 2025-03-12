@@ -20,7 +20,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.auth.GithubAuthProvider;
 
 
 public class FireBaseAuthenticate {
@@ -172,51 +171,6 @@ public class FireBaseAuthenticate {
                         callback.onFailure("Autenticação com Google falhou.");
                     }
                 });
-    }
-
-    public void signInWithGitHub(String idToken, final GitHubSignInCallback callback) {
-        AuthCredential credential = GithubAuthProvider.getCredential(idToken);
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
-        if (currentUser != null) {
-            currentUser.linkWithCredential(credential)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            if (user != null) {
-                                FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-                                fireStoreDataManager.addUser(user.getUid(), user.getDisplayName(), user.getEmail());
-                                callback.onSuccess(user);
-                            } else {
-                                callback.onFailure("Usuário GitHub não encontrado.");
-                            }
-                        } else {
-                            callback.onFailure("Falha ao vincular GitHub à conta existente.");
-                        }
-                    });
-        } else {
-            mAuth.signInWithCredential(credential)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            if (user != null) {
-                                FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-                                fireStoreDataManager.addUser(user.getUid(), user.getDisplayName(), user.getEmail());
-                                callback.onSuccess(user);
-                            } else {
-                                callback.onFailure("Usuário GitHub não encontrado.");
-                            }
-                        } else {
-                            callback.onFailure("Autenticação com GitHub falhou.");
-                        }
-                    });
-        }
-    }
-
-
-    public interface GitHubSignInCallback {
-        void onSuccess(FirebaseUser user);
-        void onFailure(String errorMessage);
     }
 
     public interface GoogleSignInCallback {
