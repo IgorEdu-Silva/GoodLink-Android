@@ -106,7 +106,7 @@
         android:id="@+id/forgotePass"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:gravity=""
+        android:gravity="center|start"
         android:paddingStart="8dp"
         android:text="@string/esqueceu_a_senha"
         app:layout_constraintBottom_toBottomOf="parent"

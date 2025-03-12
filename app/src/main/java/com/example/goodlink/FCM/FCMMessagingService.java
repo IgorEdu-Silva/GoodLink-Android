@@ -46,14 +46,18 @@ public class FCMMessagingService extends FirebaseMessagingService {
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
         Log.d(TAG, "Refreshed token: " + token);
-        saveTokenToPrefs(token);
+        saveTokenToPrefs(this, token);
     }
 
-    public void saveTokenToPrefs(String token) {
-        getApplicationContext().getSharedPreferences("_", MODE_PRIVATE)
-                .edit()
-                .putString("fcm_token", token)
-                .apply();
+    public void saveTokenToPrefs(Context context, String token) {
+        if (context != null) {
+            context.getSharedPreferences("_", Context.MODE_PRIVATE)
+                    .edit()
+                    .putString("fcm_token", token)
+                    .apply();
+        } else {
+            Log.e(TAG, "Context is null, cannot save token to prefs.");
+        }
     }
 
     @SuppressLint("ObsoleteSdkInt")

@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -38,7 +39,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.regex.Matcher;
@@ -53,8 +56,9 @@ public class Login extends AppCompatActivity {
     private TextView connectEmail, btnRegisterPage, forgotPass;
     private CheckBox checkBoxLog;
     private Button btnLogin;
-    private ImageButton btnGoogle;
-    private static final int RC_SIGN_IN = 9001;
+    private ImageButton btnGoogle, btnGitHub;
+    private static final int RC_SIGN_IN_GOOGLE = 9001;
+    private static final int RC_SIGN_IN_GITHUB = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,7 @@ public class Login extends AppCompatActivity {
         btnRegisterPage = findViewById(R.id.btnRegisterPage);
         forgotPass = findViewById(R.id.forgotePass);
         btnGoogle = findViewById(R.id.btnGoogle);
+        btnGitHub = findViewById(R.id.btnGitHub);
 
         FontSizeUtils.applySpecificFontSize(connectEmail, FontSizeUtils.getFontSize(this));
         FontSizeUtils.applySpecificFontSize(btnLogin, FontSizeUtils.getFontSize(this));
@@ -102,38 +107,35 @@ public class Login extends AppCompatActivity {
     }
 
     private void setupListener() {
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(view -> loginEmailVerification());
+        btnGitHub.setOnClickListener(v -> signInWithGitHub(this));
+        forgotPass.setOnClickListener(v -> startActivity(new Intent(Login.this, ResetPass.class)));
+    }
+
+    private void loginEmailVerification(){
+        String email = editTextEmail.getText().toString();
+        String senha = editTextPassword.getText().toString();
+
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(senha)) {
+            showToast("Por favor, preencha todos os campos");
+            return;
+        }
+
+        mAuthenticator.loginUser(email, senha, new AuthenticationListener() {
             @Override
-            public void onClick(View v) {
-                String email = editTextEmail.getText().toString();
-                String senha = editTextPassword.getText().toString();
+            public void onLoginSuccess(FirebaseUser user) {
+                goToActivity(Forum.class);
+            }
 
-                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(senha)) {
-                    showToast("Por favor, preencha todos os campos");
-                    return;
-                }
-
-                mAuthenticator.loginUser(email, senha, new AuthenticationListener() {
-                    @Override
-                    public void onLoginSuccess(FirebaseUser user) {
-                        goToActivity(Forum.class);
-                    }
-
-                    @Override
-                    public void onLoginFailure(String errorMessage) {
-                        Toast.makeText(Login.this, errorMessage, Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                if (checkBoxLog.isChecked()) {
-                    managerSession.setLogin(true);
-                }
+            @Override
+            public void onLoginFailure(String errorMessage) {
+                logError("Method loginEmailVerification on Login.class", errorMessage);
             }
         });
 
-        btnGoogle.setOnClickListener(v -> signInWithGoogle(this, RC_SIGN_IN));
-
-        forgotPass.setOnClickListener(v -> startActivity(new Intent(Login.this, ResetPass.class)));
+        if (checkBoxLog.isChecked()) {
+            managerSession.setLogin(true);
+        }
     }
 
     private void signInWithGoogle(Activity activity, int requestCode) {
@@ -141,58 +143,121 @@ public class Login extends AppCompatActivity {
             Intent signInIntent = mAuthenticator.getGoogleSignInClient().getSignInIntent();
             startActivityForResult(signInIntent, requestCode);
         } else {
-            Log.e(TAG, "Erro ao configurar Google Sign-In.");
+            logError("Method signInWithGoogle on Login.class", "Erro ao configurar Google Sign-In.");
         }
     }
 
+    public void signInWithGitHub(Activity activity) {
+        OAuthProvider.Builder provider = OAuthProvider.newBuilder("github.com");
+
+        FirebaseAuth.getInstance()
+                .startActivityForSignInWithProvider(activity, provider.build())
+                .addOnSuccessListener(authResult -> {
+                    FirebaseUser user = authResult.getUser();
+                    Log.d(TAG, "Usuário autenticado: " + (user != null ? user.getDisplayName() : "Usuário desconhecido"));
+
+                    if (user != null) {
+                        user.getIdToken(false).addOnSuccessListener(result -> {
+                            String idToken = result.getToken();
+                            Log.d(TAG, "chegou aqui - 1");
+                            if (idToken != null) {
+                                Log.d(TAG, "chegou aqui - 2");
+                                Log.d(TAG, idToken);
+                                mAuthenticator.signInWithGitHub(idToken, new FireBaseAuthenticate.GitHubSignInCallback() {
+                                    @Override
+                                    public void onSuccess(FirebaseUser user) {
+                                        Log.d(TAG, "chegou aqui - 3");
+
+                                        retrieveFCMToken(new Register.FCMTokenCallBack() {
+                                            @Override
+                                            public void onSuccess(String token) {
+                                                Log.d(TAG, "chegou aqui - 4");
+                                                managerSession.setLogin(true);
+                                                goToActivity(Forum.class);
+                                            }
+
+                                            @Override
+                                            public void onFailure(Exception e) {
+                                                Log.d(TAG, "chegou aqui - 5");
+                                                showToast("Reinicie o aplicativo");
+                                                logErrorException("Method signInWithGitHub on Login.class", "Erro ao obter o token FCM: ", e);
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onFailure(String errorMessage) {
+                                        Log.d(TAG, "chegou aqui - 6");
+                                        logError("Method signInWithGitHub on Login.class", "Erro ao enviar UID para a FireBaseAuthenticate.class");
+                                        showToast("Falha ao autenticar com GitHub.");
+                                    }
+                                });
+                            } else {
+                                Log.d(TAG, "ID Token é nulo ou inválido.");
+                                logError("Method signInWithGitHub on Login.class", "Erro ao obter idToken do usuário.");
+                            }
+                        }).addOnFailureListener(e -> logErrorException("Method signInWithGitHub on Login.class", "Erro ao obter idToken: ", e));
+                    } else {
+                        Log.d(TAG, "Usuário não encontrado.");
+                    }
+                })
+                .addOnFailureListener(e -> logErrorException("Method signInWithGitHub on Login.class", "Erro ao autenticar com GitHub: ", e));
+    }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                if (account != null) {
+        if (requestCode == RC_SIGN_IN_GOOGLE) {
+            if (data != null) {
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                try {
+                    GoogleSignInAccount account = task.getResult(ApiException.class);
                     String idToken = account.getIdToken();
-                    mAuthenticator.signInWithGoogle(idToken, new FireBaseAuthenticate.GoogleSignInCallback() {
-                        @Override
-                        public void onSuccess(FirebaseUser user) {
-                            retrieveFCMToken(new Register.FCMTokenCallBack() {
-                                @Override
-                                public void onSuccess(String token) {
-                                    goToActivity(Forum.class);
-                                }
+                    Log.d("Try Catch on onActivityResult", "ID Token recebido: " + idToken);
 
-                                @Override
-                                public void onFailure(Exception e) {
-                                    showToast("Reinicie o aplicativo");
-                                    Log.e(TAG, "Erro ao obter o token FCM: ", e);
-                                }
-                            });
-                        }
+                    if (account != null) {
+                        mAuthenticator.signInWithGoogle(idToken, new FireBaseAuthenticate.GoogleSignInCallback() {
+                            @Override
+                            public void onSuccess(FirebaseUser user) {
+                                managerSession.setLogin(true);
+                                retrieveFCMToken(new Register.FCMTokenCallBack() {
+                                    @Override
+                                    public void onSuccess(String token) {
+                                        goToActivity(Forum.class);
+                                    }
 
-                        @Override
-                        public void onFailure(String errorMessage) {
-                            Log.e(TAG, "Erro ao autenticar com Google: " + errorMessage);
-                        }
-                    });
+                                    @Override
+                                    public void onFailure(Exception e) {
+                                        showToast("Reinicie o aplicativo");
+                                        logErrorException("Method signInWithGoogle on onActivityResult", "Erro ao obter o token FCM: ", e);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+                                logError("Erro ao autenticar com Google: ", errorMessage);
+                            }
+                        });
+                    }
+                } catch (ApiException e) {
+                    Log.e("Method signInWithGoogle on onActivityResult", "Erro na autenticação com Google: " + e.getStatusCode());
+                    showToast("Erro ao se registrar com Google");
                 }
-            } catch (ApiException e) {
-                Log.e(TAG, "Erro na autenticação com Google: " + e.getStatusCode());
-                showToast("Erro ao se registrar com Google Sign-In.");
             }
         }
+
     }
 
     private void retrieveFCMToken(Register.FCMTokenCallBack callBack) {
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
-                new FCMMessagingService().saveTokenToPrefs(task.getResult());
+                new FCMMessagingService().saveTokenToPrefs(getApplicationContext(), task.getResult());
                 callBack.onSuccess(task.getResult());
             } else {
                 callBack.onFailure(task.getException());
-                Log.e(TAG, "Erro ao obter o token FCM: ", task.getException());
+                logErrorException("Method retrieveFCMToken", "Erro ao obter token FCM: " , task.getException());
             }
         });
     }
@@ -231,6 +296,14 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (managerSession.isLoggedIn()) {
+            goToActivity(Forum.class);
+        }
+    }
+
     private void openPageRegister() {
         goToActivity(Register.class);
     }
@@ -248,5 +321,13 @@ public class Login extends AppCompatActivity {
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void logError(String tag, String error){
+        Log.e(tag, error);
+    }
+
+    private void logErrorException(String tag, String error, Exception e){
+        Log.e(tag, error, e);
     }
 }

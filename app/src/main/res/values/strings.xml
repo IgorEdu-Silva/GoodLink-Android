@@ -172,6 +172,7 @@
     <string name="estamos_empenhados_em_oferecer_a_melhor_experi_ncia_poss_vel_dentro_das_limita_es_do_servi_o_gratuito_utilizado_agradecemos_sua_compreens_o_e_colabora_o_para_manter_um_ambiente_seguro_para_todos_os_usu_rios">Estamos empenhados em oferecer a melhor experiência possível dentro das limitações do serviço gratuito utilizado. Agradecemos sua compreensão e colaboração para manter um ambiente seguro para todos os usuários.</string>
     <string name="para_exercer_esses_direitos_entre_em_contato_pelo_e_mail_de_suporte_dispon_vel_no_aplicativo">Para exercer esses direitos, entre em contato pelo e-mail de suporte disponível no aplicativo.</string>
 
+    <string name="default_web_client_id">578797890995-28stmfrv53m9b9vrh7l9j7r0m47dgpcc.apps.googleusercontent.com</string>
 
     <string-array name="categories">
         <item>Programação</item>

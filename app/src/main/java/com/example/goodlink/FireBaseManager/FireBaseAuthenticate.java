@@ -21,16 +21,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.auth.GithubAuthProvider;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 
 
 public class FireBaseAuthenticate {
@@ -48,7 +38,7 @@ public class FireBaseAuthenticate {
         mDatabase = database;
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(context.getString(R.string.default_notification_channel_id))
+                .requestIdToken(context.getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
@@ -184,61 +174,45 @@ public class FireBaseAuthenticate {
                 });
     }
 
-    public void signInWithGitHub(String idToken, final GitHubSignInCallback callback){
-        String tokenUrl = "https://github.com/login/oauth/access_token?client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET&code=" + idToken;
+    public void signInWithGitHub(String idToken, final GitHubSignInCallback callback) {
+        AuthCredential credential = GithubAuthProvider.getCredential(idToken);
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(tokenUrl)
-                .header("Accept", "application/json")
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    JSONObject jsonResponse;
-                    try {
-                        jsonResponse = new JSONObject(response.body().string());
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                    String accessToken;
-                    try {
-                        accessToken = jsonResponse.getString("access_token");
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                    if (accessToken != null) {
-                        AuthCredential credential = GithubAuthProvider.getCredential(accessToken);
-                        mAuth.signInWithCredential(credential)
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()) {
-                                        FirebaseUser user = mAuth.getCurrentUser();
-                                        if (user != null) {
-                                            FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
-                                            fireStoreDataManager.addUser(user.getUid(), user.getDisplayName(), user.getEmail());
-
-                                            callback.onSuccess(user);
-                                        }
-                                    } else {
-                                        callback.onFailure("Erro ao autenticar com GitHub");
-                                    }
-                                });
-                    } else {
-                        callback.onFailure("Erro ao recuperar o token");
-                    }
-                } else {
-                    callback.onFailure("Erro ao chamar API do GitHub");
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onFailure("Erro ao conectar com o servidor GitHub");
-            }
-        });
+        if (currentUser != null) {
+            currentUser.linkWithCredential(credential)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+                                fireStoreDataManager.addUser(user.getUid(), user.getDisplayName(), user.getEmail());
+                                callback.onSuccess(user);
+                            } else {
+                                callback.onFailure("Usuário GitHub não encontrado.");
+                            }
+                        } else {
+                            callback.onFailure("Falha ao vincular GitHub à conta existente.");
+                        }
+                    });
+        } else {
+            mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                FireStoreDataManager fireStoreDataManager = new FireStoreDataManager();
+                                fireStoreDataManager.addUser(user.getUid(), user.getDisplayName(), user.getEmail());
+                                callback.onSuccess(user);
+                            } else {
+                                callback.onFailure("Usuário GitHub não encontrado.");
+                            }
+                        } else {
+                            callback.onFailure("Autenticação com GitHub falhou.");
+                        }
+                    });
+        }
     }
+
 
     public interface GitHubSignInCallback {
         void onSuccess(FirebaseUser user);
