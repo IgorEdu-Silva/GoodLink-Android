@@ -1,7 +1,5 @@
 package com.example.goodlink.Screens;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,9 +37,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.regex.Matcher;
@@ -56,9 +52,8 @@ public class Login extends AppCompatActivity {
     private TextView connectEmail, btnRegisterPage, forgotPass;
     private CheckBox checkBoxLog;
     private Button btnLogin;
-    private ImageButton btnGoogle, btnGitHub;
+    private ImageButton btnGoogle, btnGitHub, btnAnonymous;
     private static final int RC_SIGN_IN_GOOGLE = 9001;
-    private static final int RC_SIGN_IN_GITHUB = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +76,7 @@ public class Login extends AppCompatActivity {
         forgotPass = findViewById(R.id.forgotePass);
         btnGoogle = findViewById(R.id.btnGoogle);
         btnGitHub = findViewById(R.id.btnGitHub);
+        btnAnonymous = findViewById(R.id.btnAnonymous);
 
         FontSizeUtils.applySpecificFontSize(connectEmail, FontSizeUtils.getFontSize(this));
         FontSizeUtils.applySpecificFontSize(btnLogin, FontSizeUtils.getFontSize(this));
@@ -109,7 +105,8 @@ public class Login extends AppCompatActivity {
     private void setupListener() {
         btnLogin.setOnClickListener(view -> loginEmailVerification());
         btnGoogle.setOnClickListener(view -> signInWithGoogle(this, RC_SIGN_IN_GOOGLE));
-        btnGitHub.setOnClickListener(v -> signInWithGitHub(this));
+        btnGitHub.setOnClickListener(v -> mAuthenticator.signInWithGitHub(Login.this));
+        btnAnonymous.setOnClickListener(view -> mAuthenticator.signInAnonymous(Login.this));
         forgotPass.setOnClickListener(v -> startActivity(new Intent(Login.this, ResetPass.class)));
     }
 
@@ -146,20 +143,6 @@ public class Login extends AppCompatActivity {
         } else {
             logError("Method signInWithGoogle on Login.class", "Erro ao configurar Google Sign-In.");
         }
-    }
-
-    public void signInWithGitHub(Activity activity) {
-        OAuthProvider.Builder provider = OAuthProvider.newBuilder("github.com");
-
-        FirebaseAuth.getInstance()
-                .startActivityForSignInWithProvider(activity, provider.build())
-                .addOnSuccessListener(authResult -> {
-                    FirebaseUser user = authResult.getUser();
-                    Log.d(TAG, "Usuário autenticado: " + (user != null ? user.getDisplayName() : "Usuário desconhecido"));
-                    managerSession.setLogin(true);
-                    goToActivity(Forum.class);
-                })
-                .addOnFailureListener(e -> logErrorException("Method signInWithGitHub on Login.class", "Erro ao autenticar com GitHub: ", e));
     }
 
     @Override

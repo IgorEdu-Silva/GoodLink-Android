@@ -1,13 +1,18 @@
 package com.example.goodlink.FireBaseManager;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.goodlink.R;
+import com.example.goodlink.Screens.Forum;
 import com.example.goodlink.Screens.Login;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -19,12 +24,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 
 public class FireBaseAuthenticate {
     private final FirebaseAuth mAuth;
     private final FireBaseDataBase mDatabase;
+    private ManagerSession managerSession;
     private GoogleSignInClient mGoogleSignInClient;
 
     public FireBaseAuthenticate(FireBaseDataBase database) {
@@ -173,6 +180,34 @@ public class FireBaseAuthenticate {
                 });
     }
 
+    public void signInWithGitHub(Context context) {
+        OAuthProvider.Builder provider = OAuthProvider.newBuilder("github.com");
+
+        FirebaseAuth.getInstance()
+                .startActivityForSignInWithProvider((Activity) context, provider.build())
+                .addOnSuccessListener(authResult -> {
+                    FirebaseUser user = authResult.getUser();
+                    Log.d(TAG, "Usuário autenticado: " + (user != null ? user.getDisplayName() : "Usuário desconhecido"));
+                    managerSession.setLogin(true);
+                    goToActivity(context, Forum.class);
+                })
+                .addOnFailureListener(e -> logErrorException("Method signInWithGitHub on Login.class", "Erro ao autenticar com GitHub: ", e));
+    }
+
+    public void signInAnonymous(final Context context){
+        mAuth.signInAnonymously()
+                .addOnCompleteListener((Activity) context, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null){
+                            goToActivity(context, Forum.class);
+                        }
+                    } else {
+                        Toast.makeText(context, "Falha ao ser conectar anonimamente.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     public interface GoogleSignInCallback {
         void onSuccess(FirebaseUser user);
         void onFailure(String errorMessage);
@@ -186,5 +221,17 @@ public class FireBaseAuthenticate {
     public interface RegistrationCallback {
         void onRegistrationSuccess();
         void onRegistrationFailure(String errorMessage);
+    }
+
+    private void goToActivity(Context context, Class<?> cls) {
+        Intent intent = new Intent(context, cls);
+        context.startActivity(intent);
+        if (context instanceof Activity) {
+            ((Activity) context).finish();
+        }
+    }
+
+    private void logErrorException(String tag, String error, Exception e){
+        Log.e(tag, error, e);
     }
 }

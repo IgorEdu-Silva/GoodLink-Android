@@ -18,21 +18,15 @@ import com.example.goodlink.FireBaseManager.ManagerSession;
 import com.example.goodlink.R;
 import com.example.goodlink.Screens.Login;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class FragmentPageUserSettings extends Fragment {
     private SearchView searchConfig;
-    private ImageView ico_config_account;
-    private TextView text_config_account;
-    private ImageView ico_config_security;
-    private TextView text_config_security;
-    private ImageView ico_config_theme;
-    private TextView text_config_theme;
-    private ImageView icon_config_accessibility;
-    private TextView text_config_accessibility;
-    private ImageView ico_config_notifications;
-    private TextView text_config_notifications;
-    private ImageView ico_config_support;
-    private TextView text_config_support;
+    private ImageView ico_config_account, ico_config_security, ico_config_theme, icon_config_accessibility, ico_config_notifications, ico_config_support;
+    private TextView text_config_account, text_config_security, text_config_theme, text_config_accessibility, text_config_notifications, text_config_support;
     private Button btnLogoutConfig;
 
     @Override
@@ -49,6 +43,10 @@ public class FragmentPageUserSettings extends Fragment {
     }
 
     private void initUI() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        List<View> viewList = Arrays.asList(ico_config_account, text_config_account, ico_config_security, text_config_security);
+        setViews(viewList, user != null && !user.isAnonymous());
+
         searchConfig.setFocusable(true);
         searchConfig.setFocusableInTouchMode(true);
         searchConfig.setIconifiedByDefault(false);
@@ -56,6 +54,14 @@ public class FragmentPageUserSettings extends Fragment {
 
     private void setupListener() {
         btnLogoutConfig.setOnClickListener(view -> logoutAccount());
+    }
+
+    private void setViews(List<View> views, boolean isEnable)  {
+        for (View view : views) {
+            if (view != null) {
+                view.setEnabled(isEnable);
+            }
+        }
     }
 
     private void logoutAccount() {

@@ -7,7 +7,6 @@ import android.service.notification.StatusBarNotification;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,46 +14,47 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.goodlink.Fragments.FragmentDialogForm;
 import com.example.goodlink.FCM.FCMMessagingService;
 import com.example.goodlink.Adapter.AdapterPagerFragments;
+import com.example.goodlink.Functions.HelperForumLifecycleObserver;
 import com.example.goodlink.Functions.HelperNotification;
 import com.example.goodlink.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class Forum extends AppCompatActivity {
-    private boolean telaAtiva = true;
+    private final boolean telaAtiva = true;
     private FloatingActionButton fab;
-    private ImageButton btnBackForm;
+    private HelperForumLifecycleObserver lifecycleObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_forum);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.forumScreen), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
-        HelperNotification.requestNotificationPermission(this);
+        lifecycleObserver = new HelperForumLifecycleObserver();
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(lifecycleObserver);
 
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        String token = task.getResult();
-                        sendTokenToMessagingService(token);
-                    }
-                });
+        iniUI();
+        setupToken();
+    }
+
+    private void iniUI() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         ViewPager2 viewPager = findViewById(R.id.RepositoriesView);
         TabLayout tabLayout = findViewById(R.id.tabLayoutInfo);
+        fab = findViewById(R.id.FloatingBtnPageCentral);
+        fab.setEnabled(user == null || !user.isAnonymous());
 
         AdapterPagerFragments pagerAdapter = new AdapterPagerFragments(this);
         viewPager.setAdapter(pagerAdapter);
@@ -74,7 +74,6 @@ public class Forum extends AppCompatActivity {
                 }
         ).attach();
 
-        fab = findViewById(R.id.FloatingBtnPageCentral);
         fab.setOnClickListener(view -> openFormDialog());
 
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -87,6 +86,29 @@ public class Forum extends AppCompatActivity {
                 }
             }
         });
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.forumScreen), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+
+    private void setupToken() {
+        try {
+            HelperNotification.requestNotificationPermission(this);
+
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            String token = task.getResult();
+                            sendTokenToMessagingService(token);
+                        }
+                    });
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void sendTokenToMessagingService(String token) {
@@ -137,24 +159,8 @@ public class Forum extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        if (telaAtiva) {
-            return;
-        }
-        super.onBackPressed();
-        fab.setVisibility(View.VISIBLE);
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        telaAtiva = true;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        telaAtiva = false;
+    protected void onDestroy() {
+        super.onDestroy();
+        ProcessLifecycleOwner.get().getLifecycle().removeObserver(lifecycleObserver);
     }
 }

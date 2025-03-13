@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+    implementation(libs.androidx.lifecycle.process)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -60,6 +61,5 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.okhttp.v4120)
 
 }
