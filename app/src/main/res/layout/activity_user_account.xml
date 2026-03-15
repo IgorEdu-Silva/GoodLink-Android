@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    tools:context=".Screens.UserAccount">
+    tools:context=".feature.auth.ui.UserAccount">
 
     <LinearLayout
         android:id="@+id/layoutAccountInfo"

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigationusersettings"
+    app:startDestination="@id/fragmentPageUserSettings">
+
+    <fragment
+        android:id="@+id/fragmentPageUserSettings"
+        android:name="com.example.goodlink.feature.auth.ui.settings.FragmentPageUserSettings"
+        android:label="Configurações de Usuário">
+        <action
+            android:id="@+id/action_to_userAccount"
+            app:destination="@id/fragmentPageUserAccount"
+            app:enterAnim="@anim/scale_in_center"
+            app:exitAnim="@anim/scale_out_center"
+            app:popEnterAnim="@anim/scale_in_reverse"
+            app:popExitAnim="@anim/scale_out_reverse" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentPageUserAccount"
+        android:name="com.example.goodlink.feature.auth.ui.FragmentPageUserAccount"
+        android:label="Conta">
+        <action
+            android:id="@+id/action_to_resetPassword"
+            app:destination="@id/fragmentPageUserAccountResetPassword"
+            app:enterAnim="@anim/scale_in_center"
+            app:exitAnim="@anim/scale_out_center"
+            app:popEnterAnim="@anim/scale_in_reverse"
+            app:popExitAnim="@anim/scale_out_reverse" />
+        <action
+            android:id="@+id/action_back_to_settings"
+            app:destination="@id/fragmentPageUserSettings"
+            app:enterAnim="@anim/scale_in_reverse"
+            app:exitAnim="@anim/scale_out_reverse"
+            app:popEnterAnim="@anim/scale_in_center"
+            app:popExitAnim="@anim/scale_out_center" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentPageUserAccountResetPassword"
+        android:name="com.example.goodlink.feature.auth.ui.FragmentPageUserAccountResetPassword"
+        android:label="Resetar Senha">
+        <action
+            android:id="@+id/action_back_to_account"
+            app:destination="@id/fragmentPageUserAccount"
+            app:enterAnim="@anim/scale_in_reverse"
+            app:exitAnim="@anim/scale_out_reverse"
+            app:popEnterAnim="@anim/scale_in_center"
+            app:popExitAnim="@anim/scale_out_center" />
+    </fragment>
+</navigation>

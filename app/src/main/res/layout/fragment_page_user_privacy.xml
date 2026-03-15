@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout6"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".feature.auth.ui.settings.FragmentPageUserPrivacy">
+
+    <ImageButton
+        android:id="@+id/btnBackPrivacy"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@color/transparent"
+        android:importantForAccessibility="no"
+        android:src="@drawable/btn_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/TitlePageUserPrivacy"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.014"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/TitlePageUserPrivacy"
+        android:layout_width="180dp"
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:text="@string/privacidade"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.014"
+        tools:ignore="TextSizeCheck" />
+
+    <LinearLayout
+        android:id="@+id/containerPrivacy"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TitlePageUserPrivacy"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_percent="0.98">
+
+        <LinearLayout
+            android:id="@+id/containerPrivacyOption"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
+
+            <TextView
+                android:id="@+id/alertPrivacicy"
+                android:layout_width="230dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|start"
+                android:paddingStart="15dp"
+                android:text="@string/use_os_dados_para_melhoria_do_aplicativo"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="20sp"
+                tools:ignore="RtlSymmetry,TextSizeCheck" />
+
+            <Switch
+                android:id="@+id/btnPrivacyToggle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|end"
+                tools:ignore="UseSwitchCompatOrMaterialXml,VisualLintButtonSize,TouchTargetSizeCheck" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/smallLettersDateToImprove"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:paddingStart="10dp"
+        android:gravity="center|start"
+        android:text="@string/usamos_a_coleta_de_dados_do_aplicativo_para_melhoria_de_performance_e_patchs_de_corre_o"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.45"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/containerPrivacy"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_percent="0.98"
+        tools:ignore="RtlSymmetry,SmallSp,TextSizeCheck" />
+
+    <LinearLayout
+        android:id="@+id/containerTermsAndPrivacity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/smallLettersDateToImprove"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_percent="0.98">
+
+        <TextView
+            android:id="@+id/termsOfService"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center|start"
+            android:paddingStart="15dp"
+            android:text="@string/termos_de_servi_os"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="20sp"
+            tools:ignore="RtlSymmetry,TextSizeCheck" />
+
+        <TextView
+            android:id="@+id/privacity"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center|start"
+            android:paddingStart="15dp"
+            android:text="@string/politica_de_privacidade"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="20sp"
+            tools:ignore="RtlSymmetry,TextSizeCheck" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

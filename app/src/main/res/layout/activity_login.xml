@@ -5,7 +5,7 @@
     android:id="@+id/forumScreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Screens.Login">
+    tools:context=".feature.forum.ui.login.LoginActivity">
 
     <TextView
         android:id="@+id/btnRegisterPage"
@@ -78,6 +78,7 @@
         android:layout_height="50dp"
         android:text="@string/entrar"
         android:textSize="16sp"
+        android:background="@drawable/border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.52"
@@ -135,7 +136,7 @@
     <LinearLayout
         android:id="@+id/layoutAccountsBtn"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="60dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -143,20 +144,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/separatorLine"
         app:layout_constraintVertical_bias="0.078"
-        app:layout_constraintWidth_percent="0.40">
+        app:layout_constraintWidth_percent="0.60">
 
         <ImageButton
             android:id="@+id/btnAnonymous"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:background="@mipmap/ic_anonymous_foreground"
             android:importantForAccessibility="no"
             tools:ignore="TouchTargetSizeCheck" />
 
         <ImageButton
             android:id="@+id/btnGoogle"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:background="@mipmap/ic_google_foreground"
@@ -165,8 +166,8 @@
 
         <ImageButton
             android:id="@+id/btnGitHub"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:background="@mipmap/ic_github_foreground"
             android:importantForAccessibility="no"
             tools:ignore="TouchTargetSizeCheck" />

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/frameLayout8"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".feature.auth.ui.settings.FragmentPageUserAcessibility">
+
+    <ImageButton
+        android:id="@+id/btnBackAcessibility"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@color/transparent"
+        android:importantForAccessibility="no"
+        android:src="@drawable/btn_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/TitlePageUserAcessibility"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.014"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/TitlePageUserAcessibility"
+        android:layout_width="180dp"
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:text="@string/acessibilidade"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.014"
+        tools:ignore="TextSizeCheck" />
+
+    <LinearLayout
+        android:id="@+id/containerAcessibilityContrast"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TitlePageUserAcessibility"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_percent="0.98">
+
+        <TextView
+            android:id="@+id/topic_app_contrast"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingStart="10dp"
+            android:gravity="start|center"
+            android:text="Contraste"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="20sp"
+            tools:ignore="HardcodedText,RtlSymmetry,TextSizeCheck" />
+
+        <LinearLayout
+            android:id="@+id/choiceLevelContrast"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp">
+
+            <ImageButton
+                android:id="@+id/chanceContrastLess"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|start"
+                android:background="@color/transparent"
+                android:importantForAccessibility="no"
+                android:src="@drawable/less"
+                tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
+
+            <SeekBar
+                android:id="@+id/chanceConstrastScreen"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center"
+                android:max="100"
+                android:progress="10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.506" />
+
+            <ImageButton
+                android:id="@+id/chanceConstrasMore"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|end"
+                android:background="@color/transparent"
+                android:importantForAccessibility="no"
+                android:src="@drawable/more"
+                tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/ResetDefaultConstrast"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/border"
+            android:text="@string/restaurar"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/containerAcessibilityZoom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/containerAcessibilityContrast"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_percent="0.98">
+
+        <TextView
+            android:id="@+id/topic_app_notification"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="start|center"
+            android:paddingStart="10dp"
+            android:text="Tamanho do zoom"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="20sp"
+            tools:ignore="HardcodedText,RtlSymmetry,TextSizeCheck" />
+
+        <LinearLayout
+            android:id="@+id/choiceNotificationStatus"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp">
+
+            <ImageButton
+                android:id="@+id/chanceZoomLess"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|start"
+                android:background="@color/transparent"
+                android:importantForAccessibility="no"
+                android:src="@drawable/less"
+                tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
+
+            <SeekBar
+                android:id="@+id/chanceZoom"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center"
+                android:max="100"
+                android:progress="10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.506" />
+
+            <ImageButton
+                android:id="@+id/chanceZoomMore"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|end"
+                android:background="@color/transparent"
+                android:importantForAccessibility="no"
+                android:src="@drawable/more"
+                tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/ResetDefaultZoom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/border"
+            android:text="@string/restaurar"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

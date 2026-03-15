@@ -173,6 +173,28 @@
     <string name="para_exercer_esses_direitos_entre_em_contato_pelo_e_mail_de_suporte_dispon_vel_no_aplicativo">Para exercer esses direitos, entre em contato pelo e-mail de suporte disponível no aplicativo.</string>
 
     <string name="default_web_client_id">578797890995-28stmfrv53m9b9vrh7l9j7r0m47dgpcc.apps.googleusercontent.com</string>
+    <string name="account">Account</string>
+    <string name="conta">Conta</string>
+    <string name="use_os_dados_para_melhoria_do_aplicativo">Use os dados para melhoria do aplicativo</string>
+    <string name="usamos_a_coleta_de_dados_do_aplicativo_para_melhoria_de_performance_e_patchs_de_corre_o">Usamos a coleta de dados do aplicativo para melhoria de performance e patchs de correção</string>
+    <string name="termos_de_servi_os">Termos de serviços</string>
+    <string name="politica_de_privacidade">Politica de privacidade</string>
+    <string name="privacidade">Privacidade</string>
+    <string name="tema">Tema</string>
+    <string name="linguagem">Linguagem</string>
+    <string name="notifica_es">Notificações</string>
+    <string name="suporte">Suporte</string>
+    <string name="novidades">Novidades</string>
+    <string name="apar_ncia">Aparência</string>
+    <string name="sincronizar_tema_com_dispositivo">Sincronizar tema com dispositivo</string>
+    <string name="acessibilidade">Acessibilidade</string>
+    <string name="restaurar">Restaurar</string>
+    <string name="tamanho_da_fonte">Tamanho da fonte</string>
+    <string name="portugu_s_brasil">Português, Brasil</string>
+    <string name="english_us">English, US</string>
+    <string name="sistema_de_notifica_es">Sistema de notificações</string>
+    <string name="gerenciar_notifica_es">Gerenciar notificações</string>
+    <string name="feedbackDialog">Compartilhe os pontos positivos, negativos, sugestões e bugs comigo.</string>
 
     <string-array name="categories">
         <item>Programação</item>
