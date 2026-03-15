@@ -5,7 +5,7 @@
     android:id="@+id/forumScreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Screens.Forum">
+    tools:context=".feature.forum.ui.ForumActivity">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayoutInfo"
@@ -41,7 +41,7 @@
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/RepositoriesView"
+        android:id="@+id/repositoriesView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/tabLayoutInfo"
@@ -50,16 +50,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
-
     </androidx.viewpager2.widget.ViewPager2>
 
+    <FrameLayout
+        android:id="@+id/containerAccount"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:colorBackground"
+        app:layout_constraintBottom_toTopOf="@+id/tabLayoutInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/FloatingBtnPageCentral"
+        android:id="@+id/floatingBtnPageCentral"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:importantForAccessibility="no"
-        android:src="@drawable/air_button"
+        android:src="@drawable/write_pencil"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.954"

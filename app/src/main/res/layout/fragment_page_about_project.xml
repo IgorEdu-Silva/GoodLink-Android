@@ -5,7 +5,7 @@
     android:id="@+id/frameLayoutAboutProject"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.FragmentPageAboutProject">
+    tools:context=".feature.about.ui.AboutProject.AboutProjectFragment">
 
     <TextView
         android:id="@+id/introductionPageText"

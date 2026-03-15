@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout5"
+    android:id="@+id/fragmentPageUserSettings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.FragmentPageUserSettings">
+    tools:context=".feature.auth.ui.settings.FragmentPageUserSettings">
 
     <TextView
         android:id="@+id/textConfigName"
@@ -14,6 +14,7 @@
         android:gravity="center"
         android:text="@string/configura_es"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -22,31 +23,16 @@
         app:layout_constraintVertical_bias="0.014"
         tools:ignore="TextSizeCheck" />
 
-    <SearchView
-        android:id="@+id/searchConfig"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:gravity="start|center"
-        android:textAlignment="center"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.065"
-        app:layout_constraintWidth_percent="0.98"
-        app:theme="@style/CustomSearchView" />
-
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/containerConfigApp"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:paddingTop="10dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintBottom_toTopOf="@+id/btnLogoutConfig"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchConfig"
+        app:layout_constraintTop_toBottomOf="@+id/textConfigName"
         app:layout_constraintWidth_percent="0.98">
 
         <TextView
@@ -54,15 +40,17 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_weight="0"
+            android:paddingStart="10dp"
             android:gravity="start|center"
             android:text="Configurações da conta"
-            tools:ignore="HardcodedText,TextSizeCheck" />
+            android:textSize="14sp"
+            tools:ignore="HardcodedText,RtlSymmetry,TextSizeCheck" />
 
         <LinearLayout
-            android:id="@+id/linearLayoutConfigAccount"
+            android:id="@+id/containerConfigAccount"
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:layout_weight="1"
+            android:layout_weight="0.3"
             android:orientation="horizontal">
 
             <ImageView
@@ -72,7 +60,7 @@
                 android:layout_weight="0"
                 android:importantForAccessibility="no"
                 android:scaleType="center"
-                android:src="@drawable/account_circle"
+                android:src="@drawable/account"
                 tools:ignore="ContentDescription,InefficientWeight,NestedWeights" />
 
             <TextView
@@ -85,13 +73,19 @@
                 android:textSize="20sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
 
+
         </LinearLayout>
 
+        <FrameLayout
+            android:id="@+id/container_config_acocunt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <LinearLayout
-            android:id="@+id/linearLayoutConfigSecurity"
+            android:id="@+id/containerConfigSecurity"
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:layout_weight="1"
+            android:layout_weight="0.3"
             android:orientation="horizontal">
 
             <ImageView
@@ -100,8 +94,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0"
                 android:importantForAccessibility="no"
-                android:src="@drawable/security"
                 android:scaleType="center"
+                android:src="@drawable/security"
                 tools:ignore="ContentDescription,InefficientWeight,NestedWeights" />
 
             <TextView
@@ -110,39 +104,46 @@
                 android:layout_height="match_parent"
                 android:gravity="center|start"
                 android:paddingStart="10dp"
-                android:text="Privacidade e Segurança"
+                android:text="Privacidade"
                 android:textSize="20sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
         </LinearLayout>
 
+        <FrameLayout
+            android:id="@+id/container_config_privacy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/topic_app_theme"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_weight="0"
+            android:paddingStart="10dp"
             android:gravity="start|center"
             android:text="Configurações do aplicativo"
-            tools:ignore="HardcodedText,TextSizeCheck" />
+            android:textSize="14sp"
+            tools:ignore="HardcodedText,RtlSymmetry,TextSizeCheck" />
 
         <LinearLayout
-            android:id="@+id/linearLayoutConfigTheme"
+            android:id="@+id/containerConfigTheme"
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:layout_weight="1"
+            android:layout_weight="0.3"
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/ico_config_theme"
+                android:id="@+id/ico_config_apparence"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
-                android:importantForAccessibility="no" android:src="@drawable/theme"
+                android:importantForAccessibility="no"
                 android:scaleType="center"
+                android:src="@drawable/theme"
                 tools:ignore="ContentDescription,NestedWeights" />
 
             <TextView
-                android:id="@+id/text_config_theme"
+                android:id="@+id/text_config_apparence"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -154,12 +155,16 @@
                 tools:ignore="HardcodedText,RtlSymmetry" />
         </LinearLayout>
 
+        <FrameLayout
+            android:id="@+id/container_config_apparence"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
-            android:id="@+id/linearLayoutConfigAccessibility"
+            android:id="@+id/containerConfigAccessibility"
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:layout_weight="1"
+            android:layout_weight="0.3"
             android:orientation="horizontal">
 
             <ImageView
@@ -168,8 +173,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0"
                 android:contentDescription="TODO"
-                android:importantForAccessibility="no" android:src="@drawable/accessibility"
+                android:importantForAccessibility="no"
                 android:scaleType="center"
+                android:src="@drawable/accessibility"
                 tools:ignore="ContentDescription,HardcodedText,NestedWeights" />
 
             <TextView
@@ -184,12 +190,46 @@
                 tools:ignore="HardcodedText,RtlSymmetry" />
         </LinearLayout>
 
-
         <LinearLayout
-            android:id="@+id/linearLayoutConfigNotifications"
+            android:id="@+id/containerConfigLanguage"
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:layout_weight="1"
+            android:layout_weight="0.3"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ico_config_language"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:contentDescription="TODO"
+                android:importantForAccessibility="no"
+                android:scaleType="center"
+                android:src="@drawable/language"
+                tools:ignore="ContentDescription,HardcodedText,NestedWeights" />
+
+            <TextView
+                android:id="@+id/text_config_language"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:paddingStart="10dp"
+                android:text="Linguagem"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/container_config_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/containerConfigNotifications"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_weight="0.3"
             android:orientation="horizontal">
 
             <ImageView
@@ -198,8 +238,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0"
                 android:importantForAccessibility="no"
-                android:src="@drawable/notifications"
                 android:scaleType="center"
+                android:src="@drawable/notifications"
                 tools:ignore="ContentDescription,NestedWeights" />
 
             <TextView
@@ -208,27 +248,33 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center|start"
-                android:textSize="20sp"
                 android:paddingStart="10dp"
                 android:text="Notificações"
+                android:textSize="20sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
         </LinearLayout>
 
+        <FrameLayout
+            android:id="@+id/container_config_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/topic_app_support"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_weight="0"
+            android:paddingStart="10dp"
             android:gravity="start|center"
             android:text="Suporte"
-            tools:ignore="HardcodedText,TextSizeCheck" />
+            android:textSize="14sp"
+            tools:ignore="HardcodedText,RtlSymmetry,TextSizeCheck" />
 
         <LinearLayout
-            android:id="@+id/linearLayoutConfigSupport"
+            android:id="@+id/containerConfigSupport"
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:layout_weight="1"
+            android:layout_weight="0.3"
             android:orientation="horizontal">
 
             <ImageView
@@ -237,8 +283,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0"
                 android:importantForAccessibility="no"
-                android:src="@drawable/support"
                 android:scaleType="center"
+                android:src="@drawable/support"
                 tools:ignore="ContentDescription,NestedWeights" />
 
             <TextView
@@ -247,9 +293,54 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center|start"
-                android:textSize="20sp"
                 android:paddingStart="10dp"
                 android:text="Suporte"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/container_config_support"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/topic_app_news"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_weight="0"
+            android:paddingStart="10dp"
+            android:gravity="start|center"
+            android:text="@string/novidades"
+            android:textSize="14sp"
+            tools:ignore="HardcodedText,RtlSymmetry,TextSizeCheck" />
+
+        <LinearLayout
+            android:id="@+id/containerConfigNews"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_weight="0.3"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ico_config_news"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:importantForAccessibility="no"
+                android:scaleType="center"
+                android:src="@drawable/news"
+                tools:ignore="ContentDescription,NestedWeights" />
+
+            <TextView
+                android:id="@+id/text_config_news"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:paddingStart="10dp"
+                android:text="Novidades"
+                android:textSize="20sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
         </LinearLayout>
 
@@ -259,6 +350,7 @@
         android:id="@+id/btnLogoutConfig"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:background="@drawable/border"
         android:gravity="center"
         android:text="@string/desconectar"
         android:textAllCaps="false"
@@ -267,7 +359,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.992"
-        app:layout_constraintWidth_percent="0.98"
+        app:layout_constraintWidth_percent="0.95"
         tools:ignore="TextContrastCheck,VisualLintButtonSize" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

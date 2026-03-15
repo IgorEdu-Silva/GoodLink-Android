@@ -5,7 +5,7 @@
     android:id="@+id/frameLayoutFontSize"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.FragmentPageFontSize">
+    tools:context=".feature.settings.ui.fontSize.FontSizeFragment">
 
     <TextView
         android:id="@+id/fontSizeLetter"
@@ -15,7 +15,7 @@
         android:gravity="center"
         android:text="@string/fontSizeChoice"
         android:textColor="?attr/colorOnSurface"
-        app:layout_constraintBottom_toTopOf="@+id/chanceFontSizeLetter"
+        app:layout_constraintBottom_toTopOf="@+id/chanceConstrastScreen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <SeekBar
-        android:id="@+id/chanceFontSizeLetter"
+        android:id="@+id/chanceConstrastScreen"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:max="100"

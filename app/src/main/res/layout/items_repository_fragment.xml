@@ -33,21 +33,21 @@
     <TextView
         android:id="@+id/descricao_Repository"
         android:layout_width="250dp"
-        android:layout_height="0dp"
+        android:layout_height="59dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:gravity="center"
+        android:paddingStart="10dp"
         android:textAlignment="center"
         android:textSize="12sp"
-        android:paddingStart="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/commentsRepositories"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titulo_Repository"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.0"
         tools:ignore="RtlCompat,RtlSymmetry,VisualLintOverlap" />
 
     <TextView
@@ -86,6 +86,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <!--    <TextView-->
+<!--        android:id="@+id/commentsRepositories"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:gravity="center"-->
+<!--        android:text="@string/coment_rios"-->
+<!--        android:textColor="@color/light_blue"-->
+<!--        android:textSize="12sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/ratingBar"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="1.0"-->
+<!--        tools:ignore="VisualLintOverlap,TextContrastCheck" />-->
+
     <TextView
         android:id="@+id/dataPub_Repository"
         android:layout_width="152dp"
@@ -102,28 +122,8 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/descricao_Repository"
         app:layout_constraintTop_toBottomOf="@+id/nomeUsuario_Repository"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.0"
         tools:ignore="RtlCompat,VisualLintBounds" />
-
-    <TextView
-        android:id="@+id/commentsRepositories"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:text="@string/coment_rios"
-        android:textColor="@color/light_blue"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ratingBar"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="VisualLintOverlap,TextContrastCheck" />
 
     <Spinner
         android:id="@+id/ratingBar"
@@ -139,7 +139,7 @@
         android:scaleY="0.75"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/descricao_Repository"
         app:layout_constraintVertical_bias="0.0"
